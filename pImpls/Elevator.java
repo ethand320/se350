@@ -108,43 +108,66 @@ public class Elevator implements ElevatorInterface
              
                     //succeeded 
              //Else need to generate error or exception
-                
-             
-            
-		
 	}
+	
 
+		  /**
+     * Remove a specified number of passengers from the elevator.
+     * @param inPeople The number of people being removed from the elevator.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	@Override
-        
 	public void removePassengers(ArrayList <Person> inPeople) {
 		// TODO Auto-generated method stub
 		this.passengerList.removeAll(inPeople);
-                
 	}
 
+	   /**
+     * Retrieves the capacity of the elevator.
+     */
 	@Override
 	public int getCapacity() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+
+	  /**
+     * Retrieves the passenger. 
+     */
 	@Override
 	public Person[] getPassengers() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	
+  /**
+     * Retrieves the elevator. 
+     */
 	@Override
 	public int getElevatorId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
+	
+		   /**
+     * Sets the identifier number assigned to this elevator.
+     * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     */
 	private void setId(int inId)
 	{
 		elevatorId = inId;
 	}
 	
+	
+		  /**
+     * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
+     * @param inCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
+     * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	private void setCapacity(int inCap)
 	{
 		capacity = inCap;
