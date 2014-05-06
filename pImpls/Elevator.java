@@ -8,7 +8,7 @@ public class Elevator implements ElevatorInterface
 	private Direction direction;
 	private int speed;
 	private int doorSpeed;
-	private int[] requestQueue;
+	private ArrayList <Integer> requestQueue;
 	private ArrayList<Person> passengerList;
 	private boolean bDoorsOpen;
 	private int capacity;
@@ -22,30 +22,50 @@ public class Elevator implements ElevatorInterface
 	@Override
 	public void addFloorToQueue(int floorNum) {
 		// TODO Auto-generated method stub
-		
+		/*Logic
+            if the floor is in the direction then allow it,
+            otherwise throw exception or do nothing
+            */
+            
+            
+            
 	}
 
 	@Override
 	public void addPassenger(Person inPassenger) {
 		// TODO Auto-generated method stub
-		
+		this.passengerList.add(inPassenger);
+                
 	}
 
 	@Override
 	public void addPassengers(Person[] inPeople) {
-		// TODO Auto-generated method stub
 		
-	}
+            
+            //could also do weight/capacity check of each person here
+            
+		for (Person p : inPeople)
+                    this.passengerList.add(p);
+                
+                
+        }
 
 	@Override
 	public void openDoors() {
-		// TODO Auto-generated method stub
+            
+            //somethign to account for time here
+           this.bDoorsOpen = true;
+           
+           
 		
 	}
 
 	@Override
 	public void closeDoors() {
-		// TODO Auto-generated method stub
+		//time to close doors, add a wait
+            
+            this.bDoorsOpen = false;
+            
 		
 	}
 
