@@ -10,8 +10,8 @@ public interface ElevatorInterface
     public void openDoors();
     public void closeDoors();
     public void removePassenger(Person inPassenger);
-    public void removePassengers(ArrayList <Person> inPeople);
+    public void removePassengers (ArrayList <Person> inPeople);
     public int getCapacity();
-    public Person[] getPassengers();
+    public ArrayList <Person> getPassengers();
     public int getElevatorId();
 }
