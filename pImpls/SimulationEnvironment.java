@@ -1,5 +1,7 @@
 package pImpls;
 
+/* SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
+*/
 public class SimulationEnvironment
 {
 	private volatile static SimulationEnvironment instance;
