@@ -14,11 +14,24 @@ public class Elevator implements ElevatorInterface
 	private int capacity;
 	private int elevatorId;
 	
+	
+		  /**
+     * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
+     * @param inCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
+     * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative.
+     */
 	public Elevator(int inId, int inCapacity)
 	{
 		setId(inId);
 		setCapacity(inCapacity);
 	}
+	
+	  /**
+     * Simulates the act when a floor number is added to the queue.
+     * @param floorNum The floor number that will be added to the queue.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	@Override
 	public void addFloorToQueue(int floorNum) {
 		// TODO Auto-generated method stub
@@ -26,11 +39,15 @@ public class Elevator implements ElevatorInterface
             if the floor is in the direction then allow it,
             otherwise throw exception or do nothing
             */
-            
-            
-            
+ 
 	}
 
+
+	  /**
+     * Add a passenger to the elevator.
+     * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	@Override
 	public void addPassenger(Person inPassenger) {
 		// TODO Auto-generated method stub
@@ -38,6 +55,12 @@ public class Elevator implements ElevatorInterface
                 
 	}
 
+
+	  /**
+     * Add passengers to the elevator.
+     * @param inPeople The number of people being removed from the elevator.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	@Override
 	public void addPassengers(Person[] inPeople) {
 		
@@ -46,29 +69,34 @@ public class Elevator implements ElevatorInterface
             
 		for (Person p : inPeople)
                     this.passengerList.add(p);
-                
-                
         }
-
+	
+	/**
+	 * 
+	 */
 	@Override
 	public void openDoors() {
             
             //somethign to account for time here
            this.bDoorsOpen = true;
            
-           
-		
 	}
-
+	
+	  /**
+     * Close the elevator doors.
+     */
 	@Override
 	public void closeDoors() {
 		//time to close doors, add a wait
             
             this.bDoorsOpen = false;
-            
-		
 	}
 
+	  /**
+     * Remove a specific passenger from the elevator.
+     * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+     * @throws NegativeCapacityException if any of the values passed into it are negative
+     */
 	@Override
 	public void removePassenger(Person inPassenger) {
 		// TODO Auto-generated method stub
