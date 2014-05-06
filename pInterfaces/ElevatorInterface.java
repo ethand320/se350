@@ -1,5 +1,6 @@
 package pInterfaces;
 import pImpls.Person;
+import java.util.ArrayList;
 
 public interface ElevatorInterface
 {
@@ -9,7 +10,7 @@ public interface ElevatorInterface
     public void openDoors();
     public void closeDoors();
     public void removePassenger(Person inPassenger);
-    public void removePassengers(Person inPeople[]);
+    public void removePassengers(ArrayList <Person> inPeople);
     public int getCapacity();
     public Person[] getPassengers();
     public int getElevatorId();
