@@ -101,15 +101,17 @@ public class Elevator implements ElevatorInterface
 	}
 
 	@Override
-	public Person[] getPassengers() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Person> getPassengers() {
+		// not sure how we wnat to return passengers
+                // guess we want just to return the collection of People
+		return this.passengerList;
+                
 	}
 
 	@Override
 	public int getElevatorId() {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return this.elevatorId;
 	}
 	
 	private void setId(int inId)
