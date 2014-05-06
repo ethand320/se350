@@ -72,13 +72,26 @@ public class Elevator implements ElevatorInterface
 	@Override
 	public void removePassenger(Person inPassenger) {
 		// TODO Auto-generated method stub
+            
+            
+            
+             if  (passengerList.remove(inPassenger))
+                    System.exit(1);
+             
+                    //succeeded 
+             //Else need to generate error or exception
+                
+             
+            
 		
 	}
 
 	@Override
-	public void removePassengers(Person[] inPeople) {
+        
+	public void removePassengers(ArrayList <Person> inPeople) {
 		// TODO Auto-generated method stub
-		
+		this.passengerList.removeAll(inPeople);
+                
 	}
 
 	@Override
