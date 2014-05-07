@@ -27,7 +27,13 @@ public class Main
     //  ^^ while elevator 2 is moving, send it another instruct ot go to the 13th direction up.  should stop there first then
     // continue on to the 14th
     
-    //
+    // ^^ also while elevator 2 is moving , instruct it to go to the 15th floor (add 15th floor to its queue)
+    // should stop on all three floors
+    
+    // wait for all elevators to complete travels (wait for them to go idle)  when they are idle they return to default floor
+    //timeout is 15000ms
+    
+    //then send elevator 3 to the 5th floor.
     
     
     
