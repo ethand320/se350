@@ -36,6 +36,18 @@ public class Main
     //then send elevator 3 to the 5th floor.
     
     
+    // once elevator 3 is at the 5th floor, send it to the 16th floor (button pressed from inside the elevator)
+    
+    //while going to the 16th floor, instruct it to go to the 1st floor],   REQUEST SHOULD GET IGNORED
+    
+    // once elevator 3 reaches the 16th floor send it down to 2 (inside button press) this will not be ignored
+    
+    
+    // while elevator 3 on its way down, add 5th and 3rd floors to the queue (inside button presses)  should now stop at each floor
+    
+    // wait for elevator to go idle, then timeout and return to defualt floor.
+    
+    
     
     
 	public static void main(String[] args)
