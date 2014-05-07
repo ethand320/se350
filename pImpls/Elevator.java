@@ -39,7 +39,35 @@ public class Elevator implements ElevatorInterface
             if the floor is in the direction then allow it,
             otherwise throw exception or do nothing
             */
- 
+            
+            switch (this.direction) {
+                case UP:
+                   if (floorNum > this.currentFloor)
+                    {
+                        requestQueue.add(floorNum);
+                        System.out.println("Request for floor " + floorNum + " was added to elevator: " + this.elevatorId);
+                    
+                    }
+                    break;
+                case DOWN:
+                    if (floorNum < this.currentFloor)
+                    {
+                        requestQueue.add(floorNum);
+                        System.out.println("Request for floor " + floorNum + " was added to elevator: " + this.elevatorId);
+                    }
+                    break;
+                    
+                case IDLE:
+                    requestQueue.add(floorNum);
+                    System.out.println("Request for floor " + floorNum + " was added to elevator: " + this.elevatorId);
+                    break;
+                
+            }
+            
+     
+                   
+            
+            
 	}
 
 
