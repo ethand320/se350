@@ -2,6 +2,7 @@ package pImpls;
 
 import pFactories.ControlImplFactory;
 import pInterfaces.ControlModuleInterface;
+import pInterfaces.ElevatorInterface;
 
 /**
  * Constructor which allows for the creation of an elevator system as well as the elevator calling system.
@@ -12,7 +13,8 @@ import pInterfaces.ControlModuleInterface;
  */
 public class ElevatorControlModule implements ControlModuleInterface 
 {
-	private static volatile ControlModuleInterface delegate;
+	private static ControlModuleInterface delegate;
+	private static volatile ElevatorControlModule instance;
 	private static final int DEFAULT_ELEVATOR_NUM = 4;
 	private static final int DEFAULT_FLOOR_NUM = 16;
 	
@@ -23,32 +25,32 @@ public class ElevatorControlModule implements ControlModuleInterface
 	
 	public static ControlModuleInterface getInstance()
 	{
-		if(delegate == null)
+		if(instance == null)
 		{
 			synchronized(ElevatorControlModule.class)
 			{
-				if(delegate == null)
+				if(instance == null)
 				{
-					delegate = new ElevatorControlModule(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
+					instance = new ElevatorControlModule(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
 				}
 			}
 		}
-		return delegate;
+		return instance;
 	}
 	
 	public static ControlModuleInterface getInstance(int elevatorNum, int floorNum)
 	{
-		if(delegate == null)
+		if(instance == null)
 		{
 			synchronized(ElevatorControlModule.class)
 			{
-				if(delegate == null)
+				if(instance == null)
 				{
-					delegate = new ElevatorControlModule(elevatorNum, floorNum);
+					instance = new ElevatorControlModule(elevatorNum, floorNum);
 				}
 			}
 		}
-		return delegate;
+		return instance;
 	}
 	
     /**
@@ -59,5 +61,15 @@ public class ElevatorControlModule implements ControlModuleInterface
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
 	{
 		delegate.elevatorCallReceiver(floorNumber, directionRequest);
+	}
+
+	@Override
+	public ElevatorInterface getElevator(int index) {
+		return delegate.getElevator(index);
+	}
+	
+	public void shutDown()
+	{
+		delegate.shutDown();
 	}
 }

@@ -48,6 +48,9 @@ public class Floor implements FloorInterface
 			Direction directionToGo) 
 	{
 		// TODO Auto-generated method stub
+//		foreach person in goingup
+//			remove from going up
+//			elevatorToEnter.addPassenger(person);
 		
 	}
 	

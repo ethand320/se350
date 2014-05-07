@@ -20,6 +20,15 @@ public class Person
 		setCurrentFloor(floorToStart);
 	}
 	
+	public int getDestinationFloor()
+	{
+		return destinationFloor;
+	}
+	
+	public int getCurrentFloor()
+	{
+		return currentFloor;
+	}
 	    /**
      * Handles the destination floor of elevator is is called upon.
      * @param inDest The floor number that will be taken in as the floor destination

@@ -17,13 +17,13 @@ import pInterfaces.FloorInterface;
  */
 public class ElevatorControlModuleImpl implements ControlModuleInterface
 {
-	private ElevatorInterface[] elevators;
+	private ElevatorInterface[] elevators; 
 	private FloorInterface[] floors;
 	
 	public ElevatorControlModuleImpl(int elevatorNum, int floorNum)
 	{
 		createFloors(floorNum);
-		createElevators(elevatorNum);		
+		createElevators(elevatorNum, floorNum);		
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 		elevatorToSend.addFloorToQueue(floorNumber);
 	}
-	private void createElevators(int elevatorNum)
+	private void createElevators(int elevatorNum, int maxFloors)
 	{
 		if(elevatorNum < 1)
 		{
@@ -64,7 +64,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		elevators = new ElevatorInterface[elevatorNum];
 		for(int i = 0; i < elevatorNum; ++i)
 		{
-			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY);
+			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors);
 		}
 	}
 	
@@ -78,6 +78,19 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		for(int i = 0; i < floorNum; ++i)
 		{
 			floors[i] = FloorFactory.createFloor(i);
+		}
+	}
+
+	@Override
+	public ElevatorInterface getElevator(int index) {
+		return elevators[index];
+	}
+	
+	public void shutDown()
+	{
+		for(ElevatorInterface elevator : elevators)
+		{
+			elevator.shutDown();
 		}
 	}
 }
