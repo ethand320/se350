@@ -31,16 +31,16 @@ public class Floor implements FloorInterface
 	@Override
 	public void summonElevator(Direction directionToGo) 
 	{
-		// TODO Auto-generated method stub
-		
+		// Makes call to elevator control module  passing the direction
+            
 	}
 
 
 	@Override
 	public int getId() 
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.floorNumber;
+                
 	}
 
 	@Override
