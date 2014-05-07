@@ -1,12 +1,15 @@
 package pInterfaces;
 
 import pImpls.Direction;
+import pImpls.Person;
 
 public interface ControlModuleInterface
 {
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest);
 	public ElevatorInterface getElevator(int index);
 	public void shutDown();
+	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber);
+	public void addPersonToFloor(Person inPerson, int floorNum);
 }
 //This class will be fleshed out for the second code deliverable
 //this method should facilitate elevator selection and implement

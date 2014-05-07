@@ -1,5 +1,7 @@
 package pInterfaces;
+import pImpls.Direction;
 import pImpls.Person;
+
 import java.util.ArrayList;
 
 public interface ElevatorInterface
@@ -14,6 +16,7 @@ public interface ElevatorInterface
     public int getCapacity();
     public ArrayList <Person> getPassengers();
     public int getElevatorId();
+    public Direction getDirection();
 	public void shutDown();
     public static final int DEFAULT_ELEVATOR_CAPACITY = 10;
 }

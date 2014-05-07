@@ -15,7 +15,7 @@ public class Floor implements FloorInterface
 	private ArrayList<Person> goingDown;
 	private int floorNumber;
 	
-	    /** EDIT THIS FOR FLOOR
+	/** EDIT THIS FOR FLOOR
      * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
      * @param paramCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
      * @param numFloors The number of floors that this elevator services. This value cannot be larger than the number of floors in the building that owns it, but it may be smaller
@@ -25,14 +25,31 @@ public class Floor implements FloorInterface
 	public Floor(int inFloorId)
 	{
 		setFloorNumber(inFloorId);
+		initializeFloorArrays();
 	}
 	
+	@Override
+	public void addPersonToFloor(Person inPerson)
+	{
+		if(inPerson.getDestinationFloor() < this.getId())
+		{
+			goingDown.add(inPerson);
+			summonElevator(Direction.DOWN);
+		}
+		else if(inPerson.getDestinationFloor() > this.getId())
+		{
+			goingUp.add(inPerson);
+			summonElevator(Direction.UP);
+		}
+	}
 	
 	@Override
 	public void summonElevator(Direction directionToGo) 
 	{
-		// Makes call to elevator control module  passing the direction
-            
+		if(directionToGo != Direction.IDLE)
+		{
+			ElevatorControlModule.getInstance().elevatorCallReceiver(this.getId(), directionToGo);		
+		}
 	}
 
 
@@ -40,18 +57,27 @@ public class Floor implements FloorInterface
 	public int getId() 
 	{
 		return this.floorNumber;
-                
 	}
 
 	@Override
-	public void removeFromFloor(ElevatorInterface elevatorToEnter,
-			Direction directionToGo) 
+	public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
 	{
-		// TODO Auto-generated method stub
-//		foreach person in goingup
-//			remove from going up
-//			elevatorToEnter.addPassenger(person);
-		
+		if(directionToGo != Direction.IDLE)
+		{
+			ArrayList<Person> peopleToRemove;
+			if(directionToGo == Direction.UP)
+			{
+				peopleToRemove = this.goingUp;
+			}
+			else
+			{
+				peopleToRemove = this.goingDown;
+			}
+			for (Person person : peopleToRemove )
+			{
+				elevatorToEnter.addPassenger(person);
+			}
+		}
 	}
 	
 	private void setFloorNumber(int inNum)
@@ -59,4 +85,9 @@ public class Floor implements FloorInterface
 		floorNumber = inNum;
 	}
 
+	private void initializeFloorArrays()
+	{
+		goingUp = new ArrayList<Person>();
+		goingDown = new ArrayList<Person>();
+	}
 }

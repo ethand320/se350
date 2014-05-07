@@ -55,6 +55,33 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 		elevatorToSend.addFloorToQueue(floorNumber);
 	}
+
+	@Override
+	public ElevatorInterface getElevator(int index)
+	{
+		return elevators[index-1];
+	}
+	
+	public void shutDown()
+	{
+		for(ElevatorInterface elevator : elevators)
+		{
+			elevator.shutDown();
+		}
+	}
+
+	@Override
+	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
+	{
+		floors[floorNumber-1].removeFromFloor(elevator, elevator.getDirection());
+	}
+
+	@Override
+	public void addPersonToFloor(Person inPerson, int floorNum)
+	{
+		floors[floorNum-1].addPersonToFloor(inPerson);
+	}
+	
 	private void createElevators(int elevatorNum, int maxFloors)
 	{
 		if(elevatorNum < 1)
@@ -78,19 +105,6 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		for(int i = 0; i < floorNum; ++i)
 		{
 			floors[i] = FloorFactory.createFloor(i);
-		}
-	}
-
-	@Override
-	public ElevatorInterface getElevator(int index) {
-		return elevators[index];
-	}
-	
-	public void shutDown()
-	{
-		for(ElevatorInterface elevator : elevators)
-		{
-			elevator.shutDown();
 		}
 	}
 }

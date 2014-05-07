@@ -72,4 +72,18 @@ public class ElevatorControlModule implements ControlModuleInterface
 	{
 		delegate.shutDown();
 	}
+
+	@Override
+	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
+	{
+		delegate.elevatorDoorsOpened(elevator, floorNumber);
+		
+	}
+
+	@Override
+	public void addPersonToFloor(Person inPerson, int floorNum)
+	{
+		delegate.addPersonToFloor(inPerson, floorNum);
+		
+	}
 }

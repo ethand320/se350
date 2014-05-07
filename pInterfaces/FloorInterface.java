@@ -1,5 +1,6 @@
 package pInterfaces;
 import pImpls.Direction;
+import pImpls.Person;
 
 public interface FloorInterface
 {
@@ -9,4 +10,5 @@ public interface FloorInterface
     //this method isn't final, but here's the initial thought for how this method should run:
     //removeFromFloor calls elevatorToEnter.addPassengers(this.goingUp);
     public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo);
+	public void addPersonToFloor(Person inPerson);
 }

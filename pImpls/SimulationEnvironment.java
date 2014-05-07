@@ -55,23 +55,44 @@ public class SimulationEnvironment
 		//PersonFactory.createPerson(11,0);
 		try
 		{
-			// elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
-	       
-	        instance.getElevator(1).addFloorToQueue(11);
-	        Thread.sleep(500);
-	  
-	        //  while ele 1 is moving  send elevator 2 to go to the 14th as tho someone pressed up on 14
-	        instance.getElevator(2).addFloorToQueue(14);
-	        Thread.sleep(500);
-
-
-	        //  ^^ while elevator 2 is moving, send it another instruct ot go to the 13th direction up.  should stop there first then
-	        // continue on to the 14th
-	        instance.getElevator(2).addFloorToQueue(13);
-
-	      	Thread.sleep(500);
-
-	        instance.getElevator(2).addFloorToQueue(15);
+			//by placing a person in a floor, we can simulate the action of having a person call the elevator from a given floor
+			//we give them a destination of floor 0 to indicate that they have no destination and that they are only spawned to call the elevator.
+			//their request for floor 0 will be ignored by the elevator
+			instance.addPersonToFloor(PersonFactory.createPerson(11,0), 11);
+			instance.addPersonToFloor(PersonFactory.createPerson(14,0), 14);
+			instance.addPersonToFloor(PersonFactory.createPerson(13,0), 13);
+			instance.addPersonToFloor(PersonFactory.createPerson(15,0), 15);
+			
+			//by placing a person in the floor and giving them a destination floor, we cna simulate the action of having that person enter the elevator and press the floor button inside the elevator
+			Person personToControl = PersonFactory.createPerson(5,16);
+			instance.addPersonToFloor(personToControl, 5);
+			//this call should be made while the elevator is still going up. therefore, it should fail
+			personToControl.setDestinationFloor(1);
+			
+			//by creating a new person and placing him on the 16th floor, we ensure that the request for floors 2, 3, and 5 aren't processed until the elevator reaches that destination
+			Person otherPerson = PersonFactory.createPerson(16,2);
+			instance.addPersonToFloor(otherPerson,2);
+			otherPerson.setDestinationFloor(5);
+			otherPerson.setDestinationFloor(3);
+			
+			
+//			// elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
+//	       
+//	        instance.getElevator(1).addFloorToQueue(11);
+//	        Thread.sleep(500);
+//	  
+//	        //  while ele 1 is moving  send elevator 2 to go to the 14th as tho someone pressed up on 14
+//	        instance.getElevator(2).addFloorToQueue(14);
+//	        Thread.sleep(500);
+//
+//
+//	        //  ^^ while elevator 2 is moving, send it another instruct ot go to the 13th direction up.  should stop there first then
+//	        // continue on to the 14th
+//	        instance.getElevator(2).addFloorToQueue(13);
+//
+//	      	Thread.sleep(500);
+//
+//	        instance.getElevator(2).addFloorToQueue(15);
 	        // ^^ also while elevator 2 is moving , instruct it to go to the 15th floor (add 15th floor to its queue)
 	        // should stop on all three floors
 	        
@@ -115,7 +136,7 @@ public class SimulationEnvironment
 		
 	}
 
-	public void stopSimluation()
+	private void stopSimluation()
 	{
 		ElevatorControlModule.getInstance().shutDown();
 	}
@@ -125,4 +146,8 @@ public class SimulationEnvironment
 		return ElevatorControlModule.getInstance().getElevator(i);
 	}
 	
+	private void addPersonToFloor(Person inPerson, int floorNum)
+	{
+		ElevatorControlModule.getInstance().addPersonToFloor(inPerson, floorNum);
+	}
 }
