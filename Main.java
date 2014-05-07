@@ -7,6 +7,31 @@ import pImpls.SimulationEnvironment;
 //fuck bitches get money
 public class Main 
 {
+    // sudo code for the exact implemenation we need] to turn in.
+    
+    
+    //Create a Building with “16” floors and “4” elevators.
+    
+    
+    // elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
+    // 500ms per floor sleep time
+    
+    // open doors upon arrival
+    
+    // wait another 500ms then close (another 500ms)
+    
+    //  while ele 1 is moving  send elevator 2 to go to the 14th as tho someone pressed up on 14
+    
+    //upon arrival open doors, wait then close doors
+    
+    //  ^^ while elevator 2 is moving, send it another instruct ot go to the 13th direction up.  should stop there first then
+    // continue on to the 14th
+    
+    //
+    
+    
+    
+    
 	public static void main(String[] args)
 	{
         try
@@ -38,3 +63,5 @@ public class Main
         }
 	}
 }
+
+
