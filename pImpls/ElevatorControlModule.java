@@ -1,5 +1,6 @@
 package pImpls;
 
+import pFactories.ControlImplFactory;
 import pInterfaces.ControlModuleInterface;
 
 /**
@@ -11,16 +12,52 @@ import pInterfaces.ControlModuleInterface;
  */
 public class ElevatorControlModule implements ControlModuleInterface 
 {
-	private ElevatorControlModuleImpl delegate;
-
-	    /**
-     * Handles the system that works with the calling of elevators to and from floors
-     */
-	@Override
-	public void elevatorCallReceiver() {
-		// TODO Auto-generated method stub
-		delegate.elevatorCallReceiver();
+	private static volatile ControlModuleInterface delegate;
+	private static final int DEFAULT_ELEVATOR_NUM = 4;
+	private static final int DEFAULT_FLOOR_NUM = 16;
+	
+	private ElevatorControlModule(int elevatorNum, int floorNum)
+	{
+		delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
 	}
 	
+	public static ControlModuleInterface getInstance()
+	{
+		if(delegate == null)
+		{
+			synchronized(ElevatorControlModule.class)
+			{
+				if(delegate == null)
+				{
+					delegate = new ElevatorControlModule(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
+				}
+			}
+		}
+		return delegate;
+	}
 	
+	public static ControlModuleInterface getInstance(int elevatorNum, int floorNum)
+	{
+		if(delegate == null)
+		{
+			synchronized(ElevatorControlModule.class)
+			{
+				if(delegate == null)
+				{
+					delegate = new ElevatorControlModule(elevatorNum, floorNum);
+				}
+			}
+		}
+		return delegate;
+	}
+	
+    /**
+     * Handles the system that works with the calling of elevators to and from floors.
+     * Inherited from ControlModuleInterface
+     */
+	@Override
+	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
+	{
+		delegate.elevatorCallReceiver(floorNumber, directionRequest);
+	}
 }

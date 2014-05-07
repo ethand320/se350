@@ -5,6 +5,7 @@ package pImpls;
 public class SimulationEnvironment
 {
 	private volatile static SimulationEnvironment instance;
+	
 	private SimulationEnvironment(int numFloors, int numElevators)
 	{
 		ElevatorControlModule.getInstance(numFloors, numElevators);
