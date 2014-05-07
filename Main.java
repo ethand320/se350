@@ -11,30 +11,50 @@ public class Main
     
     
     //Create a Building with “16” floors and “4” elevators.
+
+   
+  
     
+
+    SimulationEnvironment.getInstance(16,4);
+ 
+
     
     // elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
     // 500ms per floor sleep time
-    
+    SimulationEnvironment.getInstance().getElevator(1).pressButton(11);
+    Thread.sleep(500);
     // open doors upon arrival
-    
+    SimulationEnvironment.getInstance().getElevator(1).openDoors();
+     
     // wait another 500ms then close (another 500ms)
-    
+    Thread.sleep(500);
+    SimulationEnvironment.getInstance().getElevator(1).closeDoors();
+    Thread.sleep(500);
     //  while ele 1 is moving  send elevator 2 to go to the 14th as tho someone pressed up on 14
-    
+    SimulationEnvironment.getInstance().getElevator(2).pressButton(14);
     //upon arrival open doors, wait then close doors
+
     
+    
+
+    SimulationEnvironment.getInstance().getElevator(2).openDoors();
+    Thread.sleep(500);
+    SimulationEnvironment.getInstance().getElevator(2).closeDoors();    
+
     //  ^^ while elevator 2 is moving, send it another instruct ot go to the 13th direction up.  should stop there first then
     // continue on to the 14th
-    
+    SimulationEnvironment.getInstance().getElevator(2).addFloorToQueue(13);
+    SimulationEnvironment.getInstance().getElevator(2).addFloorToQueue(14);
+    SimulationEnvironment.getInstance().getElevator(2).addFloorToQueue(15);
     // ^^ also while elevator 2 is moving , instruct it to go to the 15th floor (add 15th floor to its queue)
     // should stop on all three floors
     
     // wait for all elevators to complete travels (wait for them to go idle)  when they are idle they return to default floor
     //timeout is 15000ms
+    Thread.sleep(15000);
     
     //then send elevator 3 to the 5th floor.
-    
     
     // once elevator 3 is at the 5th floor, send it to the 16th floor (button pressed from inside the elevator)
     
