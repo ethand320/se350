@@ -17,6 +17,7 @@ public class Main
     
 
     SimulationEnvironment.getInstance(16,4);
+ 
 
     
     // elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
@@ -52,6 +53,7 @@ public class Main
     // wait for all elevators to complete travels (wait for them to go idle)  when they are idle they return to default floor
     //timeout is 15000ms
     Thread.sleep(15000);
+    
     //then send elevator 3 to the 5th floor.
     
     // once elevator 3 is at the 5th floor, send it to the 16th floor (button pressed from inside the elevator)
