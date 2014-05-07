@@ -25,6 +25,8 @@ public class Elevator implements ElevatorInterface
 	{
 		setId(inId);
 		setCapacity(inCapacity);
+                setDefaultFloor(1);   // will make this customizable in later iterations
+                
 	}
 	
 	  /**
@@ -202,5 +204,11 @@ public class Elevator implements ElevatorInterface
 	{
 		capacity = inCap;
 	}
-
+        private void setDefaultFloor(int floor)
+        {
+            currentFloor = floor;
+            
+        }
+        
+        
 }
