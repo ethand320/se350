@@ -33,6 +33,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
 		initializeRequestQueue();
+		setInitialDirection();
         setDefaultFloor(1);   // will make this customizable in later iterations
         elevatorThread.start();
 	}
@@ -240,6 +241,11 @@ public class Elevator implements ElevatorInterface, Runnable
 	private void setMaxFloors(int inMaxFloors)
 	{
 		this.maxFloors = inMaxFloors;
+	}
+	
+	private void setInitialDirection()
+	{
+		this.direction = Direction.IDLE;
 	}
 	
     /**
