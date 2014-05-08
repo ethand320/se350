@@ -66,8 +66,12 @@ public class Elevator implements ElevatorInterface, Runnable
         case UP:
            if (floorNum > this.currentFloor)
             {
-                requestQueue.add(floorNum);
-                System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+	           	synchronized(this)
+	           	{
+	           		requestQueue.add(floorNum);
+	           		notify();
+	           	}
+	            System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
            else
            {
@@ -77,7 +81,11 @@ public class Elevator implements ElevatorInterface, Runnable
         case DOWN:
             if (floorNum < this.currentFloor)
             {
-                requestQueue.add(floorNum);
+            	synchronized(this)
+            	{
+            		requestQueue.add(floorNum);
+            		notify();
+            	}
                 System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
             else
@@ -86,9 +94,13 @@ public class Elevator implements ElevatorInterface, Runnable
             }
             break;
 			
-            // Applies the direction to a swtich in order to determine which elevator can or reject the call.
+            // Applies the direction to a switch in order to determine which elevator can or reject the call.
         case IDLE:
-            requestQueue.add(floorNum);
+        	synchronized(this)
+        	{
+        		requestQueue.add(floorNum);
+        		notify();
+        	}
             System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             if ( currentFloor < floorNum)
             {
@@ -228,7 +240,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	{
 		return this.passengerList;
 	}
-	
+		/*
         * Retrieves the elevator's id.
         * @return returns the id that corresponds to the elevator that requested this method.
         */
