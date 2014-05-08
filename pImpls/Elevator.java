@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 /**
- * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
+ *  properties such as the speed, capacity, and floor range of the elevator to be customized.
  */
 public class Elevator implements ElevatorInterface, Runnable
 {
@@ -25,7 +25,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	
 	
        /**
-        * Simulates the creation of an elevator with the given parameters. Takes in the elevator Id, capacity, and max floors.
+        * Constructor for Elevator. Takes in the elevator Id, capacity, and max/min floors.
         * @param inId The elevators id. This number cannot be negative and must be independent of another elevators Id.
         * @param inCapacity The total number of passengers the elevator can hold. This number cannot be negative and must not be less than {@ Value}
         * @param inMaxFloors The maximum amount of floors the elevator can access. This number must not be negative and should be less than or equal to the total floors in the building le The floor number that will be added to the queue.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
@@ -45,7 +45,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	}
 	
        /**
-        * Simulates the act when a floor number is added to the queue.
+        * Simulates the act of calling an elevator.  Only accepted if floor is on elevator's path
         * @param floorNum The floor number that will be added to the queue.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
         * @throws NegativeFloorException if any of the values passed into it are negative
         */
@@ -117,7 +117,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	}
 
        /**
-        * Add a passenger to the elevator.
+        * Add a passenger to the elevator.  Adds person object.
         * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, and should be added to the pasenger list.
         * @throws NegativePassengerException if any of the values passed into it are negative
         */

@@ -29,6 +29,10 @@ public class Floor implements FloorInterface
 	}
 	
 	@Override
+        
+        /** Called when initializing a person on a floor
+         * @param Person
+         */
 	public void addPersonToFloor(Person inPerson)
 	{
 		if(inPerson.getDestinationFloor() < this.getId())
@@ -44,6 +48,9 @@ public class Floor implements FloorInterface
 	}
 	
 	@Override
+        /** Elevator Call button press method.  
+         * @param  Direction UP or Down 
+         */
 	public void summonElevator(Direction directionToGo) 
 	{
 		if(directionToGo != Direction.IDLE)

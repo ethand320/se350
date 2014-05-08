@@ -4,6 +4,7 @@ import pFactories.PersonFactory;
 import pInterfaces.ElevatorInterface;
 
 /* SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
+   This is what will run all the elevators until control module logic is fully implemented
 */
 public class SimulationEnvironment
 {
