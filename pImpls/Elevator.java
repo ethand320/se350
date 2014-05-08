@@ -334,7 +334,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			            			{
 			            				addFloorToQueue(1);
 			            			}
-			            			
+			            			idleTimer = 0;
 			            			break;
 			            		case UP:
 			            			idleTimer = 0;
