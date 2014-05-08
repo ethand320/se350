@@ -71,10 +71,7 @@ public class SimulationEnvironment
 			
 			//by creating a new person and placing him on the 16th floor, we ensure that the request for floors 2, 3, and 5 aren't processed until the elevator reaches that destination
 			Person otherPerson = PersonFactory.createPerson(16,2);
-			instance.addPersonToFloor(otherPerson,2);
-			otherPerson.setDestinationFloor(5);
-			otherPerson.setDestinationFloor(3);
-			
+			instance.addPersonToFloor(otherPerson,16);
 			
 //			// elevator 1 send to the 11th floor - as though someone pressed up on the 11th floor
 //	       
@@ -99,20 +96,20 @@ public class SimulationEnvironment
 	        
 	        // wait for all elevators to complete travels (wait for them to go idle)  when they are idle they return to default floor
 	        //timeout is 15000ms
-	        Thread.sleep(15000);
+	       // Thread.sleep(15000);
 	        
 	        //then send elevator 3 to the 5th floor.
-	        instance.getElevator(3).addFloorToQueue(5);
-	        Thread.sleep(3000);
-	        instance.getElevator(3).addFloorToQueue(16);
-	        Thread.sleep(500);;
-	        instance.getElevator(3).addFloorToQueue(1);
-	        Thread.sleep(6000);
-	        instance.getElevator(3).addFloorToQueue(2);
-	        Thread.sleep(500);
-	        
-	        instance.getElevator(3).addFloorToQueue(5);
-	        instance.getElevator(3).addFloorToQueue(3);
+//	        instance.getElevator(3).addFloorToQueue(5);
+//	        Thread.sleep(3000);
+//	        instance.getElevator(3).addFloorToQueue(16);
+//	        Thread.sleep(500);;
+//	        instance.getElevator(3).addFloorToQueue(1);
+//	        Thread.sleep(6000);
+//	        instance.getElevator(3).addFloorToQueue(2);
+//	        Thread.sleep(500);
+//	        
+//	        instance.getElevator(3).addFloorToQueue(5);
+//	        instance.getElevator(3).addFloorToQueue(3);
 	        
 	        Thread.sleep(60000);
 	        

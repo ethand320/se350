@@ -24,8 +24,8 @@ public class ElevatorFactory
      * @throw NegativeCapacityException if capacity or elevatorID are less than zero
      * @return A new elevator object with the given attributes
      */
-    public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors)
+    public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors)
     {
-        return new Elevator(elevatorId, capacity, maxFloors);
+        return new Elevator(elevatorId, capacity, maxFloors, minFloors);
     }
 }

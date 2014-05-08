@@ -39,15 +39,16 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		//this MUST be changed for the next iteration
 		switch(floorNumber)
 		{
-		case 5:
+		case 4:
+		case 15:
 			elevatorToSend = elevators[2];
 			break;
-		case 11:
+		case 10:
 			elevatorToSend = elevators[0];
 			break;
+		case 12:
 		case 13:
 		case 14:
-		case 15:
 			elevatorToSend = elevators[1];
 			break;
 		default:
@@ -91,7 +92,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		elevators = new ElevatorInterface[elevatorNum];
 		for(int i = 0; i < elevatorNum; ++i)
 		{
-			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors);
+			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors, 1);
 		}
 	}
 	

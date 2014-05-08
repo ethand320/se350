@@ -24,14 +24,16 @@ public class Elevator implements ElevatorInterface, Runnable
 	private Thread elevatorThread = new Thread(this);
 	private boolean running;
 	private int maxFloors;
+	private int minFloors;
 	
 	
 
-	public Elevator(int inId, int inCapacity, int inMaxFloors)
+	public Elevator(int inId, int inCapacity, int inMaxFloors, int inMinFloors)
 	{
 		setId(inId);
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
+		setMinFloors(inMinFloors);
 		initializeRequestQueue();
 		setInitialDirection();
         setDefaultFloor(1);   // will make this customizable in later iterations
@@ -47,13 +49,15 @@ public class Elevator implements ElevatorInterface, Runnable
 	@Override
 	public void addFloorToQueue(int floorNum) 
 	{
-		// TODO Auto-generated method stub
-           /* Logic
-            * if the floor is in the direction then allow it,
-            * otherwise throw exception or do nothing
-            */
-			//if(floorNum < 1 || floorNum > this.maxFloors)
-            
+		if(this.currentFloor == this.maxFloors)
+		{
+			this.direction = Direction.DOWN;
+		}
+		else if(this.currentFloor == this.minFloors)
+		{
+			this.direction = Direction.UP;
+		}
+		
         switch (this.direction) 
         {
         case UP:
@@ -61,11 +65,12 @@ public class Elevator implements ElevatorInterface, Runnable
             {
                 requestQueue.add(floorNum);
                 System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
-            
             }
            else
-               System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
-            break;
+           {
+        	   System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+           }
+           break;
         case DOWN:
             if (floorNum < this.currentFloor)
             {
@@ -73,18 +78,22 @@ public class Elevator implements ElevatorInterface, Runnable
                 System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
             else
-                System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
-
+            {
+            	System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+            }
             break;
             
         case IDLE:
             requestQueue.add(floorNum);
             System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             if ( currentFloor < floorNum)
+            {
             	direction = Direction.UP;
+            }
             else
+            {
             	direction = Direction.DOWN;
-            
+            }
             break;
         }
 	}
@@ -273,15 +282,29 @@ public class Elevator implements ElevatorInterface, Runnable
 					case UP:
 						tStart = 0;
 						wait(500);
-						this.currentFloor++;
-			            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+						if(this.currentFloor < this.maxFloors)
+						{
+							this.currentFloor++;
+				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+						}
+						else if(this.currentFloor == this.maxFloors)
+						{
+							this.direction = Direction.IDLE;
+						}
 			
 						break;
 					case DOWN:
 						tStart = 0;
 						wait(500);
-						this.currentFloor--;
-			            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+						if(this.currentFloor > this.maxFloors)
+						{
+							this.currentFloor--;
+				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+						}
+						else if(this.currentFloor == this.minFloors)
+						{
+							this.direction = Direction.IDLE;
+						}
 					}
 				}
 	        }
@@ -311,6 +334,11 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.maxFloors = inMaxFloors;
 	}
 	
+	private void setMinFloors(int inMinFloors)
+	{
+		this.minFloors = inMinFloors;
+	}
+	
 	private void setInitialDirection()
 	{
 		this.direction = Direction.IDLE;
@@ -326,10 +354,10 @@ public class Elevator implements ElevatorInterface, Runnable
 	{
 		this.capacity = inCap;
 	}
+	
     private void setDefaultFloor(int floor)
     {
         this.currentFloor = floor;
-        
     }
     
     private void createPassengerList()
