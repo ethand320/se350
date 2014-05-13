@@ -7,25 +7,32 @@ import pInterfaces.ElevatorInterface;
 import pInterfaces.FloorInterface;
 
 
-//fill this in
 /**
- * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
- * @param paramCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
- * @param numFloors The number of floors that this elevator services. This value cannot be larger than the number of floors in the building that owns it, but it may be smaller
- * @param idNumber The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
- * @throws NegativeCapacityException if any of the values passed into it are negative
+ * ElevatorControlModuleImpl class implements ControlModuleInterface 
+ *
  */
 public class ElevatorControlModuleImpl implements ControlModuleInterface
 {
 	private ElevatorInterface[] elevators; 
 	private FloorInterface[] floors;
 	
+       /**
+ 	* ElevatorControlModuleImpl creates floors and elevators with the given parameters.
+	* @param elevatorNum The number of elevators to be created. 
+ 	* @param floorNum The number of floors to be created.
+ 	* @throws NegativeValueException if any of the values passed into it are negative
+        */
 	public ElevatorControlModuleImpl(int elevatorNum, int floorNum)
 	{
 		createFloors(floorNum);
 		createElevators(elevatorNum, floorNum);		
 	}
 
+       /**
+        * elevatorCallReciever takes in the elevator request with the given parameters.
+        * @param floorNumber the floor number requested. 
+        * @param directionRequest the the direction that will lead to the requested floor.
+        */
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
 	{
@@ -57,12 +64,21 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		elevatorToSend.addFloorToQueue(floorNumber);
 	}
 
+
+       /**
+        * ElevatorInterface returns the total elevators.
+        * @return returns all elevators.
+        */
 	@Override
 	public ElevatorInterface getElevator(int index)
 	{
 		return elevators[index-1];
 	}
 	
+	
+       /**
+        * Master shutdown command that stops further elevator commands.
+        */
 	public void shutDown()
 	{
 		for(ElevatorInterface elevator : elevators)
@@ -71,18 +87,34 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 	}
 
+       /**
+        * elevatorDoorsOpened takes in two parameters of the floor and elevator and removes initiates removeFromFloor
+        * @see removeFroomFloor removes passengers from the floor that will be placed into the elevator.
+        * @oaram elevator the elevator the will recieve the requests.
+        * @param floorNumber the floor number the elevator is recieving the request at.
+        */
 	@Override
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
 	{
 		floors[floorNumber-1].removeFromFloor(elevator, elevator.getDirection());
 	}
 
+       /*
+        * addPersonToFloor moves them from the specified floor to the indicated elevator.
+        * @param inPerson calls the method to add a person to the elevator.
+        * @param floorNum the floor the person is located in. 
+        */
 	@Override
 	public void addPersonToFloor(Person inPerson, int floorNum)
 	{
 		floors[floorNum-1].addPersonToFloor(inPerson);
 	}
 	
+       /*
+        * creates an elevator with a maximum number of floors
+        * @param elevatorNum the number that will identify the elevator.
+        * @param maxFloors the maximum number of floors the elevator may visit.
+        */
 	private void createElevators(int elevatorNum, int maxFloors)
 	{
 		if(elevatorNum < 1)
@@ -96,6 +128,10 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 	}
 	
+       /*
+        * creates the number of floors.
+        * @param floorNum the number of floors being added.
+        */
 	private void createFloors(int floorNum)
 	{
 		if(floorNum < 1)
