@@ -10,6 +10,7 @@ public interface ControlModuleInterface
 	public void shutDown();
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber);
 	public void addPersonToFloor(Person inPerson, int floorNum);
+	public int getMaxFloors();
 }
 //This class will be fleshed out for the second code deliverable
 //this method should facilitate elevator selection and implement

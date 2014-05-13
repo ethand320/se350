@@ -89,23 +89,38 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		{
 			
 		}
-		elevators = new ElevatorInterface[elevatorNum];
-		for(int i = 0; i < elevatorNum; ++i)
+		else
 		{
-			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors, 1);
+			elevators = new ElevatorInterface[elevatorNum];
+			for(int i = 0; i < elevatorNum; ++i)
+			{
+				elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors, 1);
+			}
 		}
+		
 	}
 	
 	private void createFloors(int floorNum)
 	{
+		//soft fail. should eventually throw an exception or something
 		if(floorNum < 1)
 		{
 			
 		}
-		floors = new FloorInterface[floorNum];
-		for(int i = 0; i < floorNum; ++i)
+		else
 		{
-			floors[i] = FloorFactory.createFloor(i);
+			floors = new FloorInterface[floorNum];
+			for(int i = 0; i < floorNum; ++i)
+			{
+				floors[i] = FloorFactory.createFloor(i);
+			}
 		}
+		
+	}
+
+	@Override
+	public int getMaxFloors()
+	{
+		return this.floors.length;
 	}
 }

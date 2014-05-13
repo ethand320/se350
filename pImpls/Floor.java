@@ -35,7 +35,8 @@ public class Floor implements FloorInterface
          */
 	public void addPersonToFloor(Person inPerson)
 	{
-		if(inPerson.getDestinationFloor() < this.getId())
+		int destinationFloor = inPerson.getDestinationFloor();
+		if(destinationFloor < this.floorNumber || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
 		{
 			goingDown.add(inPerson);
 			summonElevator(Direction.DOWN);

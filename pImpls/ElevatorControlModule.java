@@ -24,8 +24,8 @@ public class ElevatorControlModule implements ControlModuleInterface
 	{
 		delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
 	}
-	
-       /* Checks to see if the instance has been creted already
+
+	/* Checks to see if the instance has been creted already
 	* If the instance already exists then return it
 	* If the instance is Null then create a new ElevatorControlModule
 	* @return returns either the newly created instance or the previously existing instance
@@ -91,6 +91,11 @@ public class ElevatorControlModule implements ControlModuleInterface
 	@Override
 	public ElevatorInterface getElevator(int index) {
 		return delegate.getElevator(index);
+	}
+	
+	public int getMaxFloors()
+	{
+		return delegate.getMaxFloors();
 	}
 	
        /* Handles the functionality of stopping all elevators .

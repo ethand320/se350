@@ -16,12 +16,9 @@ public class Main
 	{
         try
         {
-         // sudo code for the exact implemenation we need] to turn in.
-            //Create a Building with 16 floors and 4 elevators.
-
-            SimulationEnvironment.getInstance();
+        	//For the first deliverable, the SimulationEnvironment has been hardcoded to default to 16 floors with 4 elevators. These defaults are stored as 
+        	//constants within the ElevatorControlModule class
             SimulationEnvironment.getInstance().startSimulation();
-            
         }
         catch (Exception e)
         {

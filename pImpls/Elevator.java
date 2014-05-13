@@ -69,13 +69,13 @@ public class Elevator implements ElevatorInterface, Runnable
 	           	synchronized(this)
 	           	{
 	           		requestQueue.add(floorNum);
-	           		notify();
+	           		notifyAll();
 	           	}
-	            System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+	            System.out.println("Request for floor " + ( floorNum + 1) + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
            else
            {
-        	   System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+        	   System.out.println("Request for floor " + ( floorNum + 1) + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
            }
            break;
         case DOWN:
@@ -84,13 +84,13 @@ public class Elevator implements ElevatorInterface, Runnable
             	synchronized(this)
             	{
             		requestQueue.add(floorNum);
-            		notify();
+            		notifyAll();
             	}
-                System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+                System.out.println("Request for floor " + ( floorNum + 1) + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
             else
             {
-            	System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+            	System.out.println("Request for floor " + ( floorNum + 1) + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
             }
             break;
 			
@@ -99,9 +99,9 @@ public class Elevator implements ElevatorInterface, Runnable
         	synchronized(this)
         	{
         		requestQueue.add(floorNum);
-        		notify();
+        		notifyAll();
         	}
-            System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+            System.out.println("Request for floor " + ( floorNum + 1) + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             if ( currentFloor < floorNum)
             {
             	direction = Direction.UP;
@@ -293,22 +293,21 @@ public class Elevator implements ElevatorInterface, Runnable
 						wait(10000);
 						tStart = System.currentTimeMillis() - tStart;
 				
-						//for some reason, tStart becomes 10001 in the worst case, so instead of checking whether we waited 10 seconds flat, we'll check to see if we
-						//waited 10002 milliseconds
-						if (tStart >= 10002 )
+						//only add a new request (and add an entry to the log) if the elevator is idle and isn't already at its default floor
+						if (tStart >= 10000 && this.currentFloor != 1)
 						{
-							System.out.println("Elevator" + ( getElevatorId() + 1 ) + "has been idle for 10 seconds. Returning to floor 1");
+							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has been idle for 10 seconds. Returning to floor 1");
 							addFloorToQueue(1);
 						}
 						
 						break;
 					case UP:
-						tStart = 0;
+						tStart = System.currentTimeMillis();
 						wait(500);
 						if(this.currentFloor < this.maxFloors)
 						{
 							this.currentFloor++;
-				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 						}
 						else if(this.currentFloor == this.maxFloors)
 						{
@@ -317,12 +316,12 @@ public class Elevator implements ElevatorInterface, Runnable
 			
 						break;
 					case DOWN:
-						tStart = 0;
+						tStart = System.currentTimeMillis();
 						wait(500);
-						if(this.currentFloor > this.maxFloors)
+						if(this.currentFloor > this.minFloors)
 						{
 							this.currentFloor--;
-				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + currentFloor);
+				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 						}
 						else if(this.currentFloor == this.minFloors)
 						{
