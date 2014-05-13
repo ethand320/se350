@@ -28,7 +28,8 @@ public class Elevator implements ElevatorInterface, Runnable
         * Constructor for Elevator. Takes in the elevator Id, capacity, and max/min floors.
         * @param inId The elevators id. This number cannot be negative and must be independent of another elevators Id.
         * @param inCapacity The total number of passengers the elevator can hold. This number cannot be negative and must not be less than {@ Value}
-        * @param inMaxFloors The maximum amount of floors the elevator can access. This number must not be negative and should be less than or equal to the total floors in the building le The floor number that will be added to the queue.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
+        * @param inMaxFloors The maximum amount of floors the elevator can access.
+        * @param inMinFloors The minimum amount of floors the elevator can access.
         * @throws NegativeCapacityException if any of the values passed into it are negative.
         */
 	public Elevator(int inId, int inCapacity, int inMaxFloors, int inMinFloors)
