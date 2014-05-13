@@ -397,6 +397,11 @@ public class Elevator implements ElevatorInterface, Runnable
     
     private void createPassengerList()
     {
-		passengerList = new ArrayList<Person>();
-	}
+	passengerList = new ArrayList<Person>();
+    }
+	
+    @Override
+    public boolean isOpen() {
+        return bDoorsOpen;
+    }
 }
