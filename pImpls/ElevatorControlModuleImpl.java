@@ -20,7 +20,6 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
  	* ElevatorControlModuleImpl creates floors and elevators with the given parameters.
 	* @param elevatorNum The number of elevators to be created. 
  	* @param floorNum The number of floors to be created.
- 	* @throws NegativeValueException if any of the values passed into it are negative
         */
 	public ElevatorControlModuleImpl(int elevatorNum, int floorNum)
 	{
