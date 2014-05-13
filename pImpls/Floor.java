@@ -15,9 +15,9 @@ public class Floor implements FloorInterface
 	private ArrayList<Person> goingDown;
 	private int floorNumber;
 	
-	/** EDIT THIS FOR FLOOR
+    /** 
      * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
-     * @param paramCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
+     * @param Capacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
      * @param numFloors The number of floors that this elevator services. This value cannot be larger than the number of floors in the building that owns it, but it may be smaller
      * @param idNumber The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
      * @throws NegativeCapacityException if any of the values passed into it are negative
@@ -28,11 +28,10 @@ public class Floor implements FloorInterface
 		initializeFloorArrays();
 	}
 	
-	@Override
-        
         /** Called when initializing a person on a floor
-         * @param Person
+         * @param inPerson the person that is being added to the floor
          */
+        @Override
 	public void addPersonToFloor(Person inPerson)
 	{
 		int destinationFloor = inPerson.getDestinationFloor();
@@ -48,10 +47,10 @@ public class Floor implements FloorInterface
 		}
 	}
 	
-	@Override
         /** Elevator Call button press method.  
-         * @param  Direction UP or Down 
+         * @param directionToGo the direction the elevator will go.
          */
+        @Override
 	public void summonElevator(Direction directionToGo) 
 	{
 		if(directionToGo != Direction.IDLE)
@@ -60,13 +59,20 @@ public class Floor implements FloorInterface
 		}
 	}
 
-
+       /**
+        * @return returns this floor number when called.
+        */ 
 	@Override
 	public int getId() 
 	{
 		return this.floorNumber;
 	}
 
+       /**
+        * removes the people that desire to get off at the floor
+        * @param elevatorToEnter places the people from the floor onto the specified elevator.
+        * @param directionToGo the direction decides if a person will get off at the given floor or not.
+        */
 	@Override
 	public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
 	{
@@ -88,11 +94,18 @@ public class Floor implements FloorInterface
 		}
 	}
 	
+       /*
+        * Sets the floor number to the given paramter
+        * @param inNum the floor number that will be set as the floorNumber.
+        */
 	private void setFloorNumber(int inNum)
 	{
 		floorNumber = inNum;
 	}
 
+       /*
+        * Creates the floor arrays of type <Person> for both elevator directions.
+        */
 	private void initializeFloorArrays()
 	{
 		goingUp = new ArrayList<Person>();

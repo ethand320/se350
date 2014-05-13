@@ -17,6 +17,7 @@ public interface ElevatorInterface
     public ArrayList <Person> getPassengers();
     public int getElevatorId();
     public Direction getDirection();
-	public void shutDown();
+    public void shutDown();
+    public boolean isOpen();
     public static final int DEFAULT_ELEVATOR_CAPACITY = 10;
 }
