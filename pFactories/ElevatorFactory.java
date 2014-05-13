@@ -9,7 +9,7 @@ import pImpls.Elevator;
  */
 public class ElevatorFactory
 {
-    /*
+   /*
     *
     */
     private ElevatorFactory()
@@ -17,11 +17,10 @@ public class ElevatorFactory
         
     }
     
-        /**
+    /**
      * This method creates and returns a new elevator object based upon the parameters.
      * @param capacity A positive integer representing the number total number of people the elevator can hold.
-     * @param elevatorID A positive integer representing the indentifier number of the elevator
-     * @throw NegativeCapacityException if capacity or elevatorID are less than zero
+     * @param elevatorId A positive integer representing the indentifier number of the elevator
      * @return A new elevator object with the given attributes
      */
     public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors)
