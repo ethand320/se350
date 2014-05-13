@@ -19,5 +19,6 @@ public interface ElevatorInterface
     public Direction getDirection();
     public void shutDown();
     public boolean isOpen();
+    public boolean isRunning();
     public static final int DEFAULT_ELEVATOR_CAPACITY = 10;
 }
