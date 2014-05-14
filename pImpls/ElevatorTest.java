@@ -217,10 +217,15 @@ public class ElevatorTest {
     @Test
     public void testRun() {
         System.out.println("run");
-        Elevator instance = null;
-        instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        elevator.run();
+        assertEquals(true, elevator.isRunning());
+        elevator.shutDown();
+        try{
+            if (!elevator.isRunning())
+                elevator.shutDown();
+                fail("Systems are offline!");
+        }catch(IllegalArgumentException e){
+        }
     }
     
 }
