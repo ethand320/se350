@@ -19,7 +19,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	private int capacity;
 	private int elevatorId;
 	private Thread elevatorThread = new Thread(this);
-	private boolean running;
+	private boolean running = true;
 	private int maxFloors;
 	private int minFloors;
 	
