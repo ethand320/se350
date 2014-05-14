@@ -408,8 +408,21 @@ public class Elevator implements ElevatorInterface, Runnable
 	passengerList = new ArrayList<Person>();
     }
 	
+   /**
+    * Handles the opening and closing of the elevator doors.
+    * @return returns true if the doors are open or false if the doors are closed.
+    */
     @Override
     public boolean isOpen() {
         return bDoorsOpen;
+    }
+    
+   /**
+    * Handles the running and stopping of the elevator system.
+    * @return returns true if the system is running or false if the system is shutdown.
+    */
+    @Override
+    public boolean isRunning() {
+        return running;
     }
 }
