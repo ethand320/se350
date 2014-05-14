@@ -250,7 +250,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		return this.passengerList;
 	}
 	
-       /*
+       /**
         * Retrieves the elevator's id.
         * @return returns the id that corresponds to the elevator that requested this method.
         */
@@ -260,7 +260,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		return this.elevatorId;
 	}
 	
-       /*
+       /**
         * Changes the elevator running system to false.
         */
 	@Override
@@ -269,7 +269,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.running = false;
 	}
 	
-       /*
+       /**
         * Starts the elevator system process. Creates a timer to record the events of the elevator.
         * @throw InterruptedException throws an error if the elevator system is stopped or interruped. Prints the trace to the stack.
         */
@@ -354,7 +354,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		}
 	}
 	
-       /*
+       /**
         * Initializes the requestQueue array for each elevator.
         * This allows for different floors to be added to the elevator's array.
         */
