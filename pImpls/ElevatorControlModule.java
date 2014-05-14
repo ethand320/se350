@@ -15,8 +15,9 @@ public class ElevatorControlModule implements ControlModuleInterface
 	private static final int DEFAULT_ELEVATOR_NUM = 4;
 	private static final int DEFAULT_FLOOR_NUM = 16;
 	
-       /* private method that uses delegation to create the elevator controller.
-	* @param elevatorNum The number that identifies the elevator itself
+       /** 
+        * private method that uses delegation to create the elevator controller.
+	* @param elevatorNum The number that identifies the elevator itself.
 	* @param floorNum the floor number that will be passed to the elevator.
 	* @throws NegativeNumberException throws an exception if either elevatorNum or floorNum are negative.
 	*/
@@ -25,11 +26,12 @@ public class ElevatorControlModule implements ControlModuleInterface
 		delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
 	}
 
-	/* Checks to see if the instance has been creted already
-	* If the instance already exists then return it
-	* If the instance is Null then create a new ElevatorControlModule
-	* @return returns either the newly created instance or the previously existing instance
-	*/
+       /** 
+	* Checks to see if the instance has been creted already.
+  	* If the instance already exists then return it.
+	* If the instance is Null then create a new ElevatorControlModule.
+  	* @return returns either the newly created instance or the previously existing instance.
+  	*/
 	public static ControlModuleInterface getInstance()
 	{
 		if(instance == null)
@@ -46,7 +48,8 @@ public class ElevatorControlModule implements ControlModuleInterface
 		return instance;
 	}
 	
-       /* Checks to see if the instance has been creted already using the given parameters.
+       /** 
+        * Checks to see if the instance has been creted already using the given parameters.
         * @param elevatorNum the number that is assigned to the elevator.
         * @param floorNum  the floor number that is being assigned to the elevator.
 	* @return returns either the newly created instance or the previously existing instance
@@ -73,8 +76,6 @@ public class ElevatorControlModule implements ControlModuleInterface
         * Handles the system that works with the calling of elevators to and from floors. Passes the direction and the floor number to an elevator
         * @param floorNumber the floor number that is delegated to an elevator. This number can not be negative and should exist in the building. 
         * @param directionRequest The requested direction to be delegated to an elevator.
-        * @throws InvalidFloorException throws an exception if the floor number passed is negative or if the floor does not exist in the building
-        * @throws InvalidDirectionException throws an exception if the direction being passed is invalid.
         */
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
@@ -82,10 +83,9 @@ public class ElevatorControlModule implements ControlModuleInterface
 		delegate.elevatorCallReceiver(floorNumber, directionRequest);
 	}
 
-       /* ElevatorInterface returns the elevator corresponding to the requested index. This value can not be negative and should be within the index range
+       /**
+        * ElevatorInterface returns the elevator corresponding to the requested index. This value can not be negative and should be within the index range
         * @param index the number used to retrieve the elevator at the specified index.
-        * @throw NegativeIndexException throws an exception if the index passed is negative.
-        * @throw InvalidIndexException throws an exception if the index passed is outside the range.
         * @return Delegates the elevator with the specified index.
         */
 	@Override
@@ -93,19 +93,30 @@ public class ElevatorControlModule implements ControlModuleInterface
 		return delegate.getElevator(index);
 	}
 	
+       /**
+	* Retrieves the maximum number of floors.
+	* @return returns the total number of floors to be delegated.
+	*/
 	public int getMaxFloors()
 	{
 		return delegate.getMaxFloors();
 	}
 	
-       /* Handles the functionality of stopping all elevators .
+       /**
+        * Handles the functionality of stopping all elevators .
         * Delegates the shutDown method to allow for the Ending of all elevator instances.
         */
 	public void shutDown()
 	{
 		delegate.shutDown();
 	}
-
+	
+       /** 
+        * Handles the functionality of opening the elevator door at a specified floor.
+        * @param elevator the elevator that will have their doors opened.
+        * @param floorNumber the floor number of the elevator that will have it's doors opened.
+        * Delegates the method to allow for different elevators to perform a similar task.
+        */
 	@Override
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
 	{
@@ -113,6 +124,12 @@ public class ElevatorControlModule implements ControlModuleInterface
 		
 	}
 
+       /** 
+        * Handles the functionality of adding a person to the floor.
+        * @param inPerson the object person that will be added to the floor.
+        * @param floorNum the floor number the person will be added to.
+        * Delegates the method to allow for multiple persons to be added to different floors.
+        */
 	@Override
 	public void addPersonToFloor(Person inPerson, int floorNum)
 	{
