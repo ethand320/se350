@@ -85,7 +85,7 @@ public class SimulationEnvironment
 			
 			//allow the elevators time to run their floor requests and go idle
 			System.out.println("Going to sleep now (2/2)");
-	        Thread.sleep(15000);
+	        Thread.sleep(10000);
 	        System.out.println("Waking up now (2/2)");
 	        
 	        	        

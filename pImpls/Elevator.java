@@ -123,7 +123,7 @@ public class Elevator implements ElevatorInterface, Runnable
         * @throws NegativePassengerException if any of the values passed into it are negative
         */
 	@Override
-	public void addPassenger(Person inPassenger) 
+	public synchronized void addPassenger(Person inPassenger) 
 	{
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
@@ -136,7 +136,7 @@ public class Elevator implements ElevatorInterface, Runnable
         * @throws NegativePassengersException if any of the values passed into it are negative
         */
 	@Override
-	public void addPassengers(Person[] inPeople) 
+	public synchronized void addPassengers(Person[] inPeople) 
 	{
 		for (Person p : inPeople)
 		{
@@ -155,8 +155,17 @@ public class Elevator implements ElevatorInterface, Runnable
 		 try
 		 {
 			 ElevatorControlModule.getInstance().elevatorDoorsOpened(this, this.currentFloor);
+			 
+			 //find any passengers who are supposed to get off on this floor and remove them
+			 for( int i = 0; i < this.passengerList.size(); ++i)
+			 {
+				 if(this.passengerList.get(i).getDestinationFloor() == this.currentFloor)
+				 {
+					 this.passengerList.remove(i);
+				 }
+			 }
 			 wait(500);
-	         }
+	     }
 		 catch (InterruptedException e)
 		 {
 			e.printStackTrace();
@@ -216,7 +225,7 @@ public class Elevator implements ElevatorInterface, Runnable
         */
 	//private variable that initalizes the requestQueue.
 	@Override
-	public void removePassengers(ArrayList <Person> inPeople) 
+	public synchronized void removePassengers(ArrayList <Person> inPeople) 
 	{
 		// TODO Auto-generated method stub
 		this.passengerList.removeAll(inPeople);
@@ -262,7 +271,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	{
 		try
 		{
-			long tStart = 0;
+			long tStart = System.currentTimeMillis();
 			
 			System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has started");
 		    running = true;
@@ -295,7 +304,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						tStart = System.currentTimeMillis() - tStart;
 				
 						//only add a new request (and add an entry to the log) if the elevator is idle and isn't already at its default floor
-						if (tStart >= 10000 && this.currentFloor != 1)
+						if (tStart >= 10001 && this.currentFloor != 1)
 						{
 							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has been idle for 10 seconds. Returning to floor 1");
 							addFloorToQueue(1);
