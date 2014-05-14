@@ -132,25 +132,6 @@ public class ElevatorTest {
     @Test
     public void testRemovePassenger() {
         System.out.println("removePassenger");
-        passengerList p1 = new passengerList(1,0,20,150);
-        Passenger p2 = new Passenger(2,5,10,150);
-        Elevator instance = new Elevator(10, 5.0, 0.1, 4.0);
-        instance.setDirection(Direction.UP);
-        instance.setService(0, true);
-        instance.setService(5, true);
-        instance.setService(10, true);
-        instance.setService(20,true);
-        instance.setTarget(0);
-        instance.setClock(new Clock(1000));
-        instance.addPassenger(p1);
-        instance.closeDoors();
-        instance.setTarget(5);
-        instance.setClock(new Clock(2000));
-        instance.addPassenger(p2);
-        instance.closeDoors();
-        instance.setTarget(20);
-        instance.setClock(new Clock(3000));
-        instance.removePassenger(p1);
         assertEquals(false, instance.containsPassenger(p1));
         assertEquals(true, instance.containsPassenger(p2));
     }
