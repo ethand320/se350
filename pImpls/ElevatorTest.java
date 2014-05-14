@@ -19,14 +19,13 @@ import pInterfaces.ElevatorInterface;
  * Tests the main functionality of the elevator system.
  */
 public class ElevatorTest {
-    public Elevator elevator;
-    public boolean isrunning = true;
+    private Elevator elevator;
+    private boolean isrunning = true;
     public static final int FLOOR_ONE = 1;
     public static final int FLOOR_TEN = 10;
     public static final int BASEMENT = -3;
     private boolean bDoorsOpen = true;
     private ArrayList<Person> passengerList;
-    private boolean running = true;
     private Person p;
     private int currentFloor = 1;
     public ElevatorTest() {
