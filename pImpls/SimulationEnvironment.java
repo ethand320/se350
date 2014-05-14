@@ -3,23 +3,33 @@ package pImpls;
 import pFactories.PersonFactory;
 import pInterfaces.ElevatorInterface;
 
-/* SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
-   This is what will run all the elevators until control module logic is fully implemented
-*/
+/**
+ * SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
+ * This is what will run all the elevators until control module logic is fully implemented.
+ */
 public class SimulationEnvironment
 {
 	private volatile static SimulationEnvironment instance;
 	
+        /**
+	 * 
+	 */
 	private SimulationEnvironment(int numFloors, int numElevators)
 	{
 		ElevatorControlModule.getInstance(numFloors, numElevators);
 	}
 	
+	/**
+	 * 
+	 */
 	private SimulationEnvironment()
 	{
 		ElevatorControlModule.getInstance();
 	}
 	
+	/**
+	 * 
+	 */
 	public static SimulationEnvironment getInstance(int numFloors, int numElevators)
 	{
 		synchronized(SimulationEnvironment.class)
