@@ -28,6 +28,7 @@ public class ElevatorTest {
     private ArrayList<Person> passengerList;
     private boolean running = true;
     private Person p;
+    private int currentFloor = 1;
     public ElevatorTest() {
     }
     
@@ -54,8 +55,16 @@ public class ElevatorTest {
     @Test
     public void addFloorToQueueTest(){
         elevator.addFloorToQueue(FLOOR_ONE);
-        assertSame(FLOOR_ONE, );
+        assertSame(FLOOR_ONE, currentFloor);
+        assertNotSame(FLOOR_TEN, currentFloor);
+        try{
+        elevator.addFloorToQueue(BASEMENT);
+            if (currentFloor <= 0)
+                fail("Floor does not exist");
+        }catch( IllegalArgumentException e ) {
+        }
        }
+
 
     /**
      * Test of addPassenger method, of class Elevator.
