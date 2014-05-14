@@ -217,9 +217,9 @@ public class ElevatorTest {
     @Test
     public void testRun() {
         System.out.println("run");
-        assertFalse(elevator.isRunning());
+        assertEquals(true,elevator.isRunning());
         try{
-            if (elevator.isRunning())
+            if (!elevator.isRunning())
                 fail("Systems are Online without call!");
         }catch(IllegalArgumentException e){
         }
