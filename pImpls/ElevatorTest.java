@@ -16,8 +16,7 @@ import static org.junit.Assert.*;
 import pInterfaces.ElevatorInterface;
 
 /**
- *
- * @author Stouny
+ * Tests the main functionality of the elevator system.
  */
 public class ElevatorTest {
     public Elevator elevator;
@@ -27,6 +26,8 @@ public class ElevatorTest {
     public static final int BASEMENT = -3;
     private boolean bDoorsOpen = true;
     private ArrayList<Person> passengerList;
+    private boolean running = true;
+    private Person p;
     public ElevatorTest() {
     }
     
@@ -210,22 +211,18 @@ public class ElevatorTest {
         elevator.shutDown();
         assertEquals(false,elevator.isRunning());
     }
-
     /**
      * Test of run method, of class Elevator.
      */
     @Test
     public void testRun() {
         System.out.println("run");
-        elevator.run();
-        assertEquals(true, elevator.isRunning());
-        elevator.shutDown();
+        assertFalse(elevator.isRunning());
         try{
-            if (!elevator.isRunning())
-                elevator.shutDown();
-                fail("Systems are offline!");
+            if (elevator.isRunning())
+                fail("Systems are Online without call!");
         }catch(IllegalArgumentException e){
         }
     }
-    
+        
 }
