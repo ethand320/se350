@@ -16,17 +16,18 @@ import static org.junit.Assert.*;
 import pInterfaces.ElevatorInterface;
 
 /**
- *
- * @author Stouny
+ * Tests the main functionality of the elevator system.
  */
 public class ElevatorTest {
-    public Elevator elevator;
-    public boolean isrunning = true;
+    private Elevator elevator;
+    private boolean isrunning = true;
     public static final int FLOOR_ONE = 1;
     public static final int FLOOR_TEN = 10;
     public static final int BASEMENT = -3;
     private boolean bDoorsOpen = true;
     private ArrayList<Person> passengerList;
+    private Person p;
+    private int currentFloor = 1;
     public ElevatorTest() {
     }
     
@@ -53,8 +54,16 @@ public class ElevatorTest {
     @Test
     public void addFloorToQueueTest(){
         elevator.addFloorToQueue(FLOOR_ONE);
-        assertSame(FLOOR_ONE, );
+        assertSame(FLOOR_ONE, currentFloor);
+        assertNotSame(FLOOR_TEN, currentFloor);
+        try{
+        elevator.addFloorToQueue(BASEMENT);
+            if (currentFloor <= 0)
+                fail("Floor does not exist");
+        }catch( IllegalArgumentException e ) {
+        }
        }
+
 
     /**
      * Test of addPassenger method, of class Elevator.
@@ -210,22 +219,18 @@ public class ElevatorTest {
         elevator.shutDown();
         assertEquals(false,elevator.isRunning());
     }
-
     /**
      * Test of run method, of class Elevator.
      */
     @Test
     public void testRun() {
         System.out.println("run");
-        elevator.run();
-        assertEquals(true, elevator.isRunning());
-        elevator.shutDown();
+        assertEquals(true,elevator.isRunning());
         try{
             if (!elevator.isRunning())
-                elevator.shutDown();
-                fail("Systems are offline!");
+                fail("Systems are Online without call!");
         }catch(IllegalArgumentException e){
         }
     }
-    
+        
 }

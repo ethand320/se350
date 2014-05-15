@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 /**
- *  properties such as the speed, capacity, and floor range of the elevator to be customized.
+ *  Elevator class that handles properties such as the speed, capacity, and floor range of the elevator to be customized.
  */
 public class Elevator implements ElevatorInterface, Runnable
 {
@@ -19,7 +19,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	private int capacity;
 	private int elevatorId;
 	private Thread elevatorThread = new Thread(this);
-	private boolean running;
+	private boolean running = true;
 	private int maxFloors;
 	private int minFloors;
 	
@@ -30,7 +30,6 @@ public class Elevator implements ElevatorInterface, Runnable
         * @param inCapacity The total number of passengers the elevator can hold. This number cannot be negative and must not be less than {@ Value}
         * @param inMaxFloors The maximum amount of floors the elevator can access.
         * @param inMinFloors The minimum amount of floors the elevator can access.
-        * @throws NegativeCapacityException if any of the values passed into it are negative.
         */
 	public Elevator(int inId, int inCapacity, int inMaxFloors, int inMinFloors)
 	{
@@ -40,15 +39,14 @@ public class Elevator implements ElevatorInterface, Runnable
 		setMinFloors(inMinFloors);
 		initializeRequestQueue();
 		setInitialDirection();
-        setDefaultFloor(1);   // will make this customizable in later iterations
-        createPassengerList();
-        elevatorThread.start();
+        	setDefaultFloor(1);   // will make this customizable in later iterations
+        	createPassengerList();
+        	elevatorThread.start();
 	}
 	
        /**
-        * Simulates the act of calling an elevator.  Only accepted if floor is on elevator's path
-        * @param floorNum The floor number that will be added to the queue.This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
-        * @throws NegativeFloorException if any of the values passed into it are negative
+        * Simulates the act of calling an elevator.  Only accepted if floor is on the elevator's path
+        * @param floorNum The floor number that will be added to the queue. It need not be in consecutive order compared to other elevators in the building.
         */
 	@Override
 	public void addFloorToQueue(int floorNum) 
@@ -67,12 +65,12 @@ public class Elevator implements ElevatorInterface, Runnable
         case UP:
            if (floorNum > this.currentFloor)
             {
-	           	synchronized(this)
-	           	{
-	           		requestQueue.add(floorNum);
-	           		notifyAll();
-	           	}
-	            System.out.println("Request for floor " + ( floorNum + 1) + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+	           synchronized(this)
+	           {
+	           	requestQueue.add(floorNum);
+	           	notifyAll();
+	           }
+	           System.out.println("Request for floor " + ( floorNum + 1) + " was added to elevator: " + ( this.getElevatorId() + 1 ));
             }
            else
            {
@@ -120,7 +118,6 @@ public class Elevator implements ElevatorInterface, Runnable
        /**
         * Add a passenger to the elevator.  Adds person object.
         * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, and should be added to the pasenger list.
-        * @throws NegativePassengerException if any of the values passed into it are negative
         */
 	@Override
 	public synchronized void addPassenger(Person inPassenger) 
@@ -133,7 +130,6 @@ public class Elevator implements ElevatorInterface, Runnable
        /**
      	* Add multiple pasengers to the elevator.
         * @param inPeople The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
-        * @throws NegativePassengersException if any of the values passed into it are negative
         */
 	@Override
 	public synchronized void addPassengers(Person[] inPeople) 
@@ -142,7 +138,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			this.passengerList.add(p);
 		}
-    }
+        }
 	
 	/**
 	 * Allows for the doors of the elevator to be opened. A 500 ms wait time is added to allow for the removal and addition of passenger(s)
@@ -165,7 +161,7 @@ public class Elevator implements ElevatorInterface, Runnable
 				 }
 			 }
 			 wait(500);
-	     }
+	     	}
 		 catch (InterruptedException e)
 		 {
 			e.printStackTrace();
@@ -192,6 +188,10 @@ public class Elevator implements ElevatorInterface, Runnable
 		}
 	}
 
+       /**
+        * retrieves the direction of the requested elevator and returns it.
+        * @return returns the current direction of the requested elevator.
+        */
 	@Override
 	public Direction getDirection()
 	{
@@ -218,7 +218,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	}
 	
        /**
-        * Remove multiple passenger from the elevator.
+        * Remove multiple passengers from the elevator.
         * @param inPeople The passengers that will be removed from the elevator. Each value in inPeople must be inside of the passengerList and should not be negative.
         * @throws NegativePassengerException throws an exception if the passenger value passed is negative.
         * @throws InvalidIndexException throws an exception if the passenger passed isn't in the passenger list.
@@ -227,30 +227,30 @@ public class Elevator implements ElevatorInterface, Runnable
 	@Override
 	public synchronized void removePassengers(ArrayList <Person> inPeople) 
 	{
-		// TODO Auto-generated method stub
 		this.passengerList.removeAll(inPeople);
 	}
 
        /**
         * Retrieves the capacity of the elevator.
-        * @return initaites the capacity to be 0 for each call.
+        * @return returns the capacity of the elevator instance.
         */
 	@Override
 	public int getCapacity() 
-	{	//shouldn't this return the capacity of the elevator instance????
+	{	
 		return this.capacity;
 	}
 
        /**
         * Retrieves all passengers in the passengerList.
-        * @return the collection of passengers in the list
+        * @return the collection of passengers in the list.
         */
 	@Override
 	public ArrayList<Person> getPassengers() 
 	{
 		return this.passengerList;
 	}
-		/*
+	
+       /**
         * Retrieves the elevator's id.
         * @return returns the id that corresponds to the elevator that requested this method.
         */
@@ -260,12 +260,19 @@ public class Elevator implements ElevatorInterface, Runnable
 		return this.elevatorId;
 	}
 	
+       /**
+        * Changes the elevator running system to false.
+        */
 	@Override
 	public void shutDown()
 	{
 		this.running = false;
 	}
 	
+       /**
+        * Starts the elevator system process. Creates a timer to record the events of the elevator.
+        * @throw InterruptedException throws an error if the elevator system is stopped or interruped. Prints the trace to the stack.
+        */
 	@Override
 	public void run()
 	{
@@ -278,7 +285,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	        while (running)
 	        {
 	        	
-	        	// if current floor is in request queue
+	        	// if current floor is in request queue.
 	        	
 	        	if (requestQueue.contains(this.currentFloor))
 	        	{
@@ -287,7 +294,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	        	  requestQueue.remove((Integer)this.currentFloor);
 	        	}
 	        	
-	        	// if queue is empty  switch to idle
+	        	// if queue is empty  switch to idle.
 	        	if (requestQueue.isEmpty())
 	        	{
 	        		this.direction = Direction.IDLE;
@@ -339,14 +346,18 @@ public class Elevator implements ElevatorInterface, Runnable
 						}
 					}
 				}
-	        }
+	        	}
 		}
 		catch(InterruptedException e)
-        {
+        	{
         	e.printStackTrace();
-        }
+		}
 	}
 	
+       /**
+        * Initializes the requestQueue array for each elevator.
+        * This allows for different floors to be added to the elevator's array.
+        */
 	private synchronized void initializeRequestQueue()
 	{
 		this.requestQueue = new ArrayList<Integer>();
@@ -354,10 +365,8 @@ public class Elevator implements ElevatorInterface, Runnable
 	
        /**
         * Sets the identifier number assigned to this elevator.
-        * private variable - only to be used to give an id to an elevator
-        * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
-        * @throw NegativeIdException throws an exception of the id being assigned is negative
-        * @throw IdenticalIdException throws an exception if the id being assigned already exists
+        * private variable - only to be used to give an id to an elevator.
+        * @param inId The unique identifier number. This number need not be in consecutive order compared to other elevators in the building.
         */
 	private void setId(int inId)
 	{
@@ -366,63 +375,79 @@ public class Elevator implements ElevatorInterface, Runnable
 	
        /**
         * Sets the maximum number of floors.
-        * private variable - only to be used to give an id to an elevator
-        * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
-        * @throw NegativeIdException throws an exception of the id being assigned is negative
-        * @throw IdenticalIdException throws an exception if the id being assigned already exists
+        * private variable - only to be used to handle the maximum elevator floors.
+        * @param inMaxFloors The total number of floors the elevator can visit.
         */
-	
 	private void setMaxFloors(int inMaxFloors)
 	{
 		this.maxFloors = inMaxFloors;
 	}
-	
+
+       /**
+        * Sets the minimum number of floors.
+        * private variable - only to be used to handle the minimum elevator floors.
+        * @param inMinFloors The lowest numbered floor the elevator can visit.
+        */
 	private void setMinFloors(int inMinFloors)
 	{
 		this.minFloors = inMinFloors;
 	}
 	
+       /**
+        * Sets the initial direction for the elevator to IDLE.
+        * private variable - only to be used to give a default direction to an elevator.
+        */
 	private void setInitialDirection()
 	{
 		this.direction = Direction.IDLE;
 	}
 	
-    /**
-     * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
-     * @param inCapacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
-     * @param inId The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
-     * @throws NegativeCapacityException if any of the values passed into it are negative
-     */
+       /**
+        * Sets the initial capacity for the elevator.
+        * private variable - only to be used to give a default direction to an elevator.
+        * @param inCap the total capacity limit the elevator can hold.
+        */
 	private void setCapacity(int inCap)
 	{
 		this.capacity = inCap;
 	}
+
+       /**
+        * Sets the initial floor for the elevator.
+        * private variable - only to be used to give a default floor to an elevator.
+        * @param floor The default floor level that will be assigned to an elevator.
+        */	
+	private void setDefaultFloor(int floor)
+        {
+        	this.currentFloor = floor;
+    	}
+    	
+       /**
+        * Creates the passengerList to be used with the elevators..
+        * private variable - only to be used create the passengerList.
+        */    
+    	private void createPassengerList()
+    	{
+		passengerList = new ArrayList<Person>();
+    	}
 	
-    private void setDefaultFloor(int floor)
-    {
-        this.currentFloor = floor;
-    }
+       /**
+    	* Handles the opening and closing of the elevator doors.
+        * @return returns true if the doors are open or false if the doors are closed.
+        */
+    	@Override
+    	public boolean isOpen() 
+    	{
+		return bDoorsOpen;
+	}
     
-    private void createPassengerList()
-    {
-	passengerList = new ArrayList<Person>();
-    }
-	
-   /**
-    * Handles the opening and closing of the elevator doors.
-    * @return returns true if the doors are open or false if the doors are closed.
-    */
-    @Override
-    public boolean isOpen() {
-        return bDoorsOpen;
-    }
-    
-   /**
-    * Handles the running and stopping of the elevator system.
-    * @return returns true if the system is running or false if the system is shutdown.
-    */
-    @Override
-    public boolean isRunning() {
-        return running;
-    }
+       /**
+        * Handles the running and stopping of the elevator system.
+        * @return returns true if the system is running or false if the system is shutdown.
+        */
+    	@Override
+    	public boolean isRunning() 
+    	{
+        	return running;
+    	}
 }

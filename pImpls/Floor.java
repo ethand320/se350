@@ -4,7 +4,6 @@ import pInterfaces.FloorInterface;
 import java.util.ArrayList;
 
 
-//fill this in
 /**
  * The floor class represents a building floor containing the floor number, summon elevator buttons, and the modification of people on the floor.  
  *  requests to visit certain floors. Each Elevator object runs in its own thread and will continue to run until manually shut down.
@@ -16,11 +15,8 @@ public class Floor implements FloorInterface
 	private int floorNumber;
 	
     /** 
-     * Constructor which allows for properties such as the speed, capacity, and floor range of the elevator to be customized.
-     * @param Capacity The number of people this elevator can hold at a given time. When the elevator hits capacity, no more people may board the elevator.
-     * @param numFloors The number of floors that this elevator services. This value cannot be larger than the number of floors in the building that owns it, but it may be smaller
-     * @param idNumber The unique identifier number. This number cannot be negative, but it need not be in consecutive order compared to other elevators in the building.
-     * @throws NegativeCapacityException if any of the values passed into it are negative
+     * Constructor which allows for the initializations of the floor array as well as handling floor identification numbers.
+     * @param inFloorId The identification number that will be assigned to each floor.
      */
 	public Floor(int inFloorId)
 	{
@@ -28,7 +24,8 @@ public class Floor implements FloorInterface
 		initializeFloorArrays();
 	}
 	
-        /** Called when initializing a person on a floor
+        /** 
+         * Adds a person to the floor that called this method.
          * @param inPerson the person that is being added to the floor
          */
         @Override
@@ -47,7 +44,8 @@ public class Floor implements FloorInterface
 		}
 	}
 	
-        /** Elevator Call button press method.  
+        /** 
+         * Requests for an elevator to be summoned in the specified direction.
          * @param directionToGo the direction the elevator will go.
          */
         @Override
@@ -60,6 +58,7 @@ public class Floor implements FloorInterface
 	}
 
        /**
+        * retrieves the floor identification number for the requested call.
         * @return returns this floor number when called.
         */ 
 	@Override
@@ -69,7 +68,7 @@ public class Floor implements FloorInterface
 	}
 
        /**
-        * removes the people that desire to get off at the floor
+        * removes the people that desire to get off at the floor.
         * @param elevatorToEnter places the people from the floor onto the specified elevator.
         * @param directionToGo the direction decides if a person will get off at the given floor or not.
         */
@@ -94,7 +93,7 @@ public class Floor implements FloorInterface
 		}
 	}
 	
-       /*
+       /**
         * Sets the floor number to the given paramter
         * @param inNum the floor number that will be set as the floorNumber.
         */
@@ -103,7 +102,7 @@ public class Floor implements FloorInterface
 		floorNumber = inNum;
 	}
 
-       /*
+       /**
         * Creates the floor arrays of type <Person> for both elevator directions.
         */
 	private void initializeFloorArrays()

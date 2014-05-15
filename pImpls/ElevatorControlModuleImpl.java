@@ -9,7 +9,6 @@ import pInterfaces.FloorInterface;
 
 /**
  * ElevatorControlModuleImpl class implements ControlModuleInterface 
- *
  */
 public class ElevatorControlModuleImpl implements ControlModuleInterface
 {
@@ -115,7 +114,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		floors[floorNumber-1].removeFromFloor(elevator, elevator.getDirection());
 	}
 
-       /*
+       /**
         * addPersonToFloor moves them from the specified floor to the indicated elevator.
         * @param inPerson calls the method to add a person to the elevator.
         * @param floorNum the floor the person is located in. 
@@ -126,7 +125,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		floors[floorNum-1].addPersonToFloor(inPerson);
 	}
 	
-       /*
+       /**
         * creates an elevator with a maximum number of floors
         * @param elevatorNum the number that will identify the elevator.
         * @param maxFloors the maximum number of floors the elevator may visit.
@@ -148,7 +147,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		
 	}
 	
-       /*
+       /**
         * creates the number of floors.
         * @param floorNum the number of floors being added.
         */
@@ -169,7 +168,10 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 		
 	}
-
+	/**
+	 * retrieves the maximum floor length.
+	 * @return returns the total length of the buildings floors.
+	 */
 	@Override
 	public int getMaxFloors()
 	{
