@@ -41,13 +41,23 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 		ElevatorInterface elevatorToSend;
 		
+		//this number is used as a fallback value for the case where we have fewer than 4 elevators in our building. should help the selection algo to work when unit testing
+		int elevatorNum = elevators.length;
+		
 		//SIMPSON TODO: for now, we're going to hard code the elevator logic to meet the test requirements of the first deliverable 
 		//this MUST be changed for the next iteration
 		switch(floorNumber)
 		{
 		case 4:
 		case 15:
-			elevatorToSend = elevators[2];
+			if(elevatorNum >= 3)
+			{
+				elevatorToSend = elevators[2];
+			}
+			else
+			{
+				elevatorToSend = elevators[elevatorNum - 1];
+			}
 			break;
 		case 10:
 			elevatorToSend = elevators[0];
@@ -55,7 +65,14 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		case 12:
 		case 13:
 		case 14:
-			elevatorToSend = elevators[1];
+			if(elevatorNum >= 2)
+			{
+				elevatorToSend = elevators[1];
+			}
+			else
+			{
+				elevatorToSend = elevators[elevatorNum - 1];
+			}
 			break;
 		default:
 			elevatorToSend = elevators[0];
