@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package pFactories;
+package UnitTests.factoryTests;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,6 +12,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import pImpls.*;
+import pFactories.*;
 import pInterfaces.ElevatorInterface;
 
 /**
@@ -19,6 +21,10 @@ import pInterfaces.ElevatorInterface;
  * @author Stouny
  */
 public class ElevatorFactoryTest {
+    private int elevatorId;
+    private int capacity;
+    private int maxFloors;
+    private int minFloors;
     
     public ElevatorFactoryTest() {
     }
@@ -33,6 +39,10 @@ public class ElevatorFactoryTest {
     
     @Before
     public void setUp() {
+        elevatorId = 1;
+        capacity = 10;
+        maxFloors = 10;
+        minFloors = 1;
     }
     
     @After
@@ -45,15 +55,14 @@ public class ElevatorFactoryTest {
     @Test
     public void testCreateElevator() {
         System.out.println("createElevator");
-        int elevatorId = 0;
-        int capacity = 0;
-        int maxFloors = 0;
-        int minFloors = 0;
-        ElevatorInterface expResult = null;
+        ElevatorInterface expResult = new Elevator(elevatorId, capacity, maxFloors, minFloors);
         ElevatorInterface result = ElevatorFactory.createElevator(elevatorId, capacity, maxFloors, minFloors);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ElevatorInterface failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
+        assertEquals(expResult.getElevatorId(), result.getElevatorId());
+        assertEquals(expResult.getCapacity(), result.getCapacity());
+        assertFalse(failResult.getCapacity()==expResult.getCapacity());
+        assertFalse(failResult.getElevatorId()==expResult.getElevatorId());
+
     }
     
 }

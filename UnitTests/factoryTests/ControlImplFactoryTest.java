@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package pFactories;
+package UnitTests.factoryTests;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,14 +12,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import pFactories.ControlImplFactory;
 import pInterfaces.ControlModuleInterface;
+import pImpls.*;
 
 /**
  *
  * @author Stouny
  */
 public class ControlImplFactoryTest {
-    
+    private int elevatorNum;
+    private int floorNum;
     public ControlImplFactoryTest() {
     }
     
@@ -33,6 +36,8 @@ public class ControlImplFactoryTest {
     
     @Before
     public void setUp() {
+        elevatorNum = 1;
+        floorNum = 2;
     }
     
     @After
@@ -45,13 +50,11 @@ public class ControlImplFactoryTest {
     @Test
     public void testCreateElevatorController() {
         System.out.println("createElevatorController");
-        int elevatorNum = 0;
-        int floorNum = 0;
-        ControlModuleInterface expResult = null;
+
+        ControlModuleInterface expResult = new ElevatorControlModuleImpl(elevatorNum, floorNum);
         ControlModuleInterface result = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ControlModuleInterface failResult = ControlImplFactory.createElevatorController(elevatorNum+1, floorNum+1);
+        
     }
     
 }

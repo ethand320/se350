@@ -129,16 +129,16 @@ public class Elevator implements ElevatorInterface, Runnable
 
        /**
      	* Add multiple pasengers to the elevator.
-        * @param inPeople The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
+        * @param b The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
         */
 	@Override
-	public synchronized void addPassengers(Person[] inPeople) 
+	public synchronized void addPassengers(ArrayList<Person> b) 
 	{
-		for (Person p : inPeople)
+		for (Person p : b)
 		{
 			this.passengerList.add(p);
 		}
-        }
+    }
 	
 	/**
 	 * Allows for the doors of the elevator to be opened. A 500 ms wait time is added to allow for the removal and addition of passenger(s)

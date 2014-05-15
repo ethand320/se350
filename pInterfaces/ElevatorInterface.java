@@ -8,7 +8,7 @@ public interface ElevatorInterface
 {
     public void addFloorToQueue(int floorNum);
     public void addPassenger(Person inPassenger);
-    public void addPassengers(Person[] inPeople);
+	void addPassengers(ArrayList<Person> inPeople);
     public void openDoors();
     public void closeDoors();
     public void removePassenger(Person inPassenger);
@@ -21,4 +21,5 @@ public interface ElevatorInterface
     public boolean isOpen();
     public boolean isRunning();
     public static final int DEFAULT_ELEVATOR_CAPACITY = 10;
+
 }

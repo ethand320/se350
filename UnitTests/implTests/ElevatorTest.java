@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package pImpls;
+package UnitTests.implTests;
 
 import java.util.ArrayList;
 import org.junit.After;
@@ -13,21 +13,22 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import pImpls.*;
 import pInterfaces.ElevatorInterface;
 
 /**
  * Tests the main functionality of the elevator system.
  */
 public class ElevatorTest {
-    private Elevator elevator;
-    private boolean isrunning = true;
+    public Elevator elevator;
+    private int currentFloor = 1;
+    public boolean isrunning = true;
     public static final int FLOOR_ONE = 1;
     public static final int FLOOR_TEN = 10;
     public static final int BASEMENT = -3;
     private boolean bDoorsOpen = true;
-    private ArrayList<Person> passengerList;
-    private Person p;
-    private int currentFloor = 1;
+    private Person p, pfail;
+    private ArrayList <Person> b, bfail;
     public ElevatorTest() {
     }
     
@@ -42,6 +43,19 @@ public class ElevatorTest {
     @Before
     public void setUp() {
         elevator = new Elevator(0,10, 15, 0);
+        pfail = new Person(3,4);               
+        p = new Person(1,2);
+        b = new ArrayList <Person>();
+        bfail = new ArrayList <Person>();
+        for(int i = 0; i < 5; ++i)
+        {
+            b.add(new Person(1,i+1));
+        }
+        
+        for(int i = 0; i < 5; ++i)
+        {
+            bfail.add( new Person(2,i+1) );
+        }
     }
     
     @After
@@ -64,34 +78,34 @@ public class ElevatorTest {
         }
        }
 
-
     /**
      * Test of addPassenger method, of class Elevator.
      */
     @Test
-    public void addPassengerTest() {
-        Person passenger = new Person(1);
-        createPassengerList.add(1,2,3);
+    public void addPassengerTest() {  
         System.out.println("addPassenger");
-        Person inPassenger = null;
-        Elevator instance = null;
-        instance.addPassenger(inPassenger);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        elevator.addPassenger(p);
+        ArrayList<Person> elevatorPassenger = elevator.getPassengers();
+        assertTrue(elevatorPassenger.contains(p));
+        assertFalse(elevatorPassenger.contains(pfail));
     }
 
     /**
      * Test of addPassengers method, of class Elevator.
      */
     @Test
-    public void testAddPassengers() {
-        System.out.println("addPassengers");
-        passengerList.add(1);
-        Person[] inPeople = null;
-        Elevator instance = null;
-        instance.addPassengers(inPeople);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void addPassengersTest() {
+        System.out.println("addPassenger");
+        elevator.addPassengers(b);
+        ArrayList<Person> elevatorPassenger = elevator.getPassengers();
+        for (Person passenger : b)
+        {
+            assertTrue(elevatorPassenger.contains(passenger));
+        }
+        for (Person passenger : bfail)
+        {
+            assertFalse(elevatorPassenger.contains(passenger));
+        }
     }
 
     /**
@@ -141,8 +155,11 @@ public class ElevatorTest {
     @Test
     public void testRemovePassenger() {
         System.out.println("removePassenger");
-        assertEquals(false, instance.containsPassenger(p1));
-        assertEquals(true, instance.containsPassenger(p2));
+        elevator.addPassenger(p);
+        ArrayList<Person> elevatorPassenger = elevator.getPassengers();
+        assertTrue(elevatorPassenger.contains(p));
+        elevator.removePassenger(p);
+        assertFalse(elevatorPassenger.contains(p));
     }
     /**
      * Test of removePassengers method, of class Elevator.
@@ -150,12 +167,24 @@ public class ElevatorTest {
     @Test
     public void testRemovePassengers() {
         System.out.println("removePassengers");
-        ArrayList<Person> inPeople = null;
-        Elevator instance = null;
-        instance.removePassengers(inPeople);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        elevator.addPassengers(b);
+        elevator.addPassengers(bfail);
+        ArrayList<Person> elevatorPassenger = elevator.getPassengers();
+        for (Person passenger : b)
+        {
+            assertTrue(elevatorPassenger.contains(passenger));
+        }
+        elevator.removePassengers(b);
+        for (Person rPassengers : b)
+        {
+            assertFalse(elevatorPassenger.contains(rPassengers));
+        }
+        for (Person passenger : bfail)
+        {
+            assertTrue(elevatorPassenger.contains(passenger));
+        }
     }
+    
 
     /**
      * Test of getCapacity method, of class Elevator.
