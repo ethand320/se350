@@ -12,8 +12,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 import pImpls.*;
+import pExceptions.NegativeCapacityException;
 import pFactories.*;
 import pInterfaces.ElevatorInterface;
 
@@ -56,9 +58,20 @@ public class ElevatorFactoryTest {
     @Test
     public void testCreateElevator() {
         System.out.println("createElevator");
-        ElevatorInterface expResult = new Elevator(elevatorId, capacity, maxFloors, minFloors);
-        ElevatorInterface result = ElevatorFactory.createElevator(elevatorId, capacity, maxFloors, minFloors);
-        ElevatorInterface failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
+        ElevatorInterface expResult = null;
+        ElevatorInterface result = null;
+        ElevatorInterface failResult = null;
+		try
+		{
+			expResult = new Elevator(elevatorId, capacity, maxFloors, minFloors);
+			result = ElevatorFactory.createElevator(elevatorId, capacity, maxFloors, minFloors);
+	        failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
+		}
+		catch (NegativeCapacityException e)
+		{
+			fail(e.getMessage());
+		}
+        
         assertEquals(expResult.getElevatorId(), result.getElevatorId());
         assertEquals(expResult.getCapacity(), result.getCapacity());
         assertFalse(failResult.getCapacity()==expResult.getCapacity());

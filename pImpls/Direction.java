@@ -1,10 +1,11 @@
 package pImpls;
 
-
 /**
- * This method switches the direction that the elevator is traveling.
- * In the elevator class a method  is created to initialize the default direction to IDLE
+ * Enum meant to represent the possible directions that an elevator can travel in.
  */
-public enum Direction {
-UP, DOWN, IDLE
+public enum Direction
+{
+	UP,
+	DOWN,
+	IDLE
 }

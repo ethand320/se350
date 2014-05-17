@@ -8,11 +8,11 @@ public class Person
 	private int destinationFloor;
 	private int currentFloor;
 	
-       /**
-    	* Constructor which allows for properties to be applied to a person in the building.
-     	* @param floorToStop The stopping floor number that the person will stop at.
-     	* @param floorToStart The starting floor number that the person will stop at.
-        */
+   /**
+	* Constructor which allows for properties to be applied to a person in the building.
+ 	* @param floorToStop The stopping floor number that the person will stop at.
+ 	* @param floorToStart The starting floor number that the person will stop at.
+    */
 	public Person(int floorToStart, int floorToStop)
 	{
 		setDestinationFloor(floorToStop);
@@ -37,19 +37,15 @@ public class Person
 		return currentFloor;
 	}
 	
-       /**
-     	* Handles the destination floor of the requesting elevator.
-        * @param inDest The floor number that will be taken in as the floor's destination.
-        */
+   /**
+ 	* Handles the destination floor of the requesting elevator.
+    * @param inDest The floor number that will be taken in as the floor's destination.
+    */
 	public void setDestinationFloor(int inDest)
 	{
 		destinationFloor = inDest;
 	}
 	
-       /**
-     	* Handles the current floor of the requesting elevator.
-        * @param inDest The floor number that will be taken in as the current floor.
-        */
 	private void setCurrentFloor(int inCur)
 	{
 		currentFloor = inCur;

@@ -1,4 +1,5 @@
 package pFactories;
+import pExceptions.NegativeCapacityException;
 import pImpls.Elevator;
 import pInterfaces.ElevatorInterface;
 import pImpls.Elevator;
@@ -22,8 +23,9 @@ public class ElevatorFactory
      * @param capacity A positive integer representing the number total number of people the elevator can hold.
      * @param elevatorId A positive integer representing the indentifier number of the elevator
      * @return A new elevator object with the given attributes
+     * @throws NegativeCapacityException if the capacity of the elevator object would be less than 1
      */
-    public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors)
+    public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors) throws NegativeCapacityException
     {
         return new Elevator(elevatorId, capacity, maxFloors, minFloors);
     }

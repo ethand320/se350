@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NullPassengerException;
 import pImpls.*;
 import pInterfaces.*;
 
@@ -20,36 +21,50 @@ import pInterfaces.*;
  *
  * @author Stouny
  */
-public class FloorTest {
+public class FloorTest
+{
     
-    public FloorTest() {
+    public FloorTest()
+    {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass()
+    {
     }
     
     @Before
-    public void setUp() {
+    public void setUp()
+    {
     }
     
     @After
-    public void tearDown() {
+    public void tearDown()
+    {
     }
 
     /**
      * Test of addPersonToFloor method, of class Floor.
      */
     @Test
-    public void testAddPersonToFloor() {
+    public void testAddPersonToFloor()
+    {
         System.out.println("addPersonToFloor");
         Person inPerson = null;
         Floor instance = null;
-        instance.addPersonToFloor(inPerson);
+        try
+		{
+			instance.addPersonToFloor(inPerson);
+		}
+		catch (NullPassengerException e)
+		{
+			fail(e.getMessage());
+		}
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -58,7 +73,8 @@ public class FloorTest {
      * Test of summonElevator method, of class Floor.
      */
     @Test
-    public void testSummonElevator() {
+    public void testSummonElevator()
+    {
         System.out.println("summonElevator");
         Direction directionToGo = null;
         Floor instance = null;
@@ -71,7 +87,8 @@ public class FloorTest {
      * Test of getId method, of class Floor.
      */
     @Test
-    public void testGetId() {
+    public void testGetId()
+    {
         System.out.println("getId");
         Floor instance = null;
         int expResult = 0;
@@ -85,7 +102,8 @@ public class FloorTest {
      * Test of removeFromFloor method, of class Floor.
      */
     @Test
-    public void testRemoveFromFloor() {
+    public void testRemoveFromFloor()
+    {
         System.out.println("removeFromFloor");
         ElevatorInterface elevatorToEnter = null;
         Direction directionToGo = null;

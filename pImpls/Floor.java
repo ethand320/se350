@@ -1,6 +1,8 @@
 package pImpls;
+import pExceptions.NullPassengerException;
 import pInterfaces.ElevatorInterface;
 import pInterfaces.FloorInterface;
+
 import java.util.ArrayList;
 
 
@@ -14,23 +16,28 @@ public class Floor implements FloorInterface
 	private ArrayList<Person> goingDown;
 	private int floorNumber;
 	
-    /** 
-     * Constructor which allows for the initializations of the floor array as well as handling floor identification numbers.
-     * @param inFloorId The identification number that will be assigned to each floor.
-     */
+	/** 
+	 * Constructor which allows for the initializations of the floor array as well as handling floor identification numbers.
+	 * @param inFloorId The identification number that will be assigned to each floor.
+	 */
 	public Floor(int inFloorId)
 	{
 		setFloorNumber(inFloorId);
 		initializeFloorArrays();
 	}
 	
-        /** 
-         * Adds a person to the floor that called this method.
-         * @param inPerson the person that is being added to the floor
-         */
-        @Override
-	public void addPersonToFloor(Person inPerson)
+    /** 
+     * Adds a person to the floor that called this method.
+     * @param inPerson the person that is being added to the floor
+     * @throws NullPassengerException if inPerson is null
+     */
+    @Override
+	public void addPersonToFloor(Person inPerson) throws NullPassengerException
 	{
+    	if(inPerson == null)
+    	{
+    		throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
+    	}
 		int destinationFloor = inPerson.getDestinationFloor();
 		if(destinationFloor < this.floorNumber || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
 		{
@@ -44,11 +51,11 @@ public class Floor implements FloorInterface
 		}
 	}
 	
-        /** 
-         * Requests for an elevator to be summoned in the specified direction.
-         * @param directionToGo the direction the elevator will go.
-         */
-        @Override
+	/** 
+	 * Requests for an elevator to be summoned in the specified direction.
+	 * @param directionToGo the direction the elevator will go. Must not be IDLE
+	 */
+    @Override
 	public void summonElevator(Direction directionToGo) 
 	{
 		if(directionToGo != Direction.IDLE)
@@ -57,21 +64,21 @@ public class Floor implements FloorInterface
 		}
 	}
 
-       /**
-        * retrieves the floor identification number for the requested call.
-        * @return returns this floor number when called.
-        */ 
+   /**
+    * retrieves the floor identification number for the requested call.
+    * @return returns this floor number when called.
+    */ 
 	@Override
 	public int getId() 
 	{
 		return this.floorNumber;
 	}
 
-       /**
-        * removes the people that desire to get off at the floor.
-        * @param elevatorToEnter places the people from the floor onto the specified elevator.
-        * @param directionToGo the direction decides if a person will get off at the given floor or not.
-        */
+   /**
+    * removes the people that desire to get off at the floor.
+    * @param elevatorToEnter places the people from the floor onto the specified elevator.
+    * @param directionToGo the direction decides if a person will get off at the given floor or not.
+    */
 	@Override
 	public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
 	{
@@ -86,25 +93,32 @@ public class Floor implements FloorInterface
 			{
 				peopleToRemove = this.goingDown;
 			}
-			for (Person person : peopleToRemove )
+			for (Person person : peopleToRemove)
 			{
-				elevatorToEnter.addPassenger(person);
+				try
+				{
+					elevatorToEnter.addPassenger(person);
+				}
+				catch (NullPassengerException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
-       /**
-        * Sets the floor number to the given paramter
-        * @param inNum the floor number that will be set as the floorNumber.
-        */
+   /**
+    * Sets the floor number to the given parameter
+    * @param inNum the floor number that will be set as the floorNumber.
+    */
 	private void setFloorNumber(int inNum)
 	{
 		floorNumber = inNum;
 	}
 
-       /**
-        * Creates the floor arrays of type <Person> for both elevator directions.
-        */
+   /**
+    * Creates the floor arrays of type <Person> for both elevator directions.
+    */
 	private void initializeFloorArrays()
 	{
 		goingUp = new ArrayList<Person>();

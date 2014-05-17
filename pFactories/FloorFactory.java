@@ -15,7 +15,7 @@ public class FloorFactory
     
     /**
      * This method creates and returns a floor with a specified identification number.
-     * @param floorId A positive integer representing the indentifier number of the floor
+     * @param floorId A positive integer representing the identifier number of the floor
      * @return A new floor object with the unique id
      */
      

@@ -1,5 +1,6 @@
 package pImpls;
 
+import pExceptions.NullPassengerException;
 import pFactories.PersonFactory;
 import pInterfaces.ElevatorInterface;
 
@@ -102,7 +103,7 @@ public class SimulationEnvironment
 	        System.out.println("Ending simulation");
 	        instance.stopSimluation();
 		}
-		catch (InterruptedException e)
+		catch (InterruptedException | NullPassengerException e)
         {
             e.printStackTrace();
         }
@@ -119,7 +120,7 @@ public class SimulationEnvironment
 		return ElevatorControlModule.getInstance().getElevator(i);
 	}
 	
-	private void addPersonToFloor(Person inPerson, int floorNum)
+	private void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException
 	{
 		ElevatorControlModule.getInstance().addPersonToFloor(inPerson, floorNum);
 	}

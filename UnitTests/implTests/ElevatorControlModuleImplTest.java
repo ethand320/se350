@@ -13,6 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeFloorException;
+import pExceptions.NullPassengerException;
 import pImpls.*;
 import pInterfaces.ElevatorInterface;
 
@@ -59,7 +62,8 @@ public class ElevatorControlModuleImplTest {
      * Test of getElevator method, of class ElevatorControlModuleImpl.
      */
     @Test
-    public void testGetElevator() {
+    public void testGetElevator()
+    {
         System.out.println("getElevator");
         int index = 0;
         ElevatorControlModuleImpl instance = null;
@@ -74,7 +78,8 @@ public class ElevatorControlModuleImplTest {
      * Test of shutDown method, of class ElevatorControlModuleImpl.
      */
     @Test
-    public void testShutDown() {
+    public void testShutDown()
+    {
         System.out.println("shutDown");
         ElevatorControlModuleImpl instance = null;
         instance.shutDown();
@@ -86,7 +91,8 @@ public class ElevatorControlModuleImplTest {
      * Test of elevatorDoorsOpened method, of class ElevatorControlModuleImpl.
      */
     @Test
-    public void testElevatorDoorsOpened() {
+    public void testElevatorDoorsOpened()
+    {
         System.out.println("elevatorDoorsOpened");
         ElevatorInterface elevator = null;
         int floorNumber = 0;
@@ -100,12 +106,21 @@ public class ElevatorControlModuleImplTest {
      * Test of addPersonToFloor method, of class ElevatorControlModuleImpl.
      */
     @Test
-    public void testAddPersonToFloor() {
+    public void testAddPersonToFloor()
+    {
         System.out.println("addPersonToFloor");
         Person inPerson = null;
         int floorNum = 0;
-        ElevatorControlModuleImpl instance = null;
-        instance.addPersonToFloor(inPerson, floorNum);
+        ElevatorControlModuleImpl instance;
+		try
+		{
+			instance = new ElevatorControlModuleImpl(floorNum, 1);
+			instance.addPersonToFloor(inPerson, floorNum);
+		}
+		catch (NegativeFloorException | NegativeCapacityException | NullPassengerException e)
+		{
+			fail(e.getMessage());
+		}
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -1,5 +1,8 @@
 package pImpls;
 
+import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeFloorException;
+import pExceptions.NullPassengerException;
 import pFactories.ElevatorFactory;
 import pFactories.FloorFactory;
 import pInterfaces.ControlModuleInterface;
@@ -19,18 +22,20 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
  	* ElevatorControlModuleImpl creates floors and elevators with the given parameters.
 	* @param elevatorNum The number of elevators to be created. 
  	* @param floorNum The number of floors to be created.
+     * @throws NegativeFloorException 
+     * @throws NegativeCapacityException 
         */
-	public ElevatorControlModuleImpl(int elevatorNum, int floorNum)
+	public ElevatorControlModuleImpl(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException
 	{
 		createFloors(floorNum);
 		createElevators(elevatorNum, floorNum);		
 	}
 
-       /**
-        * elevatorCallReciever takes in the elevator request with the given parameters.
-        * @param floorNumber the floor number requested. 
-        * @param directionRequest the the direction that will lead to the requested floor.
-        */
+   /**
+    * elevatorCallReciever takes in the elevator request with the given parameters.
+    * @param floorNumber the floor number requested. 
+    * @param directionRequest the the direction that will lead to the requested floor.
+    */
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
 	{
@@ -80,10 +85,10 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	}
 
 
-       /**
-        * ElevatorInterface returns the total elevators.
-        * @return returns all elevators.
-        */
+   /**
+    * ElevatorInterface returns the total elevators.
+    * @return returns all elevators.
+    */
 	@Override
 	public ElevatorInterface getElevator(int index)
 	{
@@ -91,9 +96,9 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	}
 	
 	
-       /**
-        * Master shutdown command that stops further elevator commands.
-        */
+   /**
+    * Master shutdown command that stops further elevator commands.
+    */
 	public void shutDown()
 	{
 		for(ElevatorInterface elevator : elevators)
@@ -102,12 +107,12 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		}
 	}
 
-       /**
-        * elevatorDoorsOpened takes in two parameters of the floor and elevator and removes initiates removeFromFloor
-        * @see removeFroomFloor removes passengers from the floor that will be placed into the elevator.
-        * @oaram elevator the elevator the will recieve the requests.
-        * @param floorNumber the floor number the elevator is recieving the request at.
-        */
+   /**
+    * elevatorDoorsOpened takes in two parameters of the floor and elevator and removes initiates removeFromFloor
+    * @see removeFroomFloor removes passengers from the floor that will be placed into the elevator.
+    * @param elevator the elevator the will receive the requests.
+    * @param floorNumber the floor number the elevator is receiving the request at.
+    */
 	@Override
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
 	{
@@ -118,19 +123,21 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
         * addPersonToFloor moves them from the specified floor to the indicated elevator.
         * @param inPerson calls the method to add a person to the elevator.
         * @param floorNum the floor the person is located in. 
+     * @throws NullPassengerException 
         */
 	@Override
-	public void addPersonToFloor(Person inPerson, int floorNum)
+	public void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException
 	{
 		floors[floorNum-1].addPersonToFloor(inPerson);
 	}
 	
-       /**
-        * creates an elevator with a maximum number of floors
-        * @param elevatorNum the number that will identify the elevator.
-        * @param maxFloors the maximum number of floors the elevator may visit.
-        */
-	private void createElevators(int elevatorNum, int maxFloors)
+   /**
+    * creates an elevator with a maximum number of floors
+    * @param elevatorNum the number that will identify the elevator.
+    * @param maxFloors the maximum number of floors the elevator may visit.
+    * @throws NegativeCapacityException 
+    */
+	private void createElevators(int elevatorNum, int maxFloors) throws NegativeCapacityException
 	{
 		if(elevatorNum < 1)
 		{
@@ -147,27 +154,24 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		
 	}
 	
-       /**
-        * creates the number of floors.
-        * @param floorNum the number of floors being added.
-        */
-	private void createFloors(int floorNum)
+   /**
+    * creates the number of floors.
+    * @param floorNum the number of floors being added.
+    */
+	private void createFloors(int floorNum) throws NegativeFloorException
 	{
 		//soft fail. should eventually throw an exception or something
 		if(floorNum < 1)
 		{
-			
+			throw new NegativeFloorException("Attempting to create a control module without any floors!");
 		}
-		else
+		floors = new FloorInterface[floorNum];
+		for(int i = 0; i < floorNum; ++i)
 		{
-			floors = new FloorInterface[floorNum];
-			for(int i = 0; i < floorNum; ++i)
-			{
-				floors[i] = FloorFactory.createFloor(i);
-			}
+			floors[i] = FloorFactory.createFloor(i);
 		}
-		
 	}
+	
 	/**
 	 * retrieves the maximum floor length.
 	 * @return returns the total length of the buildings floors.
@@ -176,5 +180,11 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	public int getMaxFloors()
 	{
 		return this.floors.length;
+	}
+
+	@Override
+	public int getElevatorNum()
+	{
+		return this.elevators.length;
 	}
 }
