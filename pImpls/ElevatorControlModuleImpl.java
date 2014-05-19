@@ -45,10 +45,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		
 		//SIMPSON TODO: for now, we're going to hard code the elevator logic to meet the test requirements of the first deliverable 
 		//this MUST be changed for the next iteration
-<<<<<<< HEAD
-=======
 
->>>>>>> ethansbranch
                 
                 //Ethan psudo code implementation here.  
                 
