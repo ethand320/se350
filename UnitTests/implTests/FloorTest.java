@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pImpls.*;
 import pInterfaces.*;
@@ -61,7 +62,7 @@ public class FloorTest
 		{
 			instance.addPersonToFloor(inPerson);
 		}
-		catch (NullPassengerException e)
+		catch (NullPassengerException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
@@ -78,7 +79,14 @@ public class FloorTest
         System.out.println("summonElevator");
         Direction directionToGo = null;
         Floor instance = null;
-        instance.summonElevator(directionToGo);
+        try
+		{
+			instance.summonElevator(directionToGo);
+		}
+		catch (NegativeFloorException e)
+		{
+			fail(e.getMessage());
+		}
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

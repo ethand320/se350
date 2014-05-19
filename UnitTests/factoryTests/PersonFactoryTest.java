@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeFloorException;
 import pFactories.PersonFactory;
 import pImpls.Person;
 
@@ -50,7 +51,15 @@ public class PersonFactoryTest {
         int startFloor = 0;
         int destinationFloor = 0;
         Person expResult = null;
-        Person result = PersonFactory.createPerson(startFloor, destinationFloor);
+        Person result = null;
+		try
+		{
+			result = PersonFactory.createPerson(startFloor, destinationFloor);
+		}
+		catch (NegativeFloorException e)
+		{
+			fail(e.getMessage());
+		}
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

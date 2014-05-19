@@ -16,6 +16,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import pImpls.*;
 import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeFloorException;
 import pFactories.*;
 import pInterfaces.ElevatorInterface;
 
@@ -67,7 +68,7 @@ public class ElevatorFactoryTest {
 			result = ElevatorFactory.createElevator(elevatorId, capacity, maxFloors, minFloors);
 	        failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}

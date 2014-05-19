@@ -1,6 +1,7 @@
 package pImpls;
 
 import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pFactories.ControlImplFactory;
@@ -13,15 +14,22 @@ import pInterfaces.ElevatorInterface;
  */
 public class ElevatorControlModule implements ControlModuleInterface 
 {
+	/**
+	 * Delegate object which allows for different elevator selection algorithms to be switched in during runtime.
+	 * This object allows this class to implement the Strategy design pattern
+	 */
 	private static ControlModuleInterface delegate;
+	
+	/**
+	 * The underlying ElevatorControlModule object required for this class to implement the Singleton design pattern
+	 */
 	private static volatile ElevatorControlModule instance;
-	private static final int DEFAULT_ELEVATOR_NUM = 4;
-	private static final int DEFAULT_FLOOR_NUM = 16;
+
 	
    /** 
-    * private method that uses delegation to create the elevator controller.
-	* @param elevatorNum The number that identifies the elevator itself.
-	* @param floorNum the floor number that will be passed to the elevator.
+    * private constructor that is called upon the first call to getInstance().
+	* @param elevatorNum The number of elevators that the module will control.
+	* @param floorNum the number of floors that the module will receive signals from and send elevators to.
 	* @throws NegativeNumberException throws an exception if either elevatorNum or floorNum are negative.
 	*/
 	private ElevatorControlModule(int elevatorNum, int floorNum)
@@ -30,7 +38,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 		{
 			delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
 		}
-		catch (NegativeFloorException | NegativeCapacityException e)
+		catch (NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
 		{
 			e.printStackTrace();
 		}
@@ -51,7 +59,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 			{
 				if(instance == null)
 				{
-					instance = new ElevatorControlModule(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
+					instance = new ElevatorControlModule(SimulationEnvironment.DEFAULT_ELEVATOR_NUM, SimulationEnvironment.DEFAULT_FLOOR_NUM);
 				}
 			}
 		}
@@ -86,9 +94,10 @@ public class ElevatorControlModule implements ControlModuleInterface
     * Handles the system that works with the calling of elevators to and from floors. Passes the direction and the floor number to an elevator
     * @param floorNumber the floor number that is delegated to an elevator. This number can not be negative and should exist in the building. 
     * @param directionRequest The requested direction to be delegated to an elevator.
+    * @throws NegativeFloorException 
     */
 	@Override
-	public void elevatorCallReceiver(int floorNumber, Direction directionRequest)
+	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException
 	{
 		delegate.elevatorCallReceiver(floorNumber, directionRequest);
 	}
@@ -96,7 +105,7 @@ public class ElevatorControlModule implements ControlModuleInterface
    /**
     * ElevatorInterface returns the elevator corresponding to the requested index. This value can not be negative and should be within the index range
     * @param index the number used to retrieve the elevator at the specified index.
-    * @return Delegates the elevator with the specified index.
+    * @return the elevator with the given index within the module's elevator collection.
     */
 	@Override
 	public ElevatorInterface getElevator(int index)
@@ -106,7 +115,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 	
    /**
 	* Retrieves the maximum number of floors.
-	* @return returns the total number of floors to be delegated.
+	* @return returns the total number of floors that the elevator controller knows about.
 	*/
 	public int getMaxFloors()
 	{
@@ -114,7 +123,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 	}
 	
    /**
-    * Handles the functionality of stopping all elevators .
+    * Handles the functionality of stopping all elevators.
     * Delegates the shutDown method to allow for the Ending of all elevator instances.
     */
 	public void shutDown()
@@ -123,13 +132,14 @@ public class ElevatorControlModule implements ControlModuleInterface
 	}
 	
    /** 
-    * Handles the functionality of opening the elevator door at a specified floor.
-    * @param elevator the elevator that will have their doors opened.
-    * @param floorNumber the floor number of the elevator that will have it's doors opened.
-    * Delegates the method to allow for different elevators to perform a similar task.
+    * Handles the functionality of opening the elevator door at a specified floor and subsequently moving people into the elevator.
+    * @param elevator the elevator that has arrived at this floor and is opening its doors for passengers to enter. 
+    * @param floorNumber the floor number that the elevator is currently located. The people contained on this floor will be moved into the 
+    * elevator once the doors are opened.
+    * @throws NegativeFloorException 
     */
 	@Override
-	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber)
+	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber) throws NegativeFloorException
 	{
 		delegate.elevatorDoorsOpened(elevator, floorNumber);
 	}
@@ -137,16 +147,21 @@ public class ElevatorControlModule implements ControlModuleInterface
    /** 
     * Handles the functionality of adding a person to the floor.
     * @param inPerson the object person that will be added to the floor.
-    * @param floorNum the floor number the person will be added to.
-    * Delegates the method to allow for multiple persons to be added to different floors.
- * @throws NullPassengerException 
+    * @param floorNum the floor number the person will be added to. NOTE: This method uses ONE-BASED indexing instead of 0 based indexing,
+    * which means that 0 does not correspond to the first floor of the SimulationEnvironment
+    * @throws NullPassengerException if inPerson is null
+    * @throws NegativeFloorException if floorNum corresponds to an invalid floor index
     */
 	@Override
-	public void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException
+	public void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException, NegativeFloorException
 	{
 		delegate.addPersonToFloor(inPerson, floorNum);	
 	}
 
+	/**
+	 * Accessor for the number of elevators currently being managed by this Control Module
+	 * @return the number of elevators currently being managed by this Control Module
+	 */
 	@Override
 	public int getElevatorNum()
 	{

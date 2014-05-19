@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pFactories.ControlImplFactory;
 import pInterfaces.ControlModuleInterface;
@@ -63,7 +64,7 @@ public class ControlImplFactoryTest {
             expResult = new ElevatorControlModuleImpl(elevatorNum, floorNum);
             result = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
         }
-        catch (NegativeFloorException | NegativeCapacityException e)
+        catch (NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
 		{
 			fail(e.getMessage());
 		}

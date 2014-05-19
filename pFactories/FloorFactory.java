@@ -8,11 +8,6 @@ import pImpls.Floor;
  */
 public class FloorFactory
 {
-    private FloorFactory()
-    {
-        
-    }
-    
     /**
      * This method creates and returns a floor with a specified identification number.
      * @param floorId A positive integer representing the identifier number of the floor

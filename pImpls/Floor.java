@@ -1,4 +1,5 @@
 package pImpls;
+import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pInterfaces.ElevatorInterface;
 import pInterfaces.FloorInterface;
@@ -12,8 +13,19 @@ import java.util.ArrayList;
  */
 public class Floor implements FloorInterface
 {
+	/**
+	 * Collection of Person objects whose destination floors are higher than this object's floorNumber value, using zero-based indexing
+	 */
 	private ArrayList<Person> goingUp;
+	
+	/**
+	 * Collection of Person objects whose destination floors are lower than this object's floorNumber value, using zero-based indexing
+	 */
 	private ArrayList<Person> goingDown;
+	
+	/**
+	 * Integer value representing this floor's position within the simulation environment using zero-based indexing
+	 */
 	private int floorNumber;
 	
 	/** 
@@ -30,21 +42,22 @@ public class Floor implements FloorInterface
      * Adds a person to the floor that called this method.
      * @param inPerson the person that is being added to the floor
      * @throws NullPassengerException if inPerson is null
+     * @throws NegativeFloorException 
      */
     @Override
-	public void addPersonToFloor(Person inPerson) throws NullPassengerException
+	public void addPersonToFloor(Person inPerson) throws NullPassengerException, NegativeFloorException
 	{
     	if(inPerson == null)
     	{
     		throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
     	}
 		int destinationFloor = inPerson.getDestinationFloor();
-		if(destinationFloor < this.floorNumber || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
+		if(destinationFloor < this.getId() || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
 		{
 			goingDown.add(inPerson);
 			summonElevator(Direction.DOWN);
 		}
-		else if(inPerson.getDestinationFloor() > this.getId())
+		else if(destinationFloor > this.getId())
 		{
 			goingUp.add(inPerson);
 			summonElevator(Direction.UP);
@@ -54,24 +67,28 @@ public class Floor implements FloorInterface
 	/** 
 	 * Requests for an elevator to be summoned in the specified direction.
 	 * @param directionToGo the direction the elevator will go. Must not be IDLE
+	 * @throws NegativeFloorException 
 	 */
     @Override
-	public void summonElevator(Direction directionToGo) 
+	public void summonElevator(Direction directionToGo) throws NegativeFloorException 
 	{
 		if(directionToGo != Direction.IDLE)
 		{
-			ElevatorControlModule.getInstance().elevatorCallReceiver(this.getId(), directionToGo);		
+			//elevatorCallReceiver's floor index is zero-based, so instead of using this.getId(), we want to pass the
+			//zero-based floorNumber index instead
+			ElevatorControlModule.getInstance().elevatorCallReceiver(this.floorNumber, directionToGo);		
 		}
 	}
 
    /**
-    * retrieves the floor identification number for the requested call.
-    * @return returns this floor number when called.
+    * Accessor for the Floor's ID number
+    * @return returns the position of this floor instance in relation to the other floors in the simulation.
+    * NOTE: This is an external representation, which means that the value is represented with ONE-BASED indexing
     */ 
 	@Override
 	public int getId() 
 	{
-		return this.floorNumber;
+		return this.floorNumber + 1;
 	}
 
    /**

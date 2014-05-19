@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pImpls.Direction;
 import pImpls.ElevatorControlModule;
@@ -91,7 +92,14 @@ public class ElevatorControlModuleTest
         int floorNumber = 0;
         Direction directionRequest = null;
         ElevatorControlModule instance = null;
-        instance.elevatorCallReceiver(floorNumber, directionRequest);
+        try
+		{
+			instance.elevatorCallReceiver(floorNumber, directionRequest);
+		}
+		catch (NegativeFloorException e)
+		{
+			fail(e.getMessage());
+		}
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -135,7 +143,14 @@ public class ElevatorControlModuleTest
         ElevatorInterface elevator = null;
         int floorNumber = 0;
         ElevatorControlModule instance = null;
-        instance.elevatorDoorsOpened(elevator, floorNumber);
+        try
+		{
+			instance.elevatorDoorsOpened(elevator, floorNumber);
+		}
+		catch (NegativeFloorException e)
+		{
+			fail(e.getMessage());
+		}
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -155,7 +170,7 @@ public class ElevatorControlModuleTest
 			instance.addPersonToFloor(inPerson, floorNum);
 		} 
         //TODO: once we ensure that instance is properly created, don't catch NullPointerException anymore because it's a runtime exception
-        catch (NullPassengerException | NullPointerException e)
+        catch (NullPassengerException | NullPointerException | NegativeFloorException e)
         {
 			fail(e.getMessage());
 		}

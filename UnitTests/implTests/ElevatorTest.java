@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pExceptions.PassengerNotFoundException;
 import pImpls.*;
@@ -55,24 +56,25 @@ public class ElevatorTest
         try
 		{
 			elevator = new Elevator(0,10, 15, 0);
+			pfail = new Person(3,4);               
+	        p = new Person(1,2);
+	        b = new ArrayList <Person>();
+	        bfail = new ArrayList <Person>();
+	        for(int i = 0; i < 5; ++i)
+	        {
+	            b.add(new Person(1,i+1));
+	        }
+	        
+	        for(int i = 0; i < 5; ++i)
+	        {
+	            bfail.add( new Person(2,i+1) );
+	        }
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
-        pfail = new Person(3,4);               
-        p = new Person(1,2);
-        b = new ArrayList <Person>();
-        bfail = new ArrayList <Person>();
-        for(int i = 0; i < 5; ++i)
-        {
-            b.add(new Person(1,i+1));
-        }
         
-        for(int i = 0; i < 5; ++i)
-        {
-            bfail.add( new Person(2,i+1) );
-        }
     }
     
     @After
@@ -188,7 +190,7 @@ public class ElevatorTest
 		{
 			instance = new Elevator(1, 10, 1, 1);
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
@@ -264,7 +266,7 @@ public class ElevatorTest
 		{
 			instance = new Elevator(1,10,10,1);
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
@@ -285,7 +287,7 @@ public class ElevatorTest
 		{
 			gPassengers = new Elevator(1,10,10,1);
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
@@ -317,7 +319,7 @@ public class ElevatorTest
 		{
 			eID = new Elevator(1,10,10,1);
 		}
-		catch (NegativeCapacityException e)
+		catch (NegativeCapacityException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
