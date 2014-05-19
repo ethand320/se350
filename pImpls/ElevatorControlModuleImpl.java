@@ -45,6 +45,31 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		
 		//SIMPSON TODO: for now, we're going to hard code the elevator logic to meet the test requirements of the first deliverable 
 		//this MUST be changed for the next iteration
+                
+                //Ethan psudo code implementation here.  
+                
+                /*  This is for when a person presses up/down on a floor, what elevator gets the request put in it's queue, algo is from the notes Project submission 1 pdf
+                
+                if there is an elevator on the floor
+                    if elevator is idle OR going in desired direction
+                        then add the floor to that elevator;s queue
+                    else 
+                    
+                    is there an elevator already moving?
+                yes: is it also going in desired direction
+                      yes:  add the floor to that elevator's request queue
+                
+                no:
+                    are there any idle elevators?
+                    yes:
+                        pick an idle elevator and add the request to the queue
+                    no:
+                        add to unique pending request list  ( a catch all queue I guess?)
+                
+                */
+                
+                
+                
 		switch(floorNumber)
 		{
 		case 4:
