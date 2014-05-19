@@ -45,6 +45,83 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		
 		//SIMPSON TODO: for now, we're going to hard code the elevator logic to meet the test requirements of the first deliverable 
 		//this MUST be changed for the next iteration
+
+                
+                //Ethan psudo code implementation here.  
+                
+                /*  This is for when a person presses up/down on a floor, what elevator gets the request put in it's queue, algo is from the notes Project submission 1 pdf
+                
+                have to loop through each elevator in elevators[]
+                
+                
+                if there is an elevator on the floor
+                    if elevator is idle OR going in desired direction
+                        then add the floor to that elevator;s queue  and be DONE
+                    else 
+                    
+                    is there an elevator already moving?
+                yes: is it also going in desired direction
+                      yes:  add the floor to that elevator's request queue
+                
+                no:
+                    are there any idle elevators?
+                    yes:
+                        pick an idle elevator and add the request to the queue
+                    no:
+                        add to unique pending request list  ( a catch all queue I guess?)
+                
+                */
+                boolean handledRequest = false;
+                
+               //  if there is an elevator on the floor
+               //     if elevator is idle OR going in desired direction
+               //         then add the floor to that elevator;s queue  and be DONE
+                for ( ElevatorInterface curElev: elevators)
+                {
+                    if (handledRequest == true) break;  // if request has been sent you're done!
+                    
+                    if (curElev.getCurrentFloor() == floorNumber)
+                        if ( !curElev.isRunning() || curElev.getDirection() == directionRequest )
+                        {    // then add floor to that elevators queue and break
+                            curElev.addFloorToQueue(floorNumber);
+                            handledRequest = true;
+                            break;  // break out of loop since request has been handled!
+                        }   
+                }
+                 // is there an elevator already moving?
+               // yes: is it also going in desired direction
+                //      yes:  add the floor to that elevator's request queue
+                for (ElevatorInterface curElev: elevators)
+                {
+                    if(handledRequest == true) break;  //Request has already been sent so we're done
+                    if (curElev.isRunning() && curElev.getDirection() == directionRequest)
+                    {
+                        curElev.addFloorToQueue(floorNumber);
+                        handledRequest = true; 
+                        break;
+                    }
+   
+                }
+                  //are there any idle elevators?
+                 //   yes:
+                 //       pick an idle elevator and add the request to the queue
+                 //   no:
+                  //      add to unique pending request list  ( a catch all queue I guess?)
+                for (ElevatorInterface curElev: elevators)
+                {
+                    if (handledRequest == true) break;
+                    if ( !curElev.isRunning())
+                    {
+                        curElev.addFloorToQueue(floorNumber);
+                       handledRequest = true;
+                       break;
+                  
+                    }
+                }
+                
+                //If we got this far and request still hasn't been handled...
+                // then it needs to be sent again  need this implementation done eventually.
+
 		switch(floorNumber)
 		{
 		case 4:

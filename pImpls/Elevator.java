@@ -260,6 +260,11 @@ public class Elevator implements ElevatorInterface, Runnable
 		return this.elevatorId;
 	}
 	
+        public int getCurrentFloor()
+        {
+            return this.currentFloor;
+            
+        }
        /**
         * Changes the elevator running system to false.
         */
