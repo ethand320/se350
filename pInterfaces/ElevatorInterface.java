@@ -16,6 +16,8 @@ public interface ElevatorInterface
     public int getCapacity();
     public ArrayList <Person> getPassengers();
     public int getElevatorId();
+    public int getCurrentFloor();
+    
     public Direction getDirection();
     public void shutDown();
     public boolean isOpen();
