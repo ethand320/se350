@@ -23,64 +23,85 @@ import java.util.HashMap;
 
 public class XmlParser {
   
-    public static void main(String args[]){ 
-   // public HashMap getInputs() {
-    HashMap inputHash = new HashMap();
+    private static File xmlFile;
+    private static HashMap inputHash;
+    
+    public XmlParser(){
+        
+        this.xmlFile = new File("src/xmlInputs.xml");
+        this.getInputs();
+       
+    }
+    
+    
+    public void getInputs(){ 
+   
+  //  HashMap inputHash = new HashMap();
     
     try{    
         
-    File xmlFile = new File("src/xmlInputs.xml");
-    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-    Document doc = dBuilder.parse(xmlFile);
+        //XML docuement initialization for parsing
+         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+         Document doc = dBuilder.parse(this.xmlFile);
+
+         NodeList nodeList = doc.getElementsByTagName("Input");
+
+       //  Looping through all of the nodes under "Input" tags
+
+             for (int temp = 0; temp <nodeList.getLength(); temp++ ){
+                 Node nNode = nodeList.item(temp);
+                 Element eElement = (Element) nNode;
+               //Adding all the elements values to the hashmap
+                 inputHash.put("floors", eElement.getElementsByTagName("floors").item(0).getTextContent());
+                 inputHash.put("elevators", eElement.getElementsByTagName("elevators").item(0).getTextContent());
+                 inputHash.put("elevTravelTime", eElement.getElementsByTagName("elevTravelTime").item(0).getTextContent());
+                 inputHash.put("elevDoorTime", eElement.getElementsByTagName("elevDoorTime").item(0).getTextContent());
+                 inputHash.put("peoplePerMin", eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent());
+
+
+             }
+
+
+
+         } 
+    catch (Exception e) { e.printStackTrace(); }
     
-    NodeList nodeList = doc.getElementsByTagName("Input");
     
-  //  Element elem = (Element) nodeList;
-    
-    for (int temp = 0; temp <nodeList.getLength(); temp++ ){
-        Node nNode = nodeList.item(temp);
-        Element eElement = (Element) nNode;
-      //  System.out.println( eElement.getElementsByTagName("floors").item(0).getTextContent());
-        inputHash.put("floors", eElement.getElementsByTagName("floors").item(0).getTextContent());
-        inputHash.put("elevators", eElement.getElementsByTagName("elevators").item(0).getTextContent());
-        inputHash.put("elevTravelTime", eElement.getElementsByTagName("elevTravelTime").item(0).getTextContent());
-        inputHash.put("elevDoorTime", eElement.getElementsByTagName("elevDoorTime").item(0).getTextContent());
-        inputHash.put("peoplePerMin", eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent());
         
         
     }
     
+    public static int getTotalElevatorNumber(){
+        Integer elevators = (Integer) inputHash.get("elevators");
+        
+        return  elevators ;
+        
+    }
+
+    public static int getTotalFloorNumber(){
+        Integer floors = (Integer) inputHash.get("floors");
+        return floors;
+        
+    }
+    public static double getElevTravelTime(){
+      
+        Double time = (Double) inputHash.get("elevTravelTime");
+        return time;
+    }
+      
+    public static double getElevDoorTime(){
+        Double doorTime = (Double) inputHash.get("elevDoorTime");
+        return doorTime;
+        
+    }
    
-    
-    System.out.println(inputHash.get("elevators"));
-    
-    
-  
-    
-   // System.out.println(rootElement.getAttribute("floors"));
-    
-    
-   // inputHash.put("floors", rootElement.getAttribute("floors"));
-    
-    String key = "floors";
-    
-   // System.out.println(inputHash.get(key));
-    
-  //  return inputHash;
-    
-    
-    
-  
-    
-    } catch (Exception e) { e.printStackTrace(); }
-    
-  //  return inputHash;
-        
-        
+    public static double getPeoplePerMin(){
+        Double peoplePerMin = (Double) inputHash.get("peoplePerMin");
+        return peoplePerMin;
     }
-    
-    
-    
+        
+        
+        
     
 }
