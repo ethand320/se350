@@ -65,6 +65,7 @@ public class Person
 	}
 	
 	/**
+	 * Mutator which assigns this Person's current floor to a specified value.
 	 * @param inCur The floor number that the Person will be starting on. Used to compute the direction in which this Person needs to travel.
 	 * NOTE: this value is an external representation, so it is ONE-BASED
 	 * @throws NegativeFloorException if inCur is less than 1 or greater than the number of floors in the simulation

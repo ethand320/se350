@@ -62,7 +62,7 @@ public class FloorTest
 		{
 			instance.addPersonToFloor(inPerson);
 		}
-		catch (NullPassengerException | NegativeFloorException e)
+		catch (NullPassengerException e)
 		{
 			fail(e.getMessage());
 		}
@@ -79,14 +79,7 @@ public class FloorTest
         System.out.println("summonElevator");
         Direction directionToGo = null;
         Floor instance = null;
-        try
-		{
-			instance.summonElevator(directionToGo);
-		}
-		catch (NegativeFloorException e)
-		{
-			fail(e.getMessage());
-		}
+        instance.summonElevator(directionToGo);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

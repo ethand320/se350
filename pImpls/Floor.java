@@ -1,4 +1,6 @@
 package pImpls;
+import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pInterfaces.ElevatorInterface;
@@ -31,8 +33,9 @@ public class Floor implements FloorInterface
 	/** 
 	 * Constructor which allows for the initializations of the floor array as well as handling floor identification numbers.
 	 * @param inFloorId The identification number that will be assigned to each floor.
+	 * @throws NegativeFloorException 
 	 */
-	public Floor(int inFloorId)
+	public Floor(int inFloorId) throws NegativeFloorException
 	{
 		setFloorNumber(inFloorId);
 		initializeFloorArrays();
@@ -42,41 +45,54 @@ public class Floor implements FloorInterface
      * Adds a person to the floor that called this method.
      * @param inPerson the person that is being added to the floor
      * @throws NullPassengerException if inPerson is null
-     * @throws NegativeFloorException 
      */
     @Override
-	public void addPersonToFloor(Person inPerson) throws NullPassengerException, NegativeFloorException
+	public void addPersonToFloor(Person inPerson) throws NullPassengerException
 	{
     	if(inPerson == null)
     	{
     		throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
     	}
 		int destinationFloor = inPerson.getDestinationFloor();
-		if(destinationFloor < this.getId() || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
+		try
 		{
-			goingDown.add(inPerson);
-			summonElevator(Direction.DOWN);
+			if(destinationFloor < this.getId() || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
+			{
+				goingDown.add(inPerson);
+				summonElevator(Direction.DOWN);
+			}
+			else if(destinationFloor > this.getId())
+			{
+				goingUp.add(inPerson);
+				summonElevator(Direction.UP);
+			}
 		}
-		else if(destinationFloor > this.getId())
+		catch (NegativeCapacityException | NegativeElevatorException | NegativeFloorException e)
 		{
-			goingUp.add(inPerson);
-			summonElevator(Direction.UP);
+			e.printStackTrace();
 		}
 	}
 	
 	/** 
 	 * Requests for an elevator to be summoned in the specified direction.
 	 * @param directionToGo the direction the elevator will go. Must not be IDLE
-	 * @throws NegativeFloorException 
 	 */
     @Override
-	public void summonElevator(Direction directionToGo) throws NegativeFloorException 
+	public void summonElevator(Direction directionToGo)
 	{
 		if(directionToGo != Direction.IDLE)
 		{
-			//elevatorCallReceiver's floor index is zero-based, so instead of using this.getId(), we want to pass the
-			//zero-based floorNumber index instead
-			ElevatorControlModule.getInstance().elevatorCallReceiver(this.floorNumber, directionToGo);		
+			try
+			{
+				//elevatorCallReceiver's floor index is zero-based, so instead of using this.getId(), we want to pass the
+				//zero-based floorNumber index instead
+				ElevatorControlModule.getInstance().elevatorCallReceiver(this.floorNumber, directionToGo);
+			}
+			//NegativeFloorException isn't be declared here because it has already been caught in the constructor
+			catch (NegativeCapacityException | NegativeElevatorException | NegativeFloorException e)
+			{
+				e.printStackTrace();
+			}		
 		}
 	}
 
@@ -127,9 +143,14 @@ public class Floor implements FloorInterface
    /**
     * Sets the floor number to the given parameter
     * @param inNum the floor number that will be set as the floorNumber.
+    * @throws NegativeFloorException 
     */
-	private void setFloorNumber(int inNum)
+	private void setFloorNumber(int inNum) throws NegativeFloorException
 	{
+		if(inNum < 0 || inNum >= SimulationEnvironment.FLOOR_NUM)
+		{
+			throw new NegativeFloorException("Attempting to create a floor with an index that is outside the bounds of the simulation! (inNum: " + inNum + ")");
+		}
 		floorNumber = inNum;
 	}
 

@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeFloorException;
 import pFactories.FloorFactory;
 import pInterfaces.FloorInterface;
 
@@ -49,7 +50,15 @@ public class FloorFactoryTest {
         System.out.println("createFloor");
         int floorId = 0;
         FloorInterface expResult = null;
-        FloorInterface result = FloorFactory.createFloor(floorId);
+        FloorInterface result = null;
+		try
+		{
+			result = FloorFactory.createFloor(floorId);
+		}
+		catch (NegativeFloorException e)
+		{
+			fail(e.getMessage());
+		}
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

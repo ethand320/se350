@@ -83,7 +83,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inMaxFloors The maximum amount of floors the elevator can access.
     * @param inMinFloors The minimum amount of floors the elevator can access.
     * @throws NegativeCapacityException 
- * @throws NegativeFloorException 
+    * @throws NegativeFloorException 
     */
 	public Elevator(int inId, int inCapacity, int inMaxFloors, int inMinFloors) throws NegativeCapacityException, NegativeFloorException
 	{
@@ -230,7 +230,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			 }
 			 wait(500);
 	     	}
-		 catch (InterruptedException | NegativeFloorException e)
+		 catch (InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
 		 {
 			e.printStackTrace();
 		 }

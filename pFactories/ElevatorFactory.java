@@ -17,7 +17,7 @@ public class ElevatorFactory
      * @param elevatorId A positive integer representing the identifier number of the elevator
      * @return A new elevator object with the given attributes
      * @throws NegativeCapacityException if the capacity of the elevator object would be less than 1
-     * @throws NegativeFloorException 
+     * @throws NegativeFloorException if 
      */
     public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors) throws NegativeCapacityException, NegativeFloorException
     {

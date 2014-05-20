@@ -10,7 +10,7 @@ import pInterfaces.ElevatorInterface;
 
 /**
  * Constructor which allows for the creation of an elevator system.
- * The number of floors as well as the elevator number itself are used.
+ * This class delegates the actual selection algorithm, allowing the algorithm to change at runtime if desired.
  */
 public class ElevatorControlModule implements ControlModuleInterface 
 {
@@ -30,18 +30,14 @@ public class ElevatorControlModule implements ControlModuleInterface
     * private constructor that is called upon the first call to getInstance().
 	* @param elevatorNum The number of elevators that the module will control.
 	* @param floorNum the number of floors that the module will receive signals from and send elevators to.
+	* @throws NegativeElevatorException 
+	* @throws NegativeCapacityException 
+	* @throws NegativeFloorException 
 	* @throws NegativeNumberException throws an exception if either elevatorNum or floorNum are negative.
 	*/
-	private ElevatorControlModule(int elevatorNum, int floorNum)
+	private ElevatorControlModule(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
-		try
-		{
-			delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
-		}
-		catch (NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
-		{
-			e.printStackTrace();
-		}
+		delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
 	}
 
    /** 
@@ -49,8 +45,11 @@ public class ElevatorControlModule implements ControlModuleInterface
   	* If the instance already exists then return it.
 	* If the instance is Null then create a new ElevatorControlModule.
   	* @return returns either the newly created instance or the previously existing instance.
+  	* @throws NegativeElevatorException 
+  	* @throws NegativeCapacityException 
+  	* @throws NegativeFloorException 
   	*/
-	public static ControlModuleInterface getInstance()
+	public static ControlModuleInterface getInstance() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
 		if(instance == null)
 		{
@@ -71,8 +70,11 @@ public class ElevatorControlModule implements ControlModuleInterface
     * @param elevatorNum the number that is assigned to the elevator.
     * @param floorNum  the floor number that is being assigned to the elevator.
 	* @return returns either the newly created instance or the previously existing instance
+	* @throws NegativeElevatorException 
+	* @throws NegativeCapacityException 
+	* @throws NegativeFloorException 
 	*/
-	public static ControlModuleInterface getInstance(int elevatorNum, int floorNum)
+	public static ControlModuleInterface getInstance(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
 		//If the instance already exists then return it
 		if(instance == null)

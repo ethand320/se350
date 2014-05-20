@@ -13,6 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pImpls.Direction;
@@ -60,7 +62,16 @@ public class ElevatorControlModuleTest
     {
         System.out.println("getInstance");
         ControlModuleInterface expResult = null;
-        ControlModuleInterface result = ElevatorControlModule.getInstance();
+        ControlModuleInterface result = null;
+		try
+		{
+			result = ElevatorControlModule.getInstance();
+		}
+		catch (NegativeFloorException | NegativeCapacityException
+				| NegativeElevatorException e)
+		{
+			fail(e.getMessage());
+		}
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -76,7 +87,16 @@ public class ElevatorControlModuleTest
         int elevatorNum = 0;
         int floorNum = 0;
         ControlModuleInterface expResult = null;
-        ControlModuleInterface result = ElevatorControlModule.getInstance(elevatorNum, floorNum);
+        ControlModuleInterface result = null;
+		try
+		{
+			result = ElevatorControlModule.getInstance(elevatorNum, floorNum);
+		}
+		catch (NegativeFloorException | NegativeCapacityException
+				| NegativeElevatorException e)
+		{
+			fail(e.getMessage());
+		}
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

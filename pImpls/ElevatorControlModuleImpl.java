@@ -12,7 +12,7 @@ import pInterfaces.FloorInterface;
 
 
 /**
- * ElevatorControlModuleImpl class implements ControlModuleInterface 
+ * An implementation of the ControlModule interface. Implements a specific elevator selection algorithm. 
  */
 public class ElevatorControlModuleImpl implements ControlModuleInterface
 {
