@@ -48,13 +48,19 @@ public class SimulationEnvironment
 	 * @throws NegativeCapacityException 
 	 * @throws NegativeFloorException 
 	 */
-	private SimulationEnvironment(int numElevators, int numFloors) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
+	
+        
+            // We don't need this now that sim envoronment isn't taking straight up input
+        /*
+        private SimulationEnvironment(int numElevators, int numFloors) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
 		ElevatorControlModule.getInstance(numElevators, numFloors);
 		ELEVATOR_NUM = numElevators;
 		FLOOR_NUM = numFloors;
 	}
-	
+	*/
+        
+        
 	/**
 	 * Default private constructor for the SimulationEnvironment. Passes off default values to the ElevatorControlModule's getInstance() method,
 	 * which will call the Module's constructor
@@ -64,9 +70,12 @@ public class SimulationEnvironment
 	 */
 	private SimulationEnvironment() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
-		ElevatorControlModule.getInstance(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
+		/*   old impl  ElevatorControlModule.getInstance(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
 		ELEVATOR_NUM = DEFAULT_ELEVATOR_NUM;
-		FLOOR_NUM = DEFAULT_FLOOR_NUM;
+		FLOOR_NUM = DEFAULT_FLOOR_NUM; */
+            ElevatorControlModule.getInstance();
+            
+            
 	}
 	
 	/**

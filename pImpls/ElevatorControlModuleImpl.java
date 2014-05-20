@@ -26,7 +26,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	 */
 	private FloorInterface[] floors;
 	
-   /**
+   /*  Don't need this one anymore!
  	* ElevatorControlModuleImpl creates floors and elevators with the given parameters.
 	* @param elevatorNum The number of elevators to be created. 
  	* @param floorNum The number of floors to be created.
@@ -34,11 +34,38 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
     * @throws NegativeCapacityException if any of the ElevatorInterface objects would have a capacity less than 1
     * @throws NegativeElevatorException if elevatorNum is less than 1
     */
-	public ElevatorControlModuleImpl(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
+
+        
+        /*
+        //Old imp]lementation to take with paraemeters, getting rid of it
+        public ElevatorControlModuleImpl(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
 		createFloors(floorNum);
 		createElevators(elevatorNum, floorNum);		
 	}
+        
+        */
+        
+        
+        // New ECM constructor to take xml data for floors/elevators
+         public ElevatorControlModuleImpl(){
+             //maybe need a factory actually, so only one instance is declared
+             XmlParser dataFeed = new XmlParser();
+             
+             int elevatorNum =  XmlParser.getTotalElevatorNumber();
+             int floorNum = XmlParser.getTotalFloorNumber();
+             try
+             {
+             createFloors(floorNum);
+             createElevators(elevatorNum, floorNum);
+             }
+             catch (Exception e) { e.printStackTrace(); }
+             
+             
+             
+             
+             
+         }
 
    /**
     * This function is called whenever a Person object summons an elevator from a given floor. This method will compute the best elevator to
@@ -144,7 +171,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
                 //If we got this far and request still hasn't been handled...
                 // then it needs to be sent again  need this implementation done eventually.
 
-
+         /*  This was old hard coding of which elevator to send for requests. logic above 'should' take care of that
 		switch(floorNumber)
 		{
 		case 4:
@@ -177,7 +204,12 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 			elevatorToSend = elevators[0];
 		}
 		elevatorToSend.addFloorToQueue(floorNumber + 1);
+                
+                */
+                
 	}
+               
+                
 
    /**
     * Returns the elevator at the index specified.

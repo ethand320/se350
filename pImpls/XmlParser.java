@@ -34,7 +34,7 @@ public class XmlParser {
     }
     
     
-    public void getInputs(){ 
+    public  void getInputs(){ 
    
   //  HashMap inputHash = new HashMap();
     
