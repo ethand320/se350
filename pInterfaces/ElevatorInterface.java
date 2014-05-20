@@ -72,6 +72,8 @@ public interface ElevatorInterface
      */
     public int getElevatorId();
     
+    public int getCurrentFloor();
+    
     /**
      * Accessor for the current direction of this object.
      * @return a value from the Direction enum that indicates this object's current direction.

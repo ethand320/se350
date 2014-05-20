@@ -530,4 +530,14 @@ public class Elevator implements ElevatorInterface, Runnable
 	{
 		passengerList = new ArrayList<Person>();
 	}
+
+	/**
+	 * Accessor which retrieves the current floor of this elevator
+	 * @return the index of the current floor that the elevator is on.
+	 */
+	@Override
+	public int getCurrentFloor()
+	{
+		return this.currentFloor;
+	}
 }
