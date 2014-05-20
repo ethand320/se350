@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Input>
+
+
+<floors>5</floors>
+
+<elevators>5</elevators>
+
+<elevTravelTime> 3 </elevTravelTime>
+
+<elevDoorTime> 3  </elevDoorTime>
+
+<peoplePerMin> 1 </peoplePerMin>
+
+
+
+</Input>
