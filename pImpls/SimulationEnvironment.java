@@ -97,7 +97,9 @@ public class SimulationEnvironment
 			{
 				synchronized(SimulationEnvironment.class)
 				{
-					instance = new SimulationEnvironment(numFloors, numElevators);
+					//  old with paramsinstance = new SimulationEnvironment(numFloors, numElevators);
+                                    
+                                        instance = new SimulationEnvironment();
 				}
 			}
 			return instance;
