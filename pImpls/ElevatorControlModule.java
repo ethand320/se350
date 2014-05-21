@@ -37,7 +37,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 	*/
 	private ElevatorControlModule(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
-		delegate = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
+		delegate = ControlImplFactory.createElevatorController();
 	}
 
    /** 

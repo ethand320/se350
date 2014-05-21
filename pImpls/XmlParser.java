@@ -35,14 +35,16 @@ public class XmlParser {
     
     
     public static void getInputs(){ 
-   
-  //  HashMap inputHash = new HashMap();
+       if (inputHash == null)
+         inputHash = new HashMap();
     
     try{    
         
         //XML docuement initialization for parsing
          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
          DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+         xmlFile = new File("xmlInputs.xml");
+         
          Document doc = dBuilder.parse(xmlFile);
 
          NodeList nodeList = doc.getElementsByTagName("Input");
@@ -53,6 +55,8 @@ public class XmlParser {
                  Node nNode = nodeList.item(temp);
                  Element eElement = (Element) nNode;
                //Adding all the elements values to the hashmap
+                System.out.println( eElement.getElementsByTagName("floors").item(0).getTextContent());
+                
                  inputHash.put("floors", eElement.getElementsByTagName("floors").item(0).getTextContent());
                  inputHash.put("elevators", eElement.getElementsByTagName("elevators").item(0).getTextContent());
                  inputHash.put("elevTravelTime", eElement.getElementsByTagName("elevTravelTime").item(0).getTextContent());
@@ -73,35 +77,44 @@ public class XmlParser {
     }
     
     public static int getTotalElevatorNumber(){
-       if (inputHash.isEmpty()) getInputs();
+       if (inputHash == null)
+           getInputs();
        
-        Integer elevators = (Integer) inputHash.get("elevators");
+        Integer elevators = Integer.parseInt((String)inputHash.get("elevators"));
         
         return  elevators ;
         
     }
 
     public static int getTotalFloorNumber(){
-        if (inputHash.isEmpty()) getInputs();
-        Integer floors = (Integer) inputHash.get("floors");
+        if (inputHash == null)
+           getInputs();
+        
+        Integer floors = Integer.parseInt( (String) inputHash.get("floors"));
         return floors;
         
     }
     public static double getElevTravelTime(){
-      if (inputHash.isEmpty()) getInputs();
+      if (inputHash == null)
+           getInputs();
+      
         Double time = (Double) inputHash.get("elevTravelTime");
         return time;
     }
       
     public static int getElevDoorTime(){
-        if (inputHash.isEmpty()) getInputs();
+        if (inputHash == null)
+           getInputs();
+        
         Integer doorTime = (Integer) inputHash.get("elevDoorTime");
         return doorTime;
         
     }
    
     public static double getPeoplePerMin(){
-        if (inputHash.isEmpty()) getInputs();
+        if (inputHash == null)
+           getInputs();
+        
         Double peoplePerMin = (Double) inputHash.get("peoplePerMin");
         return peoplePerMin;
     }
