@@ -19,7 +19,6 @@ import pImpls.Person;
 
 /**
  *
- * @author Stouny
  */
 public class PersonFactoryTest {
     
@@ -48,21 +47,29 @@ public class PersonFactoryTest {
     @Test
     public void testCreatePerson() {
         System.out.println("createPerson");
-        int startFloor = 0;
-        int destinationFloor = 0;
+         SimulationEnvironment.FLOOR_NUM = 10;
+        Person person = new Person(1,5);
+        int startFloor = 1;
+        int destinationFloor = 5;
         Person expResult = null;
         Person result = null;
+        Person failresult = null;
+        Person failboundry = null;
 		try
 		{
 			result = PersonFactory.createPerson(startFloor, destinationFloor);
+                        expResult = new Person(startFloor, destinationFloor);
+                        failresult = PersonFactory.createPerson(startFloor+1,destinationFloor+1);
+                       
 		}
 		catch (NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult.getCurrentFloor(), result.getCurrentFloor());
+        assertEquals(expResult.getDestinationFloor(),result.getDestinationFloor());
+        assertFalse(failresult.getCurrentFloor()==result.getCurrentFloor());
+        assertFalse(failresult.getDestinationFloor()==result.getDestinationFloor());
     }
     
 }
