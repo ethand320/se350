@@ -252,7 +252,10 @@ public class SimulationEnvironment
                 Thread.sleep(60000);
                 Random randomGenerator = new Random();
                 
-                int randFloor =  randomGenerator.nextInt(totalFloors);
+                int randStartFloor =  randomGenerator.nextInt(totalFloors);
+                int randEndFloor = randomGenerator.nextInt(totalFloors);
+                
+                addPersonToFloor(PersonFactory.createPerson(randStartFloor, randEndFloor), randEndFloor);
                 
                 
        
