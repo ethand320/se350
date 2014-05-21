@@ -23,12 +23,12 @@ public class SimulationEnvironment
 	/**
 	 * Constant which determines the default number of elevators to create when the default constructor is called.
 	 */
-	public static final int DEFAULT_ELEVATOR_NUM = 4;
+	//public static final int DEFAULT_ELEVATOR_NUM = 4;
 	
 	/**
 	 * Constant which determines the default number of floors to create when the default constructor is called.
 	 */
-	public static final int DEFAULT_FLOOR_NUM = 16;
+	//public static final int DEFAULT_FLOOR_NUM = 16;
 	
 	/**
 	 * Static integer representing how many elevators are in the simulation environment. Used for error checking in various places in order to
@@ -76,6 +76,8 @@ public class SimulationEnvironment
 		/*   old impl  ElevatorControlModule.getInstance(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
 		ELEVATOR_NUM = DEFAULT_ELEVATOR_NUM;
 		FLOOR_NUM = DEFAULT_FLOOR_NUM; */
+                FLOOR_NUM = XmlParser.getTotalFloorNumber();
+                
             ElevatorControlModule.getInstance();
             
             

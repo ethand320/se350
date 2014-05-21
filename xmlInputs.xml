@@ -7,11 +7,11 @@
 
 <elevators>5</elevators>
 
-<elevTravelTime> 3 </elevTravelTime>
+<elevTravelTime>4</elevTravelTime>
 
-<elevDoorTime> 3  </elevDoorTime>
+<elevDoorTime>4</elevDoorTime>
 
-<peoplePerMin> 1 </peoplePerMin>
+<peoplePerMin>1</peoplePerMin>
 
 
 

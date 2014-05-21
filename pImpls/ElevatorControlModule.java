@@ -35,7 +35,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 	* @throws NegativeFloorException 
 	* @throws NegativeNumberException throws an exception if either elevatorNum or floorNum are negative.
 	*/
-	private ElevatorControlModule(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
+	private ElevatorControlModule() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
 		delegate = ControlImplFactory.createElevatorController();
 	}
@@ -58,7 +58,11 @@ public class ElevatorControlModule implements ControlModuleInterface
 			{
 				if(instance == null)
 				{
-					instance = new ElevatorControlModule(SimulationEnvironment.DEFAULT_ELEVATOR_NUM, SimulationEnvironment.DEFAULT_FLOOR_NUM);
+				//	instance = new ElevatorControlModule(SimulationEnvironment.DEFAULT_ELEVATOR_NUM, SimulationEnvironment.DEFAULT_FLOOR_NUM);
+                                    // changed, dont think we need to pass the elev numbers and floor numbers anymore!
+                                    
+                                    instance = new ElevatorControlModule();
+                                    
 				}
 			}
 		}

@@ -43,7 +43,7 @@ public class XmlParser {
         //XML docuement initialization for parsing
          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
          DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-         xmlFile = new File("xmlInputs.xml");
+         xmlFile = new File("src/xmlInputs.xml");
          
          Document doc = dBuilder.parse(xmlFile);
 
@@ -106,7 +106,7 @@ public class XmlParser {
         if (inputHash == null)
            getInputs();
         
-        Integer doorTime = (Integer) inputHash.get("elevDoorTime");
+        Integer doorTime = Integer.parseInt( (String) inputHash.get("elevDoorTime"));
         return doorTime;
         
     }
@@ -115,7 +115,8 @@ public class XmlParser {
         if (inputHash == null)
            getInputs();
         
-        Double peoplePerMin = (Double) inputHash.get("peoplePerMin");
+        Double peoplePerMin = (Double) Double.parseDouble( (String)inputHash.get("peoplePerMin"));
+        
         return peoplePerMin;
     }
         
