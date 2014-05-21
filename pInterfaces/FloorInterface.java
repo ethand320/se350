@@ -1,14 +1,36 @@
 package pInterfaces;
+import pExceptions.NegativeFloorException;
+import pExceptions.NullPassengerException;
 import pImpls.Direction;
 import pImpls.Person;
 
 public interface FloorInterface
 {
+	/**
+	 * Summons an elevator to this floor. Called whenever a Person object is added to this floor
+	 * @param directionToGo The direction in which the Person object needs to travel
+	 */
     public void summonElevator(Direction directionToGo);
+    
+    /**
+     * Accessor which returns the ID number of this floor
+     * @return the ID number of this floor
+     */
     public int getId();
-    //SIMPSON TODO:
-    //this method isn't final, but here's the initial thought for how this method should run:
-    //removeFromFloor calls elevatorToEnter.addPassengers(this.goingUp);
+    
+    /**
+     * Removes one or more Person objects from this floor and places them into an elevator
+     * @param elevatorToEnter the elevator object which the Person objects should enter
+     * @param directionToGo the direction in which the elevator is going. Only the Person objects that are going in the same direction should
+     * enter elevatorToEnter.
+     */
     public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo);
-	public void addPersonToFloor(Person inPerson);
+    
+    /**
+     * Places a Person object in this floor. Once inside, they summon an elevator by calling summonElevator
+     * @param inPerson the Person object being added to the floor. Must not be null.
+     * @throws NullPassengerException if inPerson is null
+     * @throws NegativeFloorException
+     */
+	public void addPersonToFloor(Person inPerson) throws NullPassengerException, NegativeFloorException;
 }
