@@ -1,4 +1,6 @@
 package pImpls;
+//import XmlParser;
+
 import pInterfaces.ElevatorInterface;
 import pExceptions.*;
 
@@ -91,6 +93,9 @@ public class Elevator implements ElevatorInterface, Runnable
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
 		setMinFloors(inMinFloors);
+                
+                doorSpeed =  XmlParser.getElevDoorTime();
+                
 		initializeRequestQueue();
 		setInitialDirection();
     	setDefaultFloor(1);
@@ -228,7 +233,7 @@ public class Elevator implements ElevatorInterface, Runnable
 					 this.passengerList.remove(i);
 				 }
 			 }
-			 wait(500);
+			 wait(doorSpeed);
 	     	}
 		 catch (InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
 		 {
@@ -247,7 +252,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		//time to close doors, add a wait
     	try
     	{
-    		wait(500);
+    		wait(doorSpeed);
     	}
 		catch (InterruptedException e)
 		{

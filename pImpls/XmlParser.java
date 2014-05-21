@@ -90,8 +90,8 @@ public class XmlParser {
         return time;
     }
       
-    public static double getElevDoorTime(){
-        Double doorTime = (Double) inputHash.get("elevDoorTime");
+    public static int getElevDoorTime(){
+        Integer doorTime = (Integer) inputHash.get("elevDoorTime");
         return doorTime;
         
     }

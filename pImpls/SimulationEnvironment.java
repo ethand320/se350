@@ -6,6 +6,7 @@ import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pFactories.PersonFactory;
 import pInterfaces.ElevatorInterface;
+import java.util.Random;
 
 /**
  * SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
@@ -146,6 +147,9 @@ public class SimulationEnvironment
 			instance.addPersonToFloor(PersonFactory.createPerson(13,14), 13);
 			instance.addPersonToFloor(PersonFactory.createPerson(15,16), 15);
 			
+                        
+                        
+                        
 			//allow the elevators time to go idle and go back to the bottom floor
 			System.out.println("Going to sleep now (1/2)");
 	        Thread.sleep(15000);
@@ -236,4 +240,29 @@ public class SimulationEnvironment
 			e.printStackTrace();
 		}
 	}
+        
+        private  void randPersonGenerator(int totalSimTime, int personRate) {
+            long tStart = System.currentTimeMillis();
+            int totalFloors = XmlParser.getTotalFloorNumber();
+            try {
+                
+            
+            while(totalSimTime < (System.currentTimeMillis()- tStart))
+            {
+                Thread.sleep(60000);
+                Random randomGenerator = new Random();
+                
+                int randFloor =  randomGenerator.nextInt(totalFloors);
+                
+                
+       
+                
+            }
+            }
+            catch (Exception e) { e.printStackTrace();}
+            
+            
+        }
+       
+        
 }
