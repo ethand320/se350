@@ -82,6 +82,8 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException
 	{
+                 System.out.println("Elevator Call Receiver called");
+            
 		if(floorNumber < 0 || floorNumber >= floors.length)
 		{
 			throw new NegativeFloorException("The floor object that called this method has an invalid ID number! (floorNumber: " + floorNumber + ")");
@@ -265,6 +267,8 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
     */
 	private void createFloors(int floorNum) throws NegativeFloorException
 	{
+            System.out.println("Creating " + floorNum + " floors..");
+            
 		if(floorNum < 1)
 		{
 			throw new NegativeFloorException("Attempting to create a control module without any floors! (floorNum: " + floorNum + ")");

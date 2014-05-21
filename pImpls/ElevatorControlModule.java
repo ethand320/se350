@@ -89,7 +89,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 			{
 				if(instance == null)
 				{
-					instance = new ElevatorControlModule(elevatorNum, floorNum);
+					instance = new ElevatorControlModule();
 				}
 			}
 		}

@@ -238,6 +238,7 @@ public class SimulationEnvironment
                 
                 int randStartFloor =  randomGenerator.nextInt(totalFloors);
                 int randEndFloor = randomGenerator.nextInt(totalFloors);
+                System.out.println("Person is being created and added to a floor #: " + randStartFloor);
                 
                 addPersonToFloor(PersonFactory.createPerson(randStartFloor, randEndFloor), randEndFloor);
                 

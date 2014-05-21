@@ -114,6 +114,8 @@ public class Elevator implements ElevatorInterface, Runnable
 	@Override
 	public void addFloorToQueue(int floorNum) 
 	{
+            System.out.println("Addfloor toqueue is called");
+            
 		int internalFloorNum = floorNum - 1;
 		if(requestQueue.contains(internalFloorNum))
 		{
@@ -378,7 +380,8 @@ public class Elevator implements ElevatorInterface, Runnable
 	        {
 	        	
 	        	// if current floor is in request queue.
-	        	
+	        
+                        
 	        	if (requestQueue.contains(this.currentFloor))
 	        	{
 	        	  this.openDoors();
@@ -389,6 +392,8 @@ public class Elevator implements ElevatorInterface, Runnable
 	        	// if queue is empty  switch to idle.
 	        	if (requestQueue.isEmpty())
 	        	{
+                            System.out.println("Request queue is empty");
+                            
 	        		this.direction = Direction.IDLE;
 	        		tStart = System.currentTimeMillis();
 	        		
