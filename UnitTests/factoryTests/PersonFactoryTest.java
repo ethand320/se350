@@ -47,14 +47,12 @@ public class PersonFactoryTest {
     @Test
     public void testCreatePerson() {
         System.out.println("createPerson");
-         SimulationEnvironment.FLOOR_NUM = 10;
-        Person person = new Person(1,5);
+        SimulationEnvironment.FLOOR_NUM = 10;
         int startFloor = 1;
         int destinationFloor = 5;
         Person expResult = null;
         Person result = null;
         Person failresult = null;
-        Person failboundry = null;
 		try
 		{
 			result = PersonFactory.createPerson(startFloor, destinationFloor);
@@ -70,6 +68,8 @@ public class PersonFactoryTest {
         assertEquals(expResult.getDestinationFloor(),result.getDestinationFloor());
         assertFalse(failresult.getCurrentFloor()==result.getCurrentFloor());
         assertFalse(failresult.getDestinationFloor()==result.getDestinationFloor());
+        assertNotNull(result.getCurrentFloor());
+        assertNotNull(result.getDestinationFloor());
     }
     
 }
