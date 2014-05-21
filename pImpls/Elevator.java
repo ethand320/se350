@@ -412,7 +412,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						break;
 					case UP:
 						tStart = System.currentTimeMillis();
-						wait(500);
+						wait(speed);
 						if(this.currentFloor < this.maxFloors)
 						{
 							this.currentFloor++;
@@ -426,7 +426,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						break;
 					case DOWN:
 						tStart = System.currentTimeMillis();
-						wait(500);
+						wait(speed);
 						if(this.currentFloor > this.minFloors)
 						{
 							this.currentFloor--;
@@ -519,7 +519,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	}
 
         private void setSpeed(int newSpeed){
-            speed = newSpeed
+            speed = newSpeed;
         }
    /**
     * Sets the initial floor for the elevator.
