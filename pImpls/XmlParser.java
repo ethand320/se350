@@ -28,13 +28,13 @@ public class XmlParser {
     
     public XmlParser(){
         
-        this.xmlFile = new File("src/xmlInputs.xml");
-        this.getInputs();
+      //  this.xmlFile = new File("src/xmlInputs.xml");
+      //  this.getInputs();
        
     }
     
     
-    public  void getInputs(){ 
+    public static void getInputs(){ 
    
   //  HashMap inputHash = new HashMap();
     
@@ -43,7 +43,7 @@ public class XmlParser {
         //XML docuement initialization for parsing
          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
          DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-         Document doc = dBuilder.parse(this.xmlFile);
+         Document doc = dBuilder.parse(xmlFile);
 
          NodeList nodeList = doc.getElementsByTagName("Input");
 
@@ -73,6 +73,8 @@ public class XmlParser {
     }
     
     public static int getTotalElevatorNumber(){
+       if (inputHash.isEmpty()) getInputs();
+       
         Integer elevators = (Integer) inputHash.get("elevators");
         
         return  elevators ;
@@ -80,23 +82,26 @@ public class XmlParser {
     }
 
     public static int getTotalFloorNumber(){
+        if (inputHash.isEmpty()) getInputs();
         Integer floors = (Integer) inputHash.get("floors");
         return floors;
         
     }
     public static double getElevTravelTime(){
-      
+      if (inputHash.isEmpty()) getInputs();
         Double time = (Double) inputHash.get("elevTravelTime");
         return time;
     }
       
     public static int getElevDoorTime(){
+        if (inputHash.isEmpty()) getInputs();
         Integer doorTime = (Integer) inputHash.get("elevDoorTime");
         return doorTime;
         
     }
    
     public static double getPeoplePerMin(){
+        if (inputHash.isEmpty()) getInputs();
         Double peoplePerMin = (Double) inputHash.get("peoplePerMin");
         return peoplePerMin;
     }
