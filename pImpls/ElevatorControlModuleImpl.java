@@ -54,6 +54,11 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
              
              int elevatorNum =  XmlParser.getTotalElevatorNumber();
              int floorNum = XmlParser.getTotalFloorNumber();
+             
+             System.out.println("Number of elevators from file : " + elevatorNum);
+             System.out.println("Numberof floor numbers from file : "+ floorNum);
+             
+             
              try
              {
              createFloors(floorNum);
