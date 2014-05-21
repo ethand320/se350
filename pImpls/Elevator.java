@@ -95,6 +95,8 @@ public class Elevator implements ElevatorInterface, Runnable
 		setMinFloors(inMinFloors);
                 
                 doorSpeed =  XmlParser.getElevDoorTime();
+                setSpeed(doorSpeed);
+                
                 
 		initializeRequestQueue();
 		setInitialDirection();
@@ -516,6 +518,9 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.capacity = inCap;
 	}
 
+        private void setSpeed(int newSpeed){
+            speed = newSpeed
+        }
    /**
     * Sets the initial floor for the elevator.
     * private variable - only to be used to give a default floor to an elevator.
