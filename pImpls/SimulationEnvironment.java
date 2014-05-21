@@ -6,6 +6,8 @@ import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pFactories.PersonFactory;
 import pInterfaces.ElevatorInterface;
+import pFactories.ControlImplFactory;
+
 import java.util.Random;
 
 /**
@@ -139,47 +141,27 @@ public class SimulationEnvironment
 		
 		try
 		{
-			//by placing a person in a floor, we can simulate the action of having a person call the elevator from a given floor
-			//we give them a destination of floor 0 to indicate that they have no destination and that they are only spawned to call the elevator.
-			//their request for floor 0 will be ignored by the elevator
-			instance.addPersonToFloor(PersonFactory.createPerson(11,14), 11);
-			instance.addPersonToFloor(PersonFactory.createPerson(14,15), 14);
-			instance.addPersonToFloor(PersonFactory.createPerson(13,14), 13);
-			instance.addPersonToFloor(PersonFactory.createPerson(15,16), 15);
-			
+                    
+                    int elevNum = XmlParser.getTotalElevatorNumber();
+                    
+                    int floorNum= XmlParser.getTotalFloorNumber();
+                  
+                    
+                    ControlImplFactory.createElevatorController();  //create our ECM  - params specified in ECM constructor
+                                                                    //this will make all our floors/elevators and start those threads
+                    
+                   getInstance().randPersonGenerator(elevNum, floorNum);   // this kicks off a method to continuously generate people 
+                      //... for the duration of the simulation, the people are handled by the floors/elevators
+                   
+                   getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
+                   
+                    
+                    
                         
-                        
-                        
-			//allow the elevators time to go idle and go back to the bottom floor
-			System.out.println("Going to sleep now (1/2)");
-	        Thread.sleep(15000);
-	        System.out.println("Waking up now (1/2)");
-			
-			//by placing a person in the floor and giving them a destination floor, we can simulate the action of having that person enter the elevator and press the floor button inside the elevator
-			instance.addPersonToFloor(PersonFactory.createPerson(5,16), 5);
-			
-			//by creating a new person and placing him on the 16th floor, we ensure that the request for floors 2, 3, and 5 aren't processed until the elevator reaches that destination
-			instance.addPersonToFloor(PersonFactory.createPerson(16,2), 16);
-			
-			//manually attempt to add floor 1 to the elevator's queue while it is going up. this call should fail
-			instance.getElevator(3).addFloorToQueue(1);
-			
-			//allow the elevator enough time to reach the top floor and receive its request to go to the fifth floor
-			Thread.sleep(8500);
-			
-			instance.getElevator(3).addFloorToQueue(3);
-			instance.getElevator(3).addFloorToQueue(5);
-			
-			//allow the elevators time to run their floor requests and go idle
-			System.out.println("Going to sleep now (2/2)");
-	        Thread.sleep(10000);
-	        System.out.println("Waking up now (2/2)");
-	        
-	        	        
-	        System.out.println("Ending simulation");
-	        instance.stopSimluation();
+		
 		}
-		catch (InterruptedException | NullPassengerException | NegativeFloorException | NegativeElevatorException e)
+		catch (Exception e)
+                        //(InterruptedException | NullPassengerException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
         {
             e.printStackTrace();
         }
