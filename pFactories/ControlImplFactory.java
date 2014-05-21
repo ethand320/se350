@@ -18,7 +18,7 @@ public class ControlImplFactory
 	 * @return A new ControlModule implementation that owns the number of elevators and floors specified by elevatorNum and floorNum respectively.
 	 * @throws NegativeFloorException if floorNum is less than 1.
 	 * @throws NegativeCapacityException if the elevators that are created as part of initialization are passed a negative value for passenger capacity.
-	 * @throws NegativeElevatorException
+	 * @throws NegativeElevatorException if the elevators being created are passed a negative value for the elevator.
 	 */
 	public static ControlModuleInterface createElevatorController() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
