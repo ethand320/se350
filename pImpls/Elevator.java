@@ -112,9 +112,9 @@ public class Elevator implements ElevatorInterface, Runnable
     * NOTE: this method uses ONE-BASED indexing, which means that zero corresponds to an invalid request.
     */
 	@Override
-	public void addFloorToQueue(int floorNum) 
+	public synchronized void addFloorToQueue(int floorNum) 
 	{
-            System.out.println("Addfloor toqueue is called");
+            System.out.println("Add floor to queue is called");
             
 		int internalFloorNum = floorNum - 1;
 		if(requestQueue.contains(internalFloorNum))
@@ -269,7 +269,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return The current direction of this elevator object.
     */
 	@Override
-	public Direction getDirection()
+	public synchronized Direction getDirection()
 	{
 		return this.direction;
 	}
@@ -310,7 +310,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return the number of people that the elevator object can hold.
     */
 	@Override
-	public int getCapacity() 
+	public synchronized int getCapacity() 
 	{	
 		return this.capacity;
 	}
@@ -320,7 +320,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return the collection of passengers in the list as an ArrayList.
     */
 	@Override
-	public ArrayList<Person> getPassengers() 
+	public synchronized ArrayList<Person> getPassengers() 
 	{
 		return this.passengerList;
 	}
@@ -330,7 +330,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns the id that corresponds to the elevator that requested this method.
     */
 	@Override
-	public int getElevatorId() 
+	public synchronized int getElevatorId() 
 	{
 		return this.elevatorId;
 	}
@@ -340,7 +340,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns true if the doors are open or false if the doors are closed.
     */
 	@Override
-	public boolean isOpen() 
+	public synchronized boolean isOpen() 
 	{
 		return bDoorsOpen;
 	}
@@ -350,7 +350,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns true if the elevator is currently running and accepting floor requests or false if the system is inactive.
     */
 	@Override
-	public boolean isRunning() 
+	public synchronized boolean isRunning() 
 	{
     	return running;
 	}
@@ -359,7 +359,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * Stops the elevator from running immediately without returning to its default floor. Once shut down, it cannot be started up again.
     */
 	@Override
-	public void shutDown()
+	public synchronized void shutDown()
 	{
 		this.running = false;
 	}
@@ -378,10 +378,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		    running = true;
 	        while (running)
 	        {
-	        	
-	        	// if current floor is in request queue.
-	        
-                        
+	        	// if current floor is in request queue.      
 	        	if (requestQueue.contains(this.currentFloor))
 	        	{
 	        	  this.openDoors();
@@ -392,7 +389,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	        	// if queue is empty  switch to idle.
 	        	if (requestQueue.isEmpty())
 	        	{
-                            System.out.println("Request queue is empty");
+                    System.out.println("Request queue for Elevator " + ( getElevatorId() + 1 ) + " is empty");
                             
 	        		this.direction = Direction.IDLE;
 	        		tStart = System.currentTimeMillis();
@@ -469,7 +466,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inId The unique identifier number. This number need not be in consecutive order compared to other elevators in the building, but it must be no larger than the 
     * maximum number of elevators in the simulation environment.
     */
-	private void setId(int inId)
+	private synchronized void setId(int inId)
 	{
 		this.elevatorId = inId;
 	}
@@ -479,7 +476,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * private variable - only to be used to handle the maximum elevator floors.
     * @param inMaxFloors The total number of floors the elevator can visit.
     */
-	private void setMaxFloors(int inMaxFloors)
+	private synchronized void setMaxFloors(int inMaxFloors)
 	{
 		this.maxFloors = inMaxFloors - 1;
 	}
@@ -490,7 +487,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inMinFloors The lowest numbered floor the elevator can visit.
     * @throws NegativeFloorException if inMinFloors is less than 0 (using ZERO-BASED indexing)
     */
-	private void setMinFloors(int inMinFloors) throws NegativeFloorException
+	private synchronized void setMinFloors(int inMinFloors) throws NegativeFloorException
 	{
 		if(inMinFloors < 1)
 		{
@@ -503,7 +500,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * Sets the initial direction for the elevator to IDLE.
     * private variable - only to be used to give a default direction to an elevator.
     */
-	private void setInitialDirection()
+	private synchronized void setInitialDirection()
 	{
 		this.direction = Direction.IDLE;
 	}
@@ -514,7 +511,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inCap the total capacity limit the elevator can hold.
     * @throws NegativeCapacityException if inCap is negative
     */
-	private void setCapacity(int inCap) throws NegativeCapacityException
+	private synchronized void setCapacity(int inCap) throws NegativeCapacityException
 	{
 		if(inCap < 1)
 		{
@@ -523,15 +520,16 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.capacity = inCap;
 	}
 
-        private void setSpeed(int newSpeed){
-            speed = newSpeed;
-        }
+    private synchronized void setSpeed(int newSpeed){
+        speed = newSpeed;
+    }
+    
    /**
     * Sets the initial floor for the elevator.
     * private variable - only to be used to give a default floor to an elevator.
     * @param floor The default floor level that will be assigned to an elevator.
     */	
-	private void setDefaultFloor(int floor)
+	private synchronized void setDefaultFloor(int floor)
     {
 		//TODO: this shouldn't be touching currentFloor. There should be a defaultFloor member that this method will modify instead
     	this.currentFloor = floor;
@@ -541,7 +539,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * Creates the passengerList to be used with the elevators.
     * private variable - only to be used create the passengerList.
     */    
-	private void createPassengerList()
+	private synchronized void createPassengerList()
 	{
 		passengerList = new ArrayList<Person>();
 	}
@@ -551,7 +549,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	 * @return the index of the current floor that the elevator is on.
 	 */
 	@Override
-	public int getCurrentFloor()
+	public synchronized int getCurrentFloor()
 	{
 		return this.currentFloor;
 	}

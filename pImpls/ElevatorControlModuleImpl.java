@@ -131,48 +131,64 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
                //  if there is an elevator on the floor
                //     if elevator is idle OR going in desired direction
                //         then add the floor to that elevator;s queue  and be DONE
-                for ( ElevatorInterface curElev: elevators)
+                for (ElevatorInterface curElev: elevators)
                 {
-                    if (handledRequest == true) break;  // if request has been sent you're done!
+                	Direction curDirection = curElev.getDirection();
+                	int curFloor = curElev.getCurrentFloor();
+                	
+                    if (handledRequest == true)
+                	{
+                		break;  // if request has been sent you're done!
+                	}
                     
-                    if (curElev.getCurrentFloor() == floorNumber)
-                        if ( !curElev.isRunning() || curElev.getDirection() == directionRequest )
-                        {    // then add floor to that elevators queue and break
+                    //is there an elevator on this floor already?
+                    else if (curFloor == floorNumber)
+                    {
+                        if (curDirection == directionRequest || curDirection == Direction.IDLE)
+                        {    
+                        	// then add floor to that elevators queue and break
                             curElev.addFloorToQueue(floorNumber);
                             handledRequest = true;
                             break;  // break out of loop since request has been handled!
                         }   
-                }
-                 // is there an elevator already moving?
-               // yes: is it also going in desired direction
-                //      yes:  add the floor to that elevator's request queue
-                for (ElevatorInterface curElev: elevators)
-                {
-                    if(handledRequest == true) break;  //Request has already been sent so we're done
-                    if (curElev.isRunning() && curElev.getDirection() == directionRequest)
+                    }
+                    else if (curElev.isRunning() && ( curDirection == directionRequest ||  curDirection == Direction.IDLE) )
                     {
                         curElev.addFloorToQueue(floorNumber);
                         handledRequest = true; 
                         break;
                     }
-   
                 }
+                 // is there an elevator already moving?
+               // yes: is it also going in desired direction or isn't moving at all?
+                //      yes:  add the floor to that elevator's request queue
+//                for (ElevatorInterface curElev: elevators)
+//                {
+//                    if(handledRequest == true) break;  //Request has already been sent so we're done
+//                    
+//                    if (curElev.isRunning() && curDirection == directionRequest ||  curDirection == Direction.IDLE)
+//                    {
+//                        curElev.addFloorToQueue(floorNumber);
+//                        handledRequest = true; 
+//                        break;
+//                    }
+//   
+//                }
                   //are there any idle elevators?
                  //   yes:
                  //       pick an idle elevator and add the request to the queue
                  //   no:
                   //      add to unique pending request list  ( a catch all queue I guess?)
-                for (ElevatorInterface curElev: elevators)
-                {
-                    if (handledRequest == true) break;
-                    if ( !curElev.isRunning())
-                    {
-                        curElev.addFloorToQueue(floorNumber);
-                       handledRequest = true;
-                       break;
-                  
-                    }
-                }
+//                for (ElevatorInterface curElev: elevators)
+//                {
+//                    if (handledRequest == true) break;
+//                    if ( !curElev.isRunning())
+//                    {
+//                        curElev.addFloorToQueue(floorNumber);
+//                       handledRequest = true;
+//                       break;
+//                    }
+//                }
                 
                 //If we got this far and request still hasn't been handled...
                 // then it needs to be sent again  need this implementation done eventually

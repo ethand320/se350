@@ -47,7 +47,7 @@ public class Floor implements FloorInterface
      * @throws NullPassengerException if inPerson is null
      */
     @Override
-	public void addPersonToFloor(Person inPerson) throws NullPassengerException
+	public synchronized void addPersonToFloor(Person inPerson) throws NullPassengerException
 	{
     	if(inPerson == null)
     	{
@@ -102,7 +102,7 @@ public class Floor implements FloorInterface
     * NOTE: This is an external representation, which means that the value is represented with ONE-BASED indexing
     */ 
 	@Override
-	public int getId() 
+	public synchronized int getId() 
 	{
 		return this.floorNumber + 1;
 	}

@@ -77,6 +77,7 @@ public class SimulationEnvironment
 		ELEVATOR_NUM = DEFAULT_ELEVATOR_NUM;
 		FLOOR_NUM = DEFAULT_FLOOR_NUM; */
                 FLOOR_NUM = XmlParser.getTotalFloorNumber();
+                ELEVATOR_NUM = XmlParser.getTotalElevatorNumber();
                 
             ElevatorControlModule.getInstance();
             
@@ -104,7 +105,7 @@ public class SimulationEnvironment
 				{
 					//  old with paramsinstance = new SimulationEnvironment(numFloors, numElevators);
                                     
-                                        instance = new SimulationEnvironment();
+                   instance = new SimulationEnvironment();
 				}
 			}
 			return instance;
@@ -142,32 +143,24 @@ public class SimulationEnvironment
 	{
 		
 		try
-		{
-                    
-                    int elevNum = XmlParser.getTotalElevatorNumber();
-                    
-                    int floorNum= XmlParser.getTotalFloorNumber();
-                  
-                    
-                    ControlImplFactory.createElevatorController();  //create our ECM  - params specified in ECM constructor
-                                                                    //this will make all our floors/elevators and start those threads
-                    
-                   getInstance().randPersonGenerator(elevNum, floorNum);   // this kicks off a method to continuously generate people 
-                      //... for the duration of the simulation, the people are handled by the floors/elevators
-                   
-                   getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
-                   
-                    
-                    
-                        
-		
+		{ 
+//           int elevNum = XmlParser.getTotalElevatorNumber();
+//            
+//           int floorNum= XmlParser.getTotalFloorNumber();
+            
+           //ControlImplFactory.createElevatorController();  //create our ECM  - params specified in ECM constructor
+                                                            //this will make all our floors/elevators and start those threads
+            
+           getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());   // this kicks off a method to continuously generate people 
+              //... for the duration of the simulation, the people are handled by the floors/elevators
+           
+           getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
 		}
 		catch (Exception e)
                         //(InterruptedException | NullPassengerException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
         {
             e.printStackTrace();
         }
-		
 	}
 
 	/**
@@ -220,37 +213,44 @@ public class SimulationEnvironment
 		}
 		catch (NegativeCapacityException | NegativeElevatorException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
         
-        private  void randPersonGenerator(int totalSimTime, int personRate) {
-            long tStart = System.currentTimeMillis();
-            int totalFloors = XmlParser.getTotalFloorNumber();
-            try {
-                
-            
-            while(totalSimTime < (System.currentTimeMillis()- tStart))
+    private  void randPersonGenerator(long totalSimTime, int personRate)
+    {
+        long tStart = System.currentTimeMillis();
+        int totalFloors = XmlParser.getTotalFloorNumber();
+        try
+        {
+            Random randomGenerator = new Random();
+            while(totalSimTime > (System.currentTimeMillis()- tStart))
             {
+                int randStartFloor, randEndFloor;
+                
+                for(int i = 0; i < XmlParser.getPeoplePerMin(); ++i)
+                {
+                	//make sure these two numbers aren't the same
+	                do
+	                {
+		                randStartFloor =  randomGenerator.nextInt(totalFloors) + 1;
+		                randEndFloor = randomGenerator.nextInt(totalFloors) + 1;
+	                }
+	                while(randStartFloor == randEndFloor);
+	                System.out.println("Person going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
+	                
+	                addPersonToFloor(PersonFactory.createPerson(randStartFloor, randEndFloor), randStartFloor);
+                }
                 Thread.sleep(60000);
-                Random randomGenerator = new Random();
-                
-                int randStartFloor =  randomGenerator.nextInt(totalFloors);
-                int randEndFloor = randomGenerator.nextInt(totalFloors);
-                System.out.println("Person is being created and added to a floor #: " + randStartFloor);
-                
-                addPersonToFloor(PersonFactory.createPerson(randStartFloor, randEndFloor), randEndFloor);
-                
-                
-       
-                
             }
-            }
-            catch (Exception e) { e.printStackTrace();}
-            
-            
         }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+        }
+        
+        
+    }
        
         
 }

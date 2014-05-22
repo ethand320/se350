@@ -21,12 +21,14 @@ import java.io.File;
 import java.util.HashMap;
 
 
-public class XmlParser {
+public class XmlParser
+{
   
     private static File xmlFile;
     private static HashMap inputHash;
     
-    public XmlParser(){
+    public XmlParser()
+    {
         
       //  this.xmlFile = new File("src/xmlInputs.xml");
       //  this.getInputs();
@@ -34,46 +36,46 @@ public class XmlParser {
     }
     
     
-    public static void getInputs(){ 
-       if (inputHash == null)
-         inputHash = new HashMap();
-    
-    try{    
-        
-        //XML docuement initialization for parsing
-         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-         xmlFile = new File("src/xmlInputs.xml");
-         
-         Document doc = dBuilder.parse(xmlFile);
+    public static void getInputs()
+    { 
+    	if (inputHash == null)
+    	{
+    		inputHash = new HashMap();
+    	}
 
-         NodeList nodeList = doc.getElementsByTagName("Input");
+		try
+		{    
+	   
+			//XML docuement initialization for parsing
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			xmlFile = new File("src/xmlInputs.xml");
+		 
+			Document doc = dBuilder.parse(xmlFile);
+		
+			NodeList nodeList = doc.getElementsByTagName("Input");
 
-       //  Looping through all of the nodes under "Input" tags
+       		//  Looping through all of the nodes under "Input" tags
 
-             for (int temp = 0; temp <nodeList.getLength(); temp++ ){
-                 Node nNode = nodeList.item(temp);
-                 Element eElement = (Element) nNode;
-               //Adding all the elements values to the hashmap
-                System.out.println( eElement.getElementsByTagName("floors").item(0).getTextContent());
-                
-                 inputHash.put("floors", eElement.getElementsByTagName("floors").item(0).getTextContent());
-                 inputHash.put("elevators", eElement.getElementsByTagName("elevators").item(0).getTextContent());
-                 inputHash.put("elevTravelTime", eElement.getElementsByTagName("elevTravelTime").item(0).getTextContent());
-                 inputHash.put("elevDoorTime", eElement.getElementsByTagName("elevDoorTime").item(0).getTextContent());
-                 inputHash.put("peoplePerMin", eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent());
-
-
-             }
-
-
-
-         } 
-    catch (Exception e) { e.printStackTrace(); }
-    
-    
-        
-        
+			for (int temp = 0; temp <nodeList.getLength(); temp++ )
+			{
+				Node nNode = nodeList.item(temp);
+				Element eElement = (Element) nNode;
+				//Adding all the elements values to the hashmap
+				System.out.println( eElement.getElementsByTagName("floors").item(0).getTextContent());
+				
+				inputHash.put("floors", eElement.getElementsByTagName("floors").item(0).getTextContent());
+				inputHash.put("elevators", eElement.getElementsByTagName("elevators").item(0).getTextContent());
+				inputHash.put("elevTravelTime", eElement.getElementsByTagName("elevTravelTime").item(0).getTextContent());
+				inputHash.put("elevDoorTime", eElement.getElementsByTagName("elevDoorTime").item(0).getTextContent());
+				inputHash.put("peoplePerMin", eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent());
+				inputHash.put("duration", eElement.getElementsByTagName("duration").item(0).getTextContent());
+			}
+       } 
+       catch (Exception e)
+       {
+    	   e.printStackTrace();
+       }
     }
     
     public static int getTotalElevatorNumber(){
@@ -111,16 +113,23 @@ public class XmlParser {
         
     }
    
-    public static double getPeoplePerMin(){
+    public static int getPeoplePerMin(){
         if (inputHash == null)
            getInputs();
         
-        Double peoplePerMin = (Double) Double.parseDouble( (String)inputHash.get("peoplePerMin"));
+        Integer peoplePerMin = (Integer) Integer.parseInt( (String)inputHash.get("peoplePerMin"));
         
         return peoplePerMin;
     }
-        
-        
-        
-    
+    public static long getDuration()
+    {
+    	if(inputHash == null)
+    	{
+    		getInputs();
+    	}
+    	Long simulationDuration = (Long) Long.parseLong( (String)inputHash.get("duration"));
+    	
+    	//the value in the xml file is measured in minutes, not milliseconds
+    	return simulationDuration * 60000;
+    }   
 }
