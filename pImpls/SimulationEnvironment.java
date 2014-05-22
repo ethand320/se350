@@ -171,10 +171,8 @@ public class SimulationEnvironment
                 	//make sure these two numbers aren't the same
 	                do
 	                {
-		                //randStartFloor =  randomGenerator.nextInt(totalFloors) + 1;\
-	                	randStartFloor = 1;
-		                //randEndFloor = randomGenerator.nextInt(totalFloors) + 1;
-	                	randEndFloor = 3;
+		                randStartFloor =  randomGenerator.nextInt(totalFloors) + 1;
+		                randEndFloor = randomGenerator.nextInt(totalFloors) + 1;
 	                }
 	                while(randStartFloor == randEndFloor);
 	                Person newPerson = PersonFactory.createPerson(totalPeopleCreated++, randStartFloor, randEndFloor);
