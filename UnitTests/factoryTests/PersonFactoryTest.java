@@ -45,29 +45,32 @@ public class PersonFactoryTest {
      * Test of createPerson method, of class PersonFactory.
      */
     @Test
-    public void testCreatePerson() {
+    public void testCreatePerson()
+    {
         System.out.println("createPerson");
-        SimulationEnvironment.FLOOR_NUM = 10;
         int startFloor = 1;
         int destinationFloor = 5;
+        int successID = 0;
+        int failID = 1;
         Person expResult = null;
         Person result = null;
-        Person failresult = null;
+        Person failResult = null;
 		try
 		{
-			result = PersonFactory.createPerson(startFloor, destinationFloor);
-                        expResult = new Person(startFloor, destinationFloor);
-                        failresult = PersonFactory.createPerson(startFloor+1,destinationFloor+1);
-                       
+			result = PersonFactory.createPerson(successID, startFloor, destinationFloor);
+            expResult = new Person(successID, startFloor, destinationFloor);
+            failResult = PersonFactory.createPerson(failID, startFloor+1,destinationFloor+1);     
 		}
 		catch (NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
-        assertEquals(expResult.getCurrentFloor(), result.getCurrentFloor());
-        assertEquals(expResult.getDestinationFloor(),result.getDestinationFloor());
-        assertFalse(failresult.getCurrentFloor()==result.getCurrentFloor());
-        assertFalse(failresult.getDestinationFloor()==result.getDestinationFloor());
+        assertTrue(expResult.getCurrentFloor() == result.getCurrentFloor());
+        assertTrue(expResult.getDestinationFloor() == result.getDestinationFloor());
+        assertTrue(expResult.getID() == result.getID());
+        assertFalse(failResult.getCurrentFloor() == result.getCurrentFloor());
+        assertFalse(failResult.getDestinationFloor() == result.getDestinationFloor());
+        assertFalse(failResult.getID() == result.getID());
         assertNotNull(result.getCurrentFloor());
         assertNotNull(result.getDestinationFloor());
     }

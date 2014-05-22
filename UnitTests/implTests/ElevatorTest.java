@@ -34,8 +34,8 @@ public class ElevatorTest
     public static final int FLOOR_TEN = 10;
     public static final int BASEMENT = 0;
     private boolean bDoorsOpen = true;
-    private Person p, pfail;
-    private ArrayList <Person> b, bfail;
+    private Person singleResult, singleResultFail;
+    private ArrayList <Person> multiResult, multiResultFail;
     public ElevatorTest()
     {
     }
@@ -55,19 +55,19 @@ public class ElevatorTest
     {
         try
 		{
-			elevator = new Elevator(0,10, 15, 0);
-			pfail = new Person(3,4);               
-	        p = new Person(1,2);
-	        b = new ArrayList <Person>();
-	        bfail = new ArrayList <Person>();
+			elevator = new Elevator(0,10, 15, 1);
+	        singleResult = new Person(0,1,2);
+			singleResultFail = new Person(1,3,4);               
+	        multiResult = new ArrayList <Person>();
+	        multiResultFail = new ArrayList <Person>();
 	        for(int i = 0; i < 5; ++i)
 	        {
-	            b.add(new Person(1,i+1));
+	            multiResult.add(new Person(i, 1, i+1));
 	        }
 	        
 	        for(int i = 0; i < 5; ++i)
 	        {
-	            bfail.add( new Person(2,i+1) );
+	            multiResultFail.add(new Person(i + 1, 2, i+1));
 	        }
 		}
 		catch (NegativeCapacityException | NegativeFloorException e)
@@ -88,19 +88,23 @@ public class ElevatorTest
     @Test
     public void addFloorToQueueTest()
     {
-        elevator.addFloorToQueue(FLOOR_ONE);
-        assertSame(FLOOR_ONE, currentFloor);
-        assertNotSame(FLOOR_TEN, currentFloor);
         try
         {
-        elevator.addFloorToQueue(BASEMENT);
+            elevator.addFloorToQueue(FLOOR_ONE);
+            assertSame(FLOOR_ONE, currentFloor);
+            assertNotSame(FLOOR_TEN, currentFloor);
+
+            elevator.addFloorToQueue(BASEMENT);
             if (currentFloor <= 0)
-                fail("Floor does not exist");
+            {
+            	fail("Floor does not exist");
+            }
         }
-        catch( IllegalArgumentException e )
+        catch( NegativeFloorException e )
         {
+        	fail(e.getMessage());
         }
-       }
+    }
 
     /**
      * Test of addPassenger method, of class Elevator.
@@ -111,15 +115,15 @@ public class ElevatorTest
         System.out.println("addPassenger");
         try
         {
-			elevator.addPassenger(p);
+			elevator.addPassenger(singleResult);
 		}
-        catch (NullPassengerException e)
+        catch (NullPassengerException | NegativeFloorException e)
         {
         	fail(e.getMessage());
         }
         ArrayList<Person> elevatorPassenger = elevator.getPassengers();
-        assertTrue(elevatorPassenger.contains(p));
-        assertFalse(elevatorPassenger.contains(pfail));
+        assertTrue(elevatorPassenger.contains(singleResult));
+        assertFalse(elevatorPassenger.contains(singleResultFail));
     }
 
     /**
@@ -129,20 +133,23 @@ public class ElevatorTest
     public void addPassengersTest()
     {
         System.out.println("addPassenger");
+        
+        //prevent the elevator from moving
+        elevator.shutDown();
         try
 		{
-			elevator.addPassengers(b);
+			elevator.addPassengers(multiResult);
 		}
-        catch (NullPassengerException e)
+        catch (NullPassengerException | NegativeFloorException e)
 		{
         	fail(e.getMessage());
 		}
         ArrayList<Person> elevatorPassenger = elevator.getPassengers();
-        for (Person passenger : b)
+        for (Person passenger : multiResult)
         {
             assertTrue(elevatorPassenger.contains(passenger));
         }
-        for (Person passenger : bfail)
+        for (Person passenger : multiResultFail)
         {
             assertFalse(elevatorPassenger.contains(passenger));
         }
@@ -209,13 +216,13 @@ public class ElevatorTest
         System.out.println("removePassenger");
         try
 		{
-			elevator.addPassenger(p);
+			elevator.addPassenger(singleResult);
 			ArrayList<Person> elevatorPassenger = elevator.getPassengers();
-	        assertTrue(elevatorPassenger.contains(p));
-	        elevator.removePassenger(p);
-	        assertFalse(elevatorPassenger.contains(p));
+	        assertTrue(elevatorPassenger.contains(singleResult));
+	        elevator.removePassenger(singleResult);
+	        assertFalse(elevatorPassenger.contains(singleResult));
 		}
-		catch (NullPassengerException | PassengerNotFoundException e)
+		catch (NullPassengerException | PassengerNotFoundException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
@@ -231,24 +238,24 @@ public class ElevatorTest
         System.out.println("removePassengers");
         try
 		{
-			elevator.addPassengers(b);
-			elevator.addPassengers(bfail);
+			elevator.addPassengers(multiResult);
+			elevator.addPassengers(multiResultFail);
 	        ArrayList<Person> elevatorPassenger = elevator.getPassengers();
-	        for (Person passenger : b)
+	        for (Person passenger : multiResult)
 	        {
 	            assertTrue(elevatorPassenger.contains(passenger));
 	        }
-	        elevator.removePassengers(b);
-	        for (Person rPassengers : b)
+	        elevator.removePassengers(multiResult);
+	        for (Person rPassengers : multiResult)
 	        {
 	            assertFalse(elevatorPassenger.contains(rPassengers));
 	        }
-	        for (Person passenger : bfail)
+	        for (Person passenger : multiResultFail)
 	        {
 	            assertTrue(elevatorPassenger.contains(passenger));
 	        }
 		}
-		catch (NullPassengerException | PassengerNotFoundException e)
+		catch (NullPassengerException | PassengerNotFoundException | NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		} 

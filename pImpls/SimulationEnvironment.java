@@ -17,18 +17,6 @@ public class SimulationEnvironment
 	 * The private SimulationEnvironment instance required for this class to be considered a singleton.
 	 */
 	private volatile static SimulationEnvironment instance;
-	
-	/**
-	 * Static integer representing how many elevators are in the simulation environment. Used for error checking in various places in order to
-	 * ensure that invalid elevator values are not used in classes which hold elevator indices.
-	 */
-	//public static int ELEVATOR_NUM;
-	
-	/**
-	 * Static integer representing how many floors are in the simulation environment. Used for error checking to ensure that invalid floor values
-	 * are not used in the classes which hold floor indices.
-	 */
-	//public static int FLOOR_NUM;
         
 	/**
 	 * Default private constructor for the SimulationEnvironment. Passes off default values to the ElevatorControlModule's getInstance() method,
@@ -40,34 +28,6 @@ public class SimulationEnvironment
 	private SimulationEnvironment() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{                
 		ElevatorControlModule.getInstance(); 
-	}
-	
-	/**
-	 * Public accessor for the singleton instance of this class. The input parameters are only used if this is the first time that the singleton
-	 * is being accessed. Once the singleton instance is intialized, this method need not be called again. Instead, call the "default" overload of this method.
-	 * @param numFloors The number of floors to create for the simulation assuming that instance has not been created yet. Must be greater than 0.
-	 * @param numElevators The number of elevators to create for the simulation assuming that instance has not been created yet. Must be greater than 0.
-	 * @return The static SimulationEnvironment object that is owned by all instances of this class, initialized to hold the passed in number of floors
-	 * and elevators if this is the first time that this method is being called.
-	 * @throws NegativeElevatorException 
-	 * @throws NegativeCapacityException 
-	 * @throws NegativeFloorException 
-	 */
-	public static SimulationEnvironment getInstance(int numFloors, int numElevators) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
-	{
-		synchronized(SimulationEnvironment.class)
-		{
-			if(instance == null)
-			{
-				synchronized(SimulationEnvironment.class)
-				{
-					//  old with paramsinstance = new SimulationEnvironment(numFloors, numElevators);
-                                    
-                   instance = new SimulationEnvironment();
-				}
-			}
-			return instance;
-		}	
 	}
 	
 	/**
@@ -101,7 +61,8 @@ public class SimulationEnvironment
 	{
 		
 		try
-		{             
+		{          
+			System.out.println("The simulation will run for " + ( XmlParser.getDuration() / 1000 ) + " seconds.");
            getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());   // this kicks off a method to continuously generate people 
               //... for the duration of the simulation, the people are handled by the floors/elevators
            
@@ -110,7 +71,7 @@ public class SimulationEnvironment
            int totalSleepTime = XmlParser.getTotalFloorNumber() * ( ( XmlParser.getElevDoorTime() * 2 ) + XmlParser.getElevTravelTime() );
            System.out.println("The simulation will sleep for " + totalSleepTime / 1000 + " seconds before shutting down completely.");
            Thread.sleep(totalSleepTime);
-           
+           System.out.println("The simulation is shutting down now");
            getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
 		}
 		catch(InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
