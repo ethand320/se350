@@ -54,22 +54,15 @@ public class Floor implements FloorInterface
     		throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
     	}
 		int destinationFloor = inPerson.getDestinationFloor();
-		try
+		if(destinationFloor < this.getId() || destinationFloor == XmlParser.getTotalFloorNumber())
 		{
-			if(destinationFloor < this.getId() || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
-			{
-				goingDown.add(inPerson);
-				summonElevator(Direction.DOWN);
-			}
-			else if(destinationFloor > this.getId())
-			{
-				goingUp.add(inPerson);
-				summonElevator(Direction.UP);
-			}
+			goingDown.add(inPerson);
+			summonElevator(Direction.DOWN);
 		}
-		catch (NegativeCapacityException | NegativeElevatorException | NegativeFloorException e)
+		else if(destinationFloor > this.getId())
 		{
-			e.printStackTrace();
+			goingUp.add(inPerson);
+			summonElevator(Direction.UP);
 		}
 	}
 	
@@ -132,7 +125,7 @@ public class Floor implements FloorInterface
 				{
 					elevatorToEnter.addPassenger(person);
 				}
-				catch (NullPassengerException e)
+				catch (NullPassengerException | NegativeFloorException e)
 				{
 					e.printStackTrace();
 				}
@@ -147,7 +140,7 @@ public class Floor implements FloorInterface
     */
 	private void setFloorNumber(int inNum) throws NegativeFloorException
 	{
-		if(inNum < 0 || inNum >= SimulationEnvironment.FLOOR_NUM)
+		if(inNum < 0 || inNum >= XmlParser.getTotalFloorNumber())
 		{
 			throw new NegativeFloorException("Attempting to create a floor with an index that is outside the bounds of the simulation! (inNum: " + inNum + ")");
 		}

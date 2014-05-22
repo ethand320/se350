@@ -30,16 +30,7 @@ public class XmlParser
 {
   
     private static File xmlFile;
-    private static volatile HashMap<String, Integer> inputHash;
-    
-    public XmlParser()
-    {
-        
-      //  this.xmlFile = new File("src/xmlInputs.xml");
-      //  this.getInputs();
-       
-    }
-    
+    private static volatile HashMap<String, Integer> inputHash;   
     
     public static void getInputs()
     {
@@ -69,8 +60,6 @@ public class XmlParser
         			{
         				Node nNode = nodeList.item(temp);
         				Element eElement = (Element) nNode;
-        				//Adding all the elements values to the hashmap
-        				System.out.println( eElement.getElementsByTagName("floors").item(0).getTextContent());
         				
         				inputHash.put("floors", Integer.parseInt(eElement.getElementsByTagName("floors").item(0).getTextContent()));
         				inputHash.put("elevators", Integer.parseInt(eElement.getElementsByTagName("elevators").item(0).getTextContent()));

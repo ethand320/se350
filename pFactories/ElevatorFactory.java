@@ -3,7 +3,6 @@ import pExceptions.NegativeCapacityException;
 import pExceptions.NegativeFloorException;
 import pImpls.Elevator;
 import pInterfaces.ElevatorInterface;
-import pImpls.Elevator;
 
 /**
  * The ElevatorFactory class is aptly named, serving as a factory for elevators. All of its methods

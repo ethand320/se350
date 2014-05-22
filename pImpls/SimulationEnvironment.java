@@ -5,8 +5,6 @@ import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pFactories.PersonFactory;
-import pInterfaces.ElevatorInterface;
-import pFactories.ControlImplFactory;
 
 import java.util.Random;
 
@@ -21,48 +19,16 @@ public class SimulationEnvironment
 	private volatile static SimulationEnvironment instance;
 	
 	/**
-	 * Constant which determines the default number of elevators to create when the default constructor is called.
-	 */
-	//public static final int DEFAULT_ELEVATOR_NUM = 4;
-	
-	/**
-	 * Constant which determines the default number of floors to create when the default constructor is called.
-	 */
-	//public static final int DEFAULT_FLOOR_NUM = 16;
-	
-	/**
 	 * Static integer representing how many elevators are in the simulation environment. Used for error checking in various places in order to
 	 * ensure that invalid elevator values are not used in classes which hold elevator indices.
-	 * 
 	 */
-	public static int ELEVATOR_NUM;
+	//public static int ELEVATOR_NUM;
 	
 	/**
 	 * Static integer representing how many floors are in the simulation environment. Used for error checking to ensure that invalid floor values
 	 * are not used in the classes which hold floor indices.
 	 */
-	public static int FLOOR_NUM;
-    
-	/**
-	 * Non-default private constructor for the SimulationEnvironment.
-	 * @param numFloors the number of floors to create for the simulation
-	 * @param numElevators the number of elevators to create for the simulation
-	 * @throws NegativeElevatorException 
-	 * @throws NegativeCapacityException 
-	 * @throws NegativeFloorException 
-	 */
-	
-        
-            // We don't need this now that sim envoronment isn't taking straight up input
-        /*
-        private SimulationEnvironment(int numElevators, int numFloors) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
-	{
-		ElevatorControlModule.getInstance(numElevators, numFloors);
-		ELEVATOR_NUM = numElevators;
-		FLOOR_NUM = numFloors;
-	}
-	*/
-        
+	//public static int FLOOR_NUM;
         
 	/**
 	 * Default private constructor for the SimulationEnvironment. Passes off default values to the ElevatorControlModule's getInstance() method,
@@ -72,16 +38,8 @@ public class SimulationEnvironment
 	 * @throws NegativeFloorException 
 	 */
 	private SimulationEnvironment() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
-	{
-		/*   old impl  ElevatorControlModule.getInstance(DEFAULT_ELEVATOR_NUM, DEFAULT_FLOOR_NUM);
-		ELEVATOR_NUM = DEFAULT_ELEVATOR_NUM;
-		FLOOR_NUM = DEFAULT_FLOOR_NUM; */
-                FLOOR_NUM = XmlParser.getTotalFloorNumber();
-                ELEVATOR_NUM = XmlParser.getTotalElevatorNumber();
-                
-            ElevatorControlModule.getInstance();
-            
-            
+	{                
+		ElevatorControlModule.getInstance(); 
 	}
 	
 	/**
@@ -143,21 +101,19 @@ public class SimulationEnvironment
 	{
 		
 		try
-		{ 
-//           int elevNum = XmlParser.getTotalElevatorNumber();
-//            
-//           int floorNum= XmlParser.getTotalFloorNumber();
-            
-           //ControlImplFactory.createElevatorController();  //create our ECM  - params specified in ECM constructor
-                                                            //this will make all our floors/elevators and start those threads
-            
+		{             
            getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());   // this kicks off a method to continuously generate people 
               //... for the duration of the simulation, the people are handled by the floors/elevators
            
+           //let the thread wait enough time for every elevator to reach the default floor
+           //movement speed * ( door open speed + door close speed ) * number of floors
+           int totalSleepTime = XmlParser.getTotalFloorNumber() * ( ( XmlParser.getElevDoorTime() * 2 ) + XmlParser.getElevTravelTime() );
+           System.out.println("The simulation will sleep for " + totalSleepTime / 1000 + " seconds before shutting down completely.");
+           Thread.sleep(totalSleepTime);
+           
            getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
 		}
-		catch (Exception e)
-                        //(InterruptedException | NullPassengerException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
+		catch(InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
         {
             e.printStackTrace();
         }
@@ -176,25 +132,6 @@ public class SimulationEnvironment
 				| NegativeElevatorException e)
 		{
 			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Retrieves the ElevatorInterface object at the specified location.
-	 * @param i the index of the ElevatorInterface object to retrieve. NOTE: this method uses ONE-BASED indexing, which makes 0 an invalid entry
-	 * @return the ElevatorInterface object stored at the index specified
-	 * @throws NegativeElevatorException if i is less than 1 or greater than the number of elevators present in the simulation
-	 */
-	private ElevatorInterface getElevator(int i) throws NegativeElevatorException
-	{
-		try
-		{
-			return ElevatorControlModule.getInstance().getElevator(i);
-		}
-		catch (NegativeCapacityException | NegativeFloorException e)
-		{
-			e.printStackTrace();
-			return null;
 		}
 	}
 	
@@ -224,6 +161,7 @@ public class SimulationEnvironment
         try
         {
             Random randomGenerator = new Random();
+            int totalPeopleCreated = 0;
             while(totalSimTime > (System.currentTimeMillis()- tStart))
             {
                 int randStartFloor, randEndFloor;
@@ -233,13 +171,16 @@ public class SimulationEnvironment
                 	//make sure these two numbers aren't the same
 	                do
 	                {
-		                randStartFloor =  randomGenerator.nextInt(totalFloors) + 1;
-		                randEndFloor = randomGenerator.nextInt(totalFloors) + 1;
+		                //randStartFloor =  randomGenerator.nextInt(totalFloors) + 1;\
+	                	randStartFloor = 1;
+		                //randEndFloor = randomGenerator.nextInt(totalFloors) + 1;
+	                	randEndFloor = 3;
 	                }
 	                while(randStartFloor == randEndFloor);
-	                System.out.println("Person going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
+	                Person newPerson = PersonFactory.createPerson(totalPeopleCreated++, randStartFloor, randEndFloor);
+	                System.out.println("Person " + newPerson.getID() + " going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
 	                
-	                addPersonToFloor(PersonFactory.createPerson(randStartFloor, randEndFloor), randStartFloor);
+	                addPersonToFloor(newPerson, randStartFloor);
                 }
                 Thread.sleep(60000);
             }

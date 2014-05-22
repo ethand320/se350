@@ -15,8 +15,8 @@ public class PersonFactory
 	 * @return A new Person object whose start and destination floors are initialized to the values of startFloor and destinationFloor
 	 * @throws NegativeFloorException if either startFloor or destinationFloor are negative or otherwise outside the bounds of the simulation.
 	 */
-    public static Person createPerson(int startFloor, int destinationFloor) throws NegativeFloorException
+    public static Person createPerson(int inID, int startFloor, int destinationFloor) throws NegativeFloorException
     {
-        return new Person(startFloor, destinationFloor);
+        return new Person(inID, startFloor, destinationFloor);
     }
 }
