@@ -42,7 +42,7 @@ public class XmlParser
   
 				try
 				{
-        			//XML docuement initialization for parsing
+        			//XML document initialization for parsing
         			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         			DocumentBuilder dBuilder;
 
@@ -67,6 +67,7 @@ public class XmlParser
         				inputHash.put("elevDoorTime", Integer.parseInt(eElement.getElementsByTagName("elevDoorTime").item(0).getTextContent()));
         				inputHash.put("peoplePerMin", Integer.parseInt(eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent()));
         				inputHash.put("duration", Integer.parseInt(eElement.getElementsByTagName("duration").item(0).getTextContent()));
+        				inputHash.put("elevCapacity",  Integer.parseInt(eElement.getElementsByTagName("elevCapacity").item(0).getTextContent()));
         			}
 				}
 				catch (ParserConfigurationException | SAXException | IOException e)
@@ -136,4 +137,13 @@ public class XmlParser
     	//the value in the xml file is measured in minutes, not milliseconds
     	return simulationDuration * 60000;
     }   
+    
+    public static int getElevCapacity()
+    {
+    	if(inputHash == null)
+    	{
+    		getInputs();
+    	}
+    	return inputHash.get("elevCapacity");
+    }
 }

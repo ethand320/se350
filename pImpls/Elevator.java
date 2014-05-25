@@ -222,30 +222,38 @@ public class Elevator implements ElevatorInterface, Runnable
 	/**
     * Add a passenger to the elevator.  Adds person object.
     * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, and should be added to the passenger list.
+	* @return true if the Person object was added to the elevator successfully, false if the elevator is at capacity 
     * @throws NullPassengerException if inPassenger is set to null
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if inPassenger's destination floor is less than 1 or greater than the number of floors in the simulation.
     */
 	@Override
-	public synchronized void addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException
+	public synchronized boolean addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException
 	{
 		if(inPassenger == null)
 		{
 			throw new NullPassengerException("The passenger object that is being added to the elevator is null!");
 		}
+		if(this.passengerList.size() >= this.capacity)
+		{
+			System.out.println("Adding person " + inPassenger.getID() + " to Elevator " + ( this.getElevatorId() + 1 ) + " failed because the elevator is already full!");
+			return false;
+		}
 		System.out.println("Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
+		return true;
 	}
 
 
    /**
  	* Add multiple passengers to the elevator.
     * @param inPassengers The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
+    * @return true if every passenger was added to the elevator successfully, otherwise false.
     * @throws NullPassengerException if any of the passengers contained within inPassengers is null
     * @throws NegativeFloorException if any of the Person objects have a destination floor that's less than 1 or greater than the number of floors in the simulation
     */
 	@Override
-	public synchronized void addPassengers(ArrayList<Person> inPassengers) throws NullPassengerException, NegativeFloorException
+	public synchronized boolean addPassengers(ArrayList<Person> inPassengers) throws NullPassengerException, NegativeFloorException
 	{
 		if(inPassengers.contains(null))
 		{
@@ -253,8 +261,14 @@ public class Elevator implements ElevatorInterface, Runnable
 		}
 		for(Person personToAdd : inPassengers)
 		{
+			if(this.passengerList.size() >= this.capacity)
+			{
+				//the elevator is full. don't attempt to move any more passengers into this elevator
+				return false;
+			}
 			this.addPassenger(personToAdd);
 		}
+		return true;
     }
 	
 	/**

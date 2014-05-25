@@ -155,4 +155,12 @@ public class Floor implements FloorInterface
 		goingUp = new ArrayList<Person>();
 		goingDown = new ArrayList<Person>();
 	}
+
+	@Override
+	public ArrayList<Person> getWaitingPeople()
+	{
+		ArrayList<Person> listToReturn = this.goingUp;
+		listToReturn.addAll(this.goingDown);
+		return listToReturn;
+	}
 }

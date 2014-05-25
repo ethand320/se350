@@ -20,25 +20,31 @@ import pImpls.Person;
 /**
  *
  */
-public class PersonFactoryTest {
+public class PersonFactoryTest
+{
     
-    public PersonFactoryTest() {
+    public PersonFactoryTest()
+    {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass()
+    {
     }
     
     @Before
-    public void setUp() {
+    public void setUp()
+    {
     }
     
     @After
-    public void tearDown() {
+    public void tearDown()
+    {
     }
 
     /**
@@ -57,8 +63,8 @@ public class PersonFactoryTest {
         Person failResult = null;
 		try
 		{
-			result = PersonFactory.createPerson(successID, startFloor, destinationFloor);
             expResult = new Person(successID, startFloor, destinationFloor);
+			result = PersonFactory.createPerson(successID, startFloor, destinationFloor);
             failResult = PersonFactory.createPerson(failID, startFloor+1,destinationFloor+1);     
 		}
 		catch (NegativeFloorException e)

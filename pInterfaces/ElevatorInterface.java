@@ -22,7 +22,7 @@ public interface ElevatorInterface
      * @throws NullPassengerException if inPassenger is null.
      * @throws NegativeFloorException 
      */
-    public void addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException;
+    public boolean addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException;
     
     /**
      * Adds a group of Person objects to the elevator. Once they are inside the elevator, their destination floors are added to the elevator's request queue.
@@ -30,7 +30,7 @@ public interface ElevatorInterface
      * @throws NullPassengerException if any of the Person objects in inPeople are null
      * @throws NegativeFloorException if any of the Person objects have a destination floor that's less than 1 or greater than the number of floors in the simulation
      */
-	void addPassengers(ArrayList<Person> inPeople) throws NullPassengerException, NegativeFloorException;
+	public boolean addPassengers(ArrayList<Person> inPeople) throws NullPassengerException, NegativeFloorException;
 	
 	/**
 	 * Open the doors of the elevator so Person objects may enter or leave this elevator.

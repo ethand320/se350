@@ -203,7 +203,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		elevators = new ElevatorInterface[elevatorNum];
 		for(int i = 0; i < elevatorNum; ++i)
 		{
-			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors, 1);
+			elevators[i] = ElevatorFactory.createElevator(i, XmlParser.getElevCapacity(), maxFloors, 1);
 		}
 	}
 	
