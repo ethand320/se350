@@ -106,7 +106,7 @@ public class Floor implements FloorInterface
     * @param directionToGo the direction decides if a person will get off at the given floor or not.
     */
 	@Override
-	public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
+	public synchronized void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
 	{
 		if(directionToGo != Direction.IDLE)
 		{
@@ -119,13 +119,37 @@ public class Floor implements FloorInterface
 			{
 				peopleToRemove = this.goingDown;
 			}
-			for (Person person : peopleToRemove)
+			int i;
+			boolean bRemovalSuccessful = true;
+			for(i = 0; i < peopleToRemove.size() && bRemovalSuccessful; ++i)
+			{
+				Person curPerson = peopleToRemove.get(i);
+				try
+				{
+					bRemovalSuccessful = elevatorToEnter.addPassenger(curPerson);
+				}
+				catch (NullPassengerException | NegativeFloorException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			int removalIndex;
+			if(!bRemovalSuccessful)
+			{
+				removalIndex = i;
+			}
+			else
+			{
+				removalIndex = peopleToRemove.size();
+			}
+			for(int j = 0; j < removalIndex; ++j)
 			{
 				try
 				{
-					elevatorToEnter.addPassenger(person);
+					peopleToRemove.remove(0);
+
 				}
-				catch (NullPassengerException | NegativeFloorException e)
+				catch(IndexOutOfBoundsException e)
 				{
 					e.printStackTrace();
 				}
@@ -138,7 +162,7 @@ public class Floor implements FloorInterface
     * @param inNum the floor number that will be set as the floorNumber.
     * @throws NegativeFloorException 
     */
-	private void setFloorNumber(int inNum) throws NegativeFloorException
+	private synchronized void setFloorNumber(int inNum) throws NegativeFloorException
 	{
 		if(inNum < 0 || inNum >= XmlParser.getTotalFloorNumber())
 		{
@@ -150,14 +174,14 @@ public class Floor implements FloorInterface
    /**
     * Creates the floor arrays of type <Person> for both elevator directions.
     */
-	private void initializeFloorArrays()
+	private synchronized void initializeFloorArrays()
 	{
 		goingUp = new ArrayList<Person>();
 		goingDown = new ArrayList<Person>();
 	}
 
 	@Override
-	public ArrayList<Person> getWaitingPeople()
+	public synchronized ArrayList<Person> getWaitingPeople()
 	{
 		ArrayList<Person> listToReturn = this.goingUp;
 		listToReturn.addAll(this.goingDown);

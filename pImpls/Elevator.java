@@ -364,7 +364,7 @@ public class Elevator implements ElevatorInterface, Runnable
 	     {
 	    	 throw new PassengerNotFoundException("The passenger object that was meant to be removed is not present in the elevator!");
 	     }
-	     System.out.println("Person " + inPassenger.getID() + " is being removed from the Elevator at floor " + ( this.currentFloor + 1 ) );
+	     System.out.println("Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
 	     passengerList.remove(inPassenger);
 	}
 	
@@ -473,9 +473,9 @@ public class Elevator implements ElevatorInterface, Runnable
 	        	// if current floor is in request queue.      
 	        	if (requestQueue.contains(this.currentFloor))
 	        	{
-	        	  this.openDoors();
-	        	  this.closeDoors();
-	        	  requestQueue.remove((Integer)this.currentFloor);
+	        		requestQueue.remove((Integer)this.currentFloor);
+	        		this.openDoors();
+	        		this.closeDoors();
 	        	}
 	        	
 	        	// if queue is empty  switch to idle.
@@ -485,7 +485,6 @@ public class Elevator implements ElevatorInterface, Runnable
                             
 	        		this.direction = Direction.IDLE;
 	        		tStart = System.currentTimeMillis();
-	        		
 	        	}
 	        	
 				synchronized(this)
