@@ -1,10 +1,10 @@
 package pImpls;
-//import XmlParser;
 
 import pInterfaces.ElevatorInterface;
 import pExceptions.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -92,15 +92,12 @@ public class Elevator implements ElevatorInterface, Runnable
 		setId(inId);
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
-		setMinFloors(inMinFloors);
-                
-                doorSpeed =  XmlParser.getElevDoorTime();
-                setSpeed(doorSpeed);
-                
-                
-		initializeRequestQueue();
+		setMinFloors(inMinFloors);   
+        doorSpeed =  XmlParser.getElevDoorTime();
+        setSpeed(doorSpeed);    
+        initializeRequestQueue();
 		setInitialDirection();
-    	setDefaultFloor(1);
+    	setDefaultFloor(0);
     	createPassengerList();
     	elevatorThread.start();
 	}
@@ -110,40 +107,57 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param floorNum The floor number that will be added to the queue. It need not be in consecutive order compared to other elevators in the building.
     * If the request is already present inside the requests queue, nothing happens
     * NOTE: this method uses ONE-BASED indexing, which means that zero corresponds to an invalid request.
+    * @throws NegativeFloorException 
     */
 	@Override
-	public void addFloorToQueue(int floorNum) 
-	{
-            System.out.println("Addfloor toqueue is called");
-            
+	public synchronized void addFloorToQueue(int floorNum) throws NegativeFloorException 
+	{            
 		int internalFloorNum = floorNum - 1;
+		if(internalFloorNum < 0 || internalFloorNum > XmlParser.getTotalFloorNumber())
+		{
+			throw new NegativeFloorException("Attempting to add an invalid floor number to Elevator " + this.getElevatorId() + "'s request queue! (floorNum: " + floorNum + ")");
+		}
 		if(requestQueue.contains(internalFloorNum))
 		{
 			//the floor already exists in the queue, so there is nothing that needs to be done
 			return;
 		}
 		
+		//we're at the last floor that this elevator can service. only way to go is DOWN
 		if(this.currentFloor == this.maxFloors)
 		{
 			this.direction = Direction.DOWN;
 		}
+		//we're at the bottommost floor that this elevator can service. only way to go is UP
 		else if(this.currentFloor == this.minFloors)
 		{
 			this.direction = Direction.UP;
+		}
+		//if the floor doesn't have any requests, it might as well be considered IDLE so it can take requests otherwise going in the opposite direction
+		else if(this.requestQueue.isEmpty())
+		{
+			this.direction = Direction.IDLE;
 		}
 		
         switch (this.direction) 
         {
         case UP:
            if (internalFloorNum > this.currentFloor)
-            {
-	           synchronized(this)
-	           {
-	        	   requestQueue.add(internalFloorNum);
-	        	   notifyAll();
+           {
+	          synchronized(this)
+	          {
+	        	  requestQueue.add(internalFloorNum);
+	        	  Collections.sort(requestQueue);
+	        	  notifyAll();
 	           }
 	           System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
-            }
+	           printRequestQueue();
+           }
+           else if(internalFloorNum == this.currentFloor)
+           {
+        	   this.openDoors();
+        	   this.closeDoors();
+           }
            else
            {
         	   System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
@@ -155,9 +169,15 @@ public class Elevator implements ElevatorInterface, Runnable
             	synchronized(this)
             	{
             		requestQueue.add(internalFloorNum);
+            		Collections.reverse(requestQueue);
             		notifyAll();
             	}
                 System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+                this.printRequestQueue();
+            }
+            else if(internalFloorNum == this.currentFloor)
+            {
+            	this.openDoors();
             }
             else
             {
@@ -171,50 +191,84 @@ public class Elevator implements ElevatorInterface, Runnable
         		notifyAll();
         	}
             System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
-            if ( currentFloor < internalFloorNum)
+            if (currentFloor < internalFloorNum)
             {
             	direction = Direction.UP;
+            	Collections.sort(requestQueue);
             }
-            else
+            else// if(currentFloor > internalFloorNum)
             {
             	//compare to see if the floorNumber is greater than the current floor
             	//If true then assign the elevator to the request.
             	direction = Direction.DOWN;
+            	Collections.reverse(requestQueue);
             }
+//            else
+//            {
+//            	if(currentFloor == this.minFloors)
+//            	{
+//            		direction = Direction.UP;
+//            	}
+//            	else if(currentFloor == this.maxFloors)
+//            	{
+//            		direction = Direction.DOWN;
+//            	}
+//            }
+            this.printRequestQueue();
             break;
         }
 	}
 
-   /**
+	/**
     * Add a passenger to the elevator.  Adds person object.
     * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, and should be added to the passenger list.
+	* @return true if the Person object was added to the elevator successfully, false if the elevator is at capacity 
     * @throws NullPassengerException if inPassenger is set to null
+    * @throws NegativeFloorException if inPassenger's destination floor is less than 1 or greater than the number of floors in the simulation.
     */
 	@Override
-	public synchronized void addPassenger(Person inPassenger) throws NullPassengerException
+	public synchronized boolean addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException
 	{
 		if(inPassenger == null)
 		{
 			throw new NullPassengerException("The passenger object that is being added to the elevator is null!");
 		}
+		if(this.passengerList.size() >= this.capacity)
+		{
+			System.out.println("Adding person " + inPassenger.getID() + " to Elevator " + ( this.getElevatorId() + 1 ) + " failed because the elevator is already full!");
+			return false;
+		}
+		System.out.println("Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
+		return true;
 	}
 
 
    /**
  	* Add multiple passengers to the elevator.
     * @param inPassengers The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
+    * @return true if every passenger was added to the elevator successfully, otherwise false.
     * @throws NullPassengerException if any of the passengers contained within inPassengers is null
+    * @throws NegativeFloorException if any of the Person objects have a destination floor that's less than 1 or greater than the number of floors in the simulation
     */
 	@Override
-	public synchronized void addPassengers(ArrayList<Person> inPassengers) throws NullPassengerException
+	public synchronized boolean addPassengers(ArrayList<Person> inPassengers) throws NullPassengerException, NegativeFloorException
 	{
 		if(inPassengers.contains(null))
 		{
 			throw new NullPassengerException("The passenger object that is being added to the elevator is null!");
 		}
-		this.passengerList.addAll(inPassengers);
+		for(Person personToAdd : inPassengers)
+		{
+			if(this.passengerList.size() >= this.capacity)
+			{
+				//the elevator is full. don't attempt to move any more passengers into this elevator
+				return false;
+			}
+			this.addPassenger(personToAdd);
+		}
+		return true;
     }
 	
 	/**
@@ -227,15 +281,39 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.bDoorsOpen = true;
 		 try
 		 {
+			 if(this.requestQueue.isEmpty())
+			 {
+				 //either the elevator is at the top or it's not at the bottom right now
+				 if(XmlParser.getTotalFloorNumber() == this.currentFloor + 1 || ( this.direction == Direction.UP && this.currentFloor != 0 ))
+				 {
+					 this.direction = Direction.DOWN;
+				 }
+				 else if(this.currentFloor == 0 || this.direction == Direction.DOWN)
+				 {
+					 this.direction = Direction.UP;
+				 }
+			 }
 			 ElevatorControlModule.getInstance().elevatorDoorsOpened(this, this.currentFloor);
-			 
+			 ArrayList<Person> peopleToRemove = new ArrayList<Person>();
 			 //find any passengers who are supposed to get off on this floor and remove them
 			 for( int i = 0; i < this.passengerList.size(); ++i)
 			 {
-				 if(this.passengerList.get(i).getDestinationFloor() == this.currentFloor)
+				 Person currentPerson = this.passengerList.get(i);
+				 if(currentPerson.getDestinationFloor() == this.currentFloor + 1)
 				 {
-					 this.passengerList.remove(i);
+					 peopleToRemove.add(currentPerson);
 				 }
+			 }
+			 if(!peopleToRemove.isEmpty())
+			 {
+				 try
+				{
+					this.removePassengers(peopleToRemove);
+				}
+				catch (PassengerNotFoundException e)
+				{
+					e.printStackTrace();
+				}
 			 }
 			 wait(doorSpeed);
 	     	}
@@ -269,7 +347,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return The current direction of this elevator object.
     */
 	@Override
-	public Direction getDirection()
+	public synchronized Direction getDirection()
 	{
 		return this.direction;
 	}
@@ -282,10 +360,11 @@ public class Elevator implements ElevatorInterface, Runnable
 	@Override
 	public synchronized void removePassenger(Person inPassenger) throws PassengerNotFoundException
 	{            
-	     if  (!passengerList.contains(inPassenger))
+	     if(!passengerList.contains(inPassenger))
 	     {
 	    	 throw new PassengerNotFoundException("The passenger object that was meant to be removed is not present in the elevator!");
 	     }
+	     System.out.println("Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
 	     passengerList.remove(inPassenger);
 	}
 	
@@ -302,7 +381,10 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			throw new PassengerNotFoundException("At least one of the passenger objects that were meant to be removed are not present in the elevator!");
 		}
-		this.passengerList.removeAll(inPeople);			
+		for(Person personToRemove : inPeople)
+		{
+			this.removePassenger(personToRemove);
+		}
 	}
 
    /**
@@ -310,7 +392,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return the number of people that the elevator object can hold.
     */
 	@Override
-	public int getCapacity() 
+	public synchronized int getCapacity() 
 	{	
 		return this.capacity;
 	}
@@ -320,7 +402,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return the collection of passengers in the list as an ArrayList.
     */
 	@Override
-	public ArrayList<Person> getPassengers() 
+	public synchronized ArrayList<Person> getPassengers() 
 	{
 		return this.passengerList;
 	}
@@ -330,9 +412,19 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns the id that corresponds to the elevator that requested this method.
     */
 	@Override
-	public int getElevatorId() 
+	public synchronized int getElevatorId() 
 	{
 		return this.elevatorId;
+	}
+	
+	/**
+	 * Accessor which retrieves the current floor of this elevator
+	 * @return the index of the current floor that the elevator is on.
+	 */
+	@Override
+	public synchronized int getCurrentFloor()
+	{
+		return this.currentFloor + 1;
 	}
 	
    /**
@@ -340,7 +432,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns true if the doors are open or false if the doors are closed.
     */
 	@Override
-	public boolean isOpen() 
+	public synchronized boolean isOpen() 
 	{
 		return bDoorsOpen;
 	}
@@ -350,7 +442,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @return returns true if the elevator is currently running and accepting floor requests or false if the system is inactive.
     */
 	@Override
-	public boolean isRunning() 
+	public synchronized boolean isRunning() 
 	{
     	return running;
 	}
@@ -359,7 +451,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * Stops the elevator from running immediately without returning to its default floor. Once shut down, it cannot be started up again.
     */
 	@Override
-	public void shutDown()
+	public synchronized void shutDown()
 	{
 		this.running = false;
 	}
@@ -378,25 +470,21 @@ public class Elevator implements ElevatorInterface, Runnable
 		    running = true;
 	        while (running)
 	        {
-	        	
-	        	// if current floor is in request queue.
-	        
-                        
+	        	// if current floor is in request queue.      
 	        	if (requestQueue.contains(this.currentFloor))
 	        	{
-	        	  this.openDoors();
-	        	  this.closeDoors();
-	        	  requestQueue.remove((Integer)this.currentFloor);
+	        		requestQueue.remove((Integer)this.currentFloor);
+	        		this.openDoors();
+	        		this.closeDoors();
 	        	}
 	        	
 	        	// if queue is empty  switch to idle.
 	        	if (requestQueue.isEmpty())
 	        	{
-                            System.out.println("Request queue is empty");
+                    System.out.println("Request queue for Elevator " + ( getElevatorId() + 1 ) + " is empty");
                             
 	        		this.direction = Direction.IDLE;
 	        		tStart = System.currentTimeMillis();
-	        		
 	        	}
 	        	
 				synchronized(this)
@@ -408,10 +496,19 @@ public class Elevator implements ElevatorInterface, Runnable
 						tStart = System.currentTimeMillis() - tStart;
 				
 						//only add a new request (and add an entry to the log) if the elevator is idle and isn't already at its default floor
-						if (tStart >= 10001 && this.currentFloor != 1)
+						if (tStart >= 10001 && this.currentFloor != 0)
 						{
 							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has been idle for 10 seconds. Returning to floor 1");
-							addFloorToQueue(1);
+							
+							//since this is a hard coded value, there's no point in adding this exception to the outer catch block. just take care of it here
+							try
+							{
+								addFloorToQueue(1);
+							}
+							catch(NegativeFloorException e)
+							{
+								e.printStackTrace();
+							}
 						}
 						
 						break;
@@ -422,6 +519,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						{
 							this.currentFloor++;
 				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
+				            this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.maxFloors)
 						{
@@ -436,6 +534,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						{
 							this.currentFloor--;
 				            System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
+				            this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.minFloors)
 						{
@@ -443,7 +542,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						}
 					}
 				}
-	        	}
+	        }
 		}
 		catch(InterruptedException e)
         {
@@ -463,23 +562,37 @@ public class Elevator implements ElevatorInterface, Runnable
 		}
 	}
 	
+	/**
+	 * Private helper method used to print the external representation (one-based indices) of this Elevator's request queue (stored as zero-based indices)
+	 */
+	private void printRequestQueue()
+	{
+		ArrayList<Integer> queueToPrint = new ArrayList<Integer>(requestQueue);
+		for(int i = 0; i < queueToPrint.size(); ++i)
+		{
+			queueToPrint.set(i, queueToPrint.get(i) + 1);
+		}
+        System.out.println("Elevator " + ( this.getElevatorId() + 1 ) + "'s request queue: " + queueToPrint.toString());
+	}
+	
    /**
     * Sets the identifier number assigned to this elevator.
     * private variable - only to be used to give an id to an elevator.
     * @param inId The unique identifier number. This number need not be in consecutive order compared to other elevators in the building, but it must be no larger than the 
     * maximum number of elevators in the simulation environment.
     */
-	private void setId(int inId)
+	private synchronized void setId(int inId)
 	{
 		this.elevatorId = inId;
 	}
 	
    /**
-    * Sets the maximum number of floors.
+    * Sets the maximum number of floors that can be reached by this particular Elevator object. Useful for if the situation arises where an elevator should service a subset of the available
+    * floors in the simulation.
     * private variable - only to be used to handle the maximum elevator floors.
     * @param inMaxFloors The total number of floors the elevator can visit.
     */
-	private void setMaxFloors(int inMaxFloors)
+	private synchronized void setMaxFloors(int inMaxFloors)
 	{
 		this.maxFloors = inMaxFloors - 1;
 	}
@@ -490,7 +603,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inMinFloors The lowest numbered floor the elevator can visit.
     * @throws NegativeFloorException if inMinFloors is less than 0 (using ZERO-BASED indexing)
     */
-	private void setMinFloors(int inMinFloors) throws NegativeFloorException
+	private synchronized void setMinFloors(int inMinFloors) throws NegativeFloorException
 	{
 		if(inMinFloors < 1)
 		{
@@ -503,7 +616,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * Sets the initial direction for the elevator to IDLE.
     * private variable - only to be used to give a default direction to an elevator.
     */
-	private void setInitialDirection()
+	private synchronized void setInitialDirection()
 	{
 		this.direction = Direction.IDLE;
 	}
@@ -514,7 +627,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inCap the total capacity limit the elevator can hold.
     * @throws NegativeCapacityException if inCap is negative
     */
-	private void setCapacity(int inCap) throws NegativeCapacityException
+	private synchronized void setCapacity(int inCap) throws NegativeCapacityException
 	{
 		if(inCap < 1)
 		{
@@ -523,15 +636,17 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.capacity = inCap;
 	}
 
-        private void setSpeed(int newSpeed){
-            speed = newSpeed;
-        }
+    private synchronized void setSpeed(int newSpeed)
+    {
+        speed = newSpeed;
+    }
+    
    /**
     * Sets the initial floor for the elevator.
     * private variable - only to be used to give a default floor to an elevator.
     * @param floor The default floor level that will be assigned to an elevator.
     */	
-	private void setDefaultFloor(int floor)
+	private synchronized void setDefaultFloor(int floor)
     {
 		//TODO: this shouldn't be touching currentFloor. There should be a defaultFloor member that this method will modify instead
     	this.currentFloor = floor;
@@ -541,18 +656,8 @@ public class Elevator implements ElevatorInterface, Runnable
     * Creates the passengerList to be used with the elevators.
     * private variable - only to be used create the passengerList.
     */    
-	private void createPassengerList()
+	private synchronized void createPassengerList()
 	{
 		passengerList = new ArrayList<Person>();
-	}
-
-	/**
-	 * Accessor which retrieves the current floor of this elevator
-	 * @return the index of the current floor that the elevator is on.
-	 */
-	@Override
-	public int getCurrentFloor()
-	{
-		return this.currentFloor;
 	}
 }

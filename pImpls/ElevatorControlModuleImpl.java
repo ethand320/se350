@@ -24,53 +24,27 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	/**
 	 * The collection of FloorInterface objects that this Control Module Implementation is responsible for
 	 */
-	private FloorInterface[] floors;
-	
-   /*  Don't need this one anymore!
- 	* ElevatorControlModuleImpl creates floors and elevators with the given parameters.
-	* @param elevatorNum The number of elevators to be created. 
- 	* @param floorNum The number of floors to be created.
-    * @throws NegativeFloorException if floorNum is less than or equal to 0
-    * @throws NegativeCapacityException if any of the ElevatorInterface objects would have a capacity less than 1
-    * @throws NegativeElevatorException if elevatorNum is less than 1
-    */
-
+	private FloorInterface[] floors;     
         
-        /*
-        //Old imp]lementation to take with paraemeters, getting rid of it
-        public ElevatorControlModuleImpl(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
+	// New ECM constructor to take xml data for floors/elevators
+	public ElevatorControlModuleImpl()
 	{
-		createFloors(floorNum);
-		createElevators(elevatorNum, floorNum);		
+		int elevatorNum =  XmlParser.getTotalElevatorNumber();
+	    int floorNum = XmlParser.getTotalFloorNumber();
+	     
+	    System.out.println("Number of elevators from file : " + elevatorNum);
+	    System.out.println("Numberof floor numbers from file : "+ floorNum);
+	    try
+		{
+			createElevators(elevatorNum, floorNum);
+		    createFloors(floorNum);
+		}
+		catch (NegativeCapacityException | NegativeElevatorException
+				| NegativeFloorException e)
+		{
+			e.printStackTrace();
+		}
 	}
-        
-        */
-        
-        
-        // New ECM constructor to take xml data for floors/elevators
-         public ElevatorControlModuleImpl(){
-             //maybe need a factory actually, so only one instance is declared
-             XmlParser dataFeed = new XmlParser();
-             
-             int elevatorNum =  XmlParser.getTotalElevatorNumber();
-             int floorNum = XmlParser.getTotalFloorNumber();
-             
-             System.out.println("Number of elevators from file : " + elevatorNum);
-             System.out.println("Numberof floor numbers from file : "+ floorNum);
-             
-             
-             try
-             {
-             createFloors(floorNum);
-             createElevators(elevatorNum, floorNum);
-             }
-             catch (Exception e) { e.printStackTrace(); }
-             
-             
-             
-             
-             
-         }
 
    /**
     * This function is called whenever a Person object summons an elevator from a given floor. This method will compute the best elevator to
@@ -82,104 +56,77 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException
 	{
-                 System.out.println("Elevator Call Receiver called");
-            
 		if(floorNumber < 0 || floorNumber >= floors.length)
 		{
 			throw new NegativeFloorException("The floor object that called this method has an invalid ID number! (floorNumber: " + floorNumber + ")");
 		}
-		ElevatorInterface elevatorToSend;
-		
-		//this number is used as a fall-back value for the case where we have fewer than 4 elevators in our building. should help the selection algo to work when unit testing
+                
+        //Ethan psudo code implementation here.  
+        
+        /*  This is for when a person presses up/down on a floor, what elevator gets the request put in it's queue, algo is from the notes Project submission 1 pdf
+        
+        if there is an elevator on the floor
+            if elevator is idle OR going in desired direction
+                then add the floor to that elevator;s queue
+
+        have to loop through each elevator in elevators[]
+        
+        
+        if there is an elevator on the floor
+            if elevator is idle OR going in desired direction
+                then add the floor to that elevator;s queue  and be DONE
+            else 
+            
+            is there an elevator already moving?
+        yes: is it also going in desired direction
+              yes:  add the floor to that elevator's request queue
+        
+        no:
+            are there any idle elevators?
+            yes:
+                pick an idle elevator and add the request to the queue
+            no:
+                add to unique pending request list  ( a catch all queue I guess?)
+        
+        */
+		int externalFloorNum = floorNumber + 1;
 		int elevatorNum = elevators.length;
-		
-		//SIMPSON TODO: for now, we're going to hard code the elevator logic to meet the test requirements of the first deliverable 
-		//this MUST be changed for the next iteration
-
-                
-                //Ethan psudo code implementation here.  
-                
-                /*  This is for when a person presses up/down on a floor, what elevator gets the request put in it's queue, algo is from the notes Project submission 1 pdf
-                
-                if there is an elevator on the floor
-                    if elevator is idle OR going in desired direction
-                        then add the floor to that elevator;s queue
-
-                have to loop through each elevator in elevators[]
-                
-                
-                if there is an elevator on the floor
-                    if elevator is idle OR going in desired direction
-                        then add the floor to that elevator;s queue  and be DONE
-                    else 
-                    
-                    is there an elevator already moving?
-                yes: is it also going in desired direction
-                      yes:  add the floor to that elevator's request queue
-                
-                no:
-                    are there any idle elevators?
-                    yes:
-                        pick an idle elevator and add the request to the queue
-                    no:
-                        add to unique pending request list  ( a catch all queue I guess?)
-                
-                */
-              
-                boolean handledRequest = false;
-                
-               //  if there is an elevator on the floor
-               //     if elevator is idle OR going in desired direction
-               //         then add the floor to that elevator;s queue  and be DONE
-                for ( ElevatorInterface curElev: elevators)
-                {
-                    if (handledRequest == true) break;  // if request has been sent you're done!
-                    
-                    if (curElev.getCurrentFloor() == floorNumber)
-                        if ( !curElev.isRunning() || curElev.getDirection() == directionRequest )
-                        {    // then add floor to that elevators queue and break
-                            curElev.addFloorToQueue(floorNumber);
-                            handledRequest = true;
-                            break;  // break out of loop since request has been handled!
-                        }   
-                }
-                 // is there an elevator already moving?
-               // yes: is it also going in desired direction
-                //      yes:  add the floor to that elevator's request queue
-                for (ElevatorInterface curElev: elevators)
-                {
-                    if(handledRequest == true) break;  //Request has already been sent so we're done
-                    if (curElev.isRunning() && curElev.getDirection() == directionRequest)
-                    {
-                        curElev.addFloorToQueue(floorNumber);
-                        handledRequest = true; 
-                        break;
-                    }
-   
-                }
-                  //are there any idle elevators?
-                 //   yes:
-                 //       pick an idle elevator and add the request to the queue
-                 //   no:
-                  //      add to unique pending request list  ( a catch all queue I guess?)
-                for (ElevatorInterface curElev: elevators)
-                {
-                    if (handledRequest == true) break;
-                    if ( !curElev.isRunning())
-                    {
-                        curElev.addFloorToQueue(floorNumber);
-                       handledRequest = true;
-                       break;
-                  
-                    }
-                }
-                
-                //If we got this far and request still hasn't been handled...
-                // then it needs to be sent again  need this implementation done eventually
-                
-	}
-               
-                
+        boolean handledRequest = false;
+        
+       //  if there is an elevator on the floor
+       //     if elevator is idle OR going in desired direction
+       //         then add the floor to that elevator;s queue  and be DONE
+        //for (ElevatorInterface curElev: elevators)
+        for(int i = 0; i < elevatorNum && !handledRequest; ++i)
+        {
+        	ElevatorInterface curElev = this.elevators[i];
+        	Direction curDirection = curElev.getDirection();
+        	int curFloor = curElev.getCurrentFloor();
+            
+            //is there an elevator on this floor already?
+            if (curFloor == externalFloorNum)
+            {
+                if (curDirection == directionRequest || curDirection == Direction.IDLE)
+                {    
+                	//open the doors of that elevator so people can get in. no need to actually add a request since it's already there
+                    curElev.openDoors();
+                    curElev.closeDoors();
+                    handledRequest = true;
+                }   
+            }
+            // is there an elevator already moving?
+            // yes: is it also going in desired direction or isn't moving at all?
+             //      yes:  add the floor to that elevator's request queue
+            else if (curElev.isRunning() && (curDirection == directionRequest ||  curDirection == Direction.IDLE) )
+            {
+                curElev.addFloorToQueue(externalFloorNum);
+                handledRequest = true; 
+            }
+        }
+        
+        //If we got this far and request still hasn't been handled...
+        // then it needs to be sent again  need this implementation done eventually     
+	}          
 
    /**
     * Returns the elevator at the index specified.
@@ -256,7 +203,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		elevators = new ElevatorInterface[elevatorNum];
 		for(int i = 0; i < elevatorNum; ++i)
 		{
-			elevators[i] = ElevatorFactory.createElevator(i, ElevatorInterface.DEFAULT_ELEVATOR_CAPACITY, maxFloors, 1);
+			elevators[i] = ElevatorFactory.createElevator(i, XmlParser.getElevCapacity(), maxFloors, 1);
 		}
 	}
 	

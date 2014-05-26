@@ -19,18 +19,24 @@ public class Person
 	 */
 	private int currentFloor;
 	
+	/**
+	 * The ID for this Person object. Used to differentiate Person objects when adding to/removing from an Elevator.
+	 */
+	private int personID;
+	
    /**
 	* Constructor which allows for properties to be applied to a person in the building.
  	* @param floorToStop The stopping floor number that the person will stop at.
  	* @param floorToStart The starting floor number that the person will stop at.
  	* @throws NegativeFloorException if either floorToStart or floorToStop are outside the bounds of the simulation
     */
-	public Person(int floorToStart, int floorToStop) throws NegativeFloorException
+	public Person(int inID, int floorToStart, int floorToStop) throws NegativeFloorException
 	{
+		setPersonID(inID);
 		setDestinationFloor(floorToStop);
 		setCurrentFloor(floorToStart);
 	}
-	
+
 	/**
 	 * Accessor for the floor that this Person is going to travel to.
 	 * @return returns the ONE-BASED index of the floor that this Person is going to travel to.
@@ -49,6 +55,15 @@ public class Person
 		return currentFloor + 1;
 	}
 	
+	/**
+	 * Accessor for the Person's ID number.
+	 * @return the ID number of this Person instance.
+	 */
+	public int getID()
+	{
+		return personID;
+	}
+	
    /**
  	* Handles the destination floor of the requesting elevator.
     * @param inDest The floor number that the Person will want to go to. This value will be added to the elevator's request queue upon entering
@@ -57,7 +72,7 @@ public class Person
     */
 	public void setDestinationFloor(int inDest) throws NegativeFloorException
 	{
-		if(inDest < 1 || inDest > SimulationEnvironment.FLOOR_NUM)
+		if(inDest < 1 || inDest > XmlParser.getTotalFloorNumber())
 		{
 			throw new NegativeFloorException("This passenger's destination floor does not exist in the simulation! (inDest: " + inDest + ")");
 		}
@@ -72,10 +87,19 @@ public class Person
 	 */
 	private void setCurrentFloor(int inCur) throws NegativeFloorException
 	{
-		if(inCur < 1 || inCur > SimulationEnvironment.FLOOR_NUM)
+		if(inCur < 1 || inCur > XmlParser.getTotalFloorNumber())
 		{
 			throw new NegativeFloorException("This passenger's current floor does not exist in the simulation! (inCur: " + inCur + ")");
 		}
 		currentFloor = inCur - 1;
+	}
+	
+	/**
+	 * Mutator which assigns the Person's ID number
+	 * @param inID the ID number to assign to this Person
+	 */
+	private void setPersonID(int inID)
+	{
+		personID = inID;
 	}
 }

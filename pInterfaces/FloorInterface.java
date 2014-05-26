@@ -1,4 +1,6 @@
 package pInterfaces;
+import java.util.ArrayList;
+
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pImpls.Direction;
@@ -33,4 +35,10 @@ public interface FloorInterface
      * @throws NegativeFloorException
      */
 	public void addPersonToFloor(Person inPerson) throws NullPassengerException, NegativeFloorException;
+	
+	/**
+	 * Accessor for all of the people waiting for an elevator on this floor
+	 * @return The ArrayList containing all of the Person objects who are waiting for an elevator on this particular floor
+	 */
+	public ArrayList<Person> getWaitingPeople();
 }

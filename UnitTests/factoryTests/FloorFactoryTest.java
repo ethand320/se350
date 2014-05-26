@@ -48,20 +48,24 @@ public class FloorFactoryTest {
     @Test
     public void testCreateFloor() {
         System.out.println("createFloor");
-        int floorId = 0;
+        int floorId = 1;
         FloorInterface expResult = null;
         FloorInterface result = null;
+        FloorInterface failresult = null;
 		try
 		{
 			result = FloorFactory.createFloor(floorId);
+                        expResult = FloorFactory.createFloor(floorId);
+                        failresult = FloorFactory.createFloor(floorId+1);
 		}
 		catch (NegativeFloorException e)
 		{
 			fail(e.getMessage());
 		}
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult.getId(), result.getId());
+        assertFalse(failresult.getId() == result.getId());
+        assertNotNull(result.getId());
+        assertNotNull(failresult.getId());
     }
     
 }

@@ -78,31 +78,6 @@ public class ElevatorControlModuleTest
     }
 
     /**
-     * Test of getInstance method, of class ElevatorControlModule.
-     */
-    @Test
-    public void testGetInstance_int_int()
-    {
-        System.out.println("getInstance");
-        int elevatorNum = 0;
-        int floorNum = 0;
-        ControlModuleInterface expResult = null;
-        ControlModuleInterface result = null;
-		try
-		{
-			result = ElevatorControlModule.getInstance(elevatorNum, floorNum);
-		}
-		catch (NegativeFloorException | NegativeCapacityException
-				| NegativeElevatorException e)
-		{
-			fail(e.getMessage());
-		}
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of elevatorCallReceiver method, of class ElevatorControlModule.
      */
     @Test

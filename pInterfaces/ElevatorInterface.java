@@ -1,4 +1,5 @@
 package pInterfaces;
+import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pExceptions.PassengerNotFoundException;
 import pImpls.Direction;
@@ -11,22 +12,25 @@ public interface ElevatorInterface
 	/**
 	 * Adds a floor to the elevator's request queue, indicating that the elevator should stop at the indicated floor.
 	 * @param floorNum the floor number to stop at.
+	 * @throws NegativeFloorException if floorNum is less than 1 or greater than the number of floors in the simulation.
 	 */
-    public void addFloorToQueue(int floorNum);
+    public void addFloorToQueue(int floorNum) throws NegativeFloorException;
     
     /**
      * Adds a Person object to the elevator. Once inside, their destination floor is added to the elevator's request queue.
      * @param inPassenger the Person object that is entering the elevator.
      * @throws NullPassengerException if inPassenger is null.
+     * @throws NegativeFloorException 
      */
-    public void addPassenger(Person inPassenger) throws NullPassengerException;
+    public boolean addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException;
     
     /**
      * Adds a group of Person objects to the elevator. Once they are inside the elevator, their destination floors are added to the elevator's request queue.
      * @param inPeople the group of Person objects that are entering the elevator
      * @throws NullPassengerException if any of the Person objects in inPeople are null
+     * @throws NegativeFloorException if any of the Person objects have a destination floor that's less than 1 or greater than the number of floors in the simulation
      */
-	void addPassengers(ArrayList<Person> inPeople) throws NullPassengerException;
+	public boolean addPassengers(ArrayList<Person> inPeople) throws NullPassengerException, NegativeFloorException;
 	
 	/**
 	 * Open the doors of the elevator so Person objects may enter or leave this elevator.

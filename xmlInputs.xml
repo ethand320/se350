@@ -3,16 +3,18 @@
 <Input>
 
 
-<floors>5</floors>
+<floors>10</floors>
 
 <elevators>5</elevators>
 
-<elevTravelTime>4</elevTravelTime>
+<elevTravelTime>500</elevTravelTime>
 
-<elevDoorTime>4</elevDoorTime>
+<elevDoorTime>500</elevDoorTime>
 
-<peoplePerMin>1</peoplePerMin>
+<peoplePerMin>11</peoplePerMin>
 
+<duration>2</duration>
 
+<elevCapacity>10</elevCapacity>
 
 </Input>

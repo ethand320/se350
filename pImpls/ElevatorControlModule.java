@@ -57,39 +57,8 @@ public class ElevatorControlModule implements ControlModuleInterface
 			synchronized(ElevatorControlModule.class)
 			{
 				if(instance == null)
-				{
-				//	instance = new ElevatorControlModule(SimulationEnvironment.DEFAULT_ELEVATOR_NUM, SimulationEnvironment.DEFAULT_FLOOR_NUM);
-                                    // changed, dont think we need to pass the elev numbers and floor numbers anymore!
-                                    
-                                    instance = new ElevatorControlModule();
-                                    
-				}
-			}
-		}
-		return instance;
-	}
-	
-   /** 
-    * Checks to see if the instance has been created already using the given parameters.
-    * @param elevatorNum the number that is assigned to the elevator.
-    * @param floorNum  the floor number that is being assigned to the elevator.
-	* @return returns either the newly created instance or the previously existing instance
-	* @throws NegativeElevatorException 
-	* @throws NegativeCapacityException 
-	* @throws NegativeFloorException 
-	*/
-	public static ControlModuleInterface getInstance(int elevatorNum, int floorNum) throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
-	{
-		//If the instance already exists then return it
-		if(instance == null)
-		{		
-			//If the instance is Null then create a new ElevatorControlModule
-			//synchronized is used to ensure only one instance is created.
-			synchronized(ElevatorControlModule.class)
-			{
-				if(instance == null)
-				{
-					instance = new ElevatorControlModule();
+				{                                    
+					instance = new ElevatorControlModule();            
 				}
 			}
 		}

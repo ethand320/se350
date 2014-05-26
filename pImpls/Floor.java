@@ -47,29 +47,22 @@ public class Floor implements FloorInterface
      * @throws NullPassengerException if inPerson is null
      */
     @Override
-	public void addPersonToFloor(Person inPerson) throws NullPassengerException
+	public synchronized void addPersonToFloor(Person inPerson) throws NullPassengerException
 	{
     	if(inPerson == null)
     	{
     		throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
     	}
 		int destinationFloor = inPerson.getDestinationFloor();
-		try
+		if(destinationFloor < this.getId() || destinationFloor == XmlParser.getTotalFloorNumber())
 		{
-			if(destinationFloor < this.getId() || destinationFloor == ElevatorControlModule.getInstance().getMaxFloors())
-			{
-				goingDown.add(inPerson);
-				summonElevator(Direction.DOWN);
-			}
-			else if(destinationFloor > this.getId())
-			{
-				goingUp.add(inPerson);
-				summonElevator(Direction.UP);
-			}
+			goingDown.add(inPerson);
+			summonElevator(Direction.DOWN);
 		}
-		catch (NegativeCapacityException | NegativeElevatorException | NegativeFloorException e)
+		else if(destinationFloor > this.getId())
 		{
-			e.printStackTrace();
+			goingUp.add(inPerson);
+			summonElevator(Direction.UP);
 		}
 	}
 	
@@ -102,7 +95,7 @@ public class Floor implements FloorInterface
     * NOTE: This is an external representation, which means that the value is represented with ONE-BASED indexing
     */ 
 	@Override
-	public int getId() 
+	public synchronized int getId() 
 	{
 		return this.floorNumber + 1;
 	}
@@ -113,7 +106,7 @@ public class Floor implements FloorInterface
     * @param directionToGo the direction decides if a person will get off at the given floor or not.
     */
 	@Override
-	public void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
+	public synchronized void removeFromFloor(ElevatorInterface elevatorToEnter, Direction directionToGo) 
 	{
 		if(directionToGo != Direction.IDLE)
 		{
@@ -126,13 +119,37 @@ public class Floor implements FloorInterface
 			{
 				peopleToRemove = this.goingDown;
 			}
-			for (Person person : peopleToRemove)
+			int i;
+			boolean bRemovalSuccessful = true;
+			for(i = 0; i < peopleToRemove.size() && bRemovalSuccessful; ++i)
+			{
+				Person curPerson = peopleToRemove.get(i);
+				try
+				{
+					bRemovalSuccessful = elevatorToEnter.addPassenger(curPerson);
+				}
+				catch (NullPassengerException | NegativeFloorException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			int removalIndex;
+			if(!bRemovalSuccessful)
+			{
+				removalIndex = i;
+			}
+			else
+			{
+				removalIndex = peopleToRemove.size();
+			}
+			for(int j = 0; j < removalIndex; ++j)
 			{
 				try
 				{
-					elevatorToEnter.addPassenger(person);
+					peopleToRemove.remove(0);
+
 				}
-				catch (NullPassengerException e)
+				catch(IndexOutOfBoundsException e)
 				{
 					e.printStackTrace();
 				}
@@ -145,9 +162,9 @@ public class Floor implements FloorInterface
     * @param inNum the floor number that will be set as the floorNumber.
     * @throws NegativeFloorException 
     */
-	private void setFloorNumber(int inNum) throws NegativeFloorException
+	private synchronized void setFloorNumber(int inNum) throws NegativeFloorException
 	{
-		if(inNum < 0 || inNum >= SimulationEnvironment.FLOOR_NUM)
+		if(inNum < 0 || inNum >= XmlParser.getTotalFloorNumber())
 		{
 			throw new NegativeFloorException("Attempting to create a floor with an index that is outside the bounds of the simulation! (inNum: " + inNum + ")");
 		}
@@ -157,9 +174,17 @@ public class Floor implements FloorInterface
    /**
     * Creates the floor arrays of type <Person> for both elevator directions.
     */
-	private void initializeFloorArrays()
+	private synchronized void initializeFloorArrays()
 	{
 		goingUp = new ArrayList<Person>();
 		goingDown = new ArrayList<Person>();
+	}
+
+	@Override
+	public synchronized ArrayList<Person> getWaitingPeople()
+	{
+		ArrayList<Person> listToReturn = this.goingUp;
+		listToReturn.addAll(this.goingDown);
+		return listToReturn;
 	}
 }
