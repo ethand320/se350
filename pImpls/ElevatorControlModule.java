@@ -30,10 +30,9 @@ public class ElevatorControlModule implements ControlModuleInterface
     * private constructor that is called upon the first call to getInstance().
 	* @param elevatorNum The number of elevators that the module will control.
 	* @param floorNum the number of floors that the module will receive signals from and send elevators to.
-	* @throws NegativeElevatorException 
-	* @throws NegativeCapacityException 
-	* @throws NegativeFloorException 
-	* @throws NegativeNumberException throws an exception if either elevatorNum or floorNum are negative.
+	* @throws NegativeElevatorException if the corresponding value parsed from the xmlInputs file is less than 1 while constructing the delegate
+	* @throws NegativeCapacityException if the corresponding value parsed from the xmlInputs file is less than 1 while constructing the delegate
+	* @throws NegativeFloorException if the corresponding value parsed from the xmlInputs file is less than 1 while constructing the delegate
 	*/
 	private ElevatorControlModule() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
@@ -45,9 +44,9 @@ public class ElevatorControlModule implements ControlModuleInterface
   	* If the instance already exists then return it.
 	* If the instance is Null then create a new ElevatorControlModule.
   	* @return returns either the newly created instance or the previously existing instance.
-  	* @throws NegativeElevatorException 
-  	* @throws NegativeCapacityException 
-  	* @throws NegativeFloorException 
+  	* @throws NegativeElevatorException if the instance needs to be created first and the delegate constructor receives a total elevator number that is less than 1
+  	* @throws NegativeCapacityException if the instance needs to be created first and the delegate constructor receives an elevator capacity number that is less than 1
+  	* @throws NegativeFloorException if the instance needs to be created first and the delegate constructor receives a total floor number that is less than 1
   	*/
 	public static ControlModuleInterface getInstance() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{
@@ -69,7 +68,7 @@ public class ElevatorControlModule implements ControlModuleInterface
     * Handles the system that works with the calling of elevators to and from floors. Passes the direction and the floor number to an elevator
     * @param floorNumber the floor number that is delegated to an elevator. This number can not be negative and should exist in the building. 
     * @param directionRequest The requested direction to be delegated to an elevator.
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if floorNumber is less than 1 or greater than the total number of floors in the simulation
     */
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException
@@ -97,6 +96,16 @@ public class ElevatorControlModule implements ControlModuleInterface
 		return delegate.getMaxFloors();
 	}
 	
+	/**
+	 * Accessor for the number of elevators currently being managed by this Control Module
+	 * @return the number of elevators currently being managed by this Control Module
+	 */
+	@Override
+	public int getElevatorNum()
+	{
+		return delegate.getElevatorNum();
+	}
+	
    /**
     * Handles the functionality of stopping all elevators.
     * Delegates the shutDown method to allow for the Ending of all elevator instances.
@@ -111,7 +120,7 @@ public class ElevatorControlModule implements ControlModuleInterface
     * @param elevator the elevator that has arrived at this floor and is opening its doors for passengers to enter. 
     * @param floorNumber the floor number that the elevator is currently located. The people contained on this floor will be moved into the 
     * elevator once the doors are opened.
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if floorNumber is less than 1 or greater than the total number of floors in the simulation
     */
 	@Override
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber) throws NegativeFloorException
@@ -131,15 +140,5 @@ public class ElevatorControlModule implements ControlModuleInterface
 	public void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException, NegativeFloorException
 	{
 		delegate.addPersonToFloor(inPerson, floorNum);	
-	}
-
-	/**
-	 * Accessor for the number of elevators currently being managed by this Control Module
-	 * @return the number of elevators currently being managed by this Control Module
-	 */
-	@Override
-	public int getElevatorNum()
-	{
-		return delegate.getElevatorNum();
 	}
 }

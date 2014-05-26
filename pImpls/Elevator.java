@@ -1,10 +1,14 @@
 package pImpls;
 
-import pInterfaces.ElevatorInterface;
-import pExceptions.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
+
+import pExceptions.NegativeCapacityException;
+import pExceptions.NegativeElevatorException;
+import pExceptions.NegativeFloorException;
+import pExceptions.NullPassengerException;
+import pExceptions.PassengerNotFoundException;
+import pInterfaces.ElevatorInterface;
 
 
 /**
@@ -84,8 +88,8 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param inCapacity The total number of passengers the elevator can hold. This number cannot be negative and must not be less than {@ Value}
     * @param inMaxFloors The maximum amount of floors the elevator can access.
     * @param inMinFloors The minimum amount of floors the elevator can access.
-    * @throws NegativeCapacityException 
-    * @throws NegativeFloorException 
+    * @throws NegativeCapacityException if inCapacity is less than 1
+    * @throws NegativeFloorException if inMinFloors specifies a floor that is outside the bounds of the simulation (less than 1 or greater than the total number of floors in teh simulation)
     */
 	public Elevator(int inId, int inCapacity, int inMaxFloors, int inMinFloors) throws NegativeCapacityException, NegativeFloorException
 	{
@@ -93,8 +97,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
 		setMinFloors(inMinFloors);   
-        doorSpeed =  XmlParser.getElevDoorTime();
-        setSpeed(doorSpeed);    
+        setSpeed(XmlParser.getElevDoorTime());    
         initializeRequestQueue();
 		setInitialDirection();
     	setDefaultFloor(0);
@@ -107,7 +110,7 @@ public class Elevator implements ElevatorInterface, Runnable
     * @param floorNum The floor number that will be added to the queue. It need not be in consecutive order compared to other elevators in the building.
     * If the request is already present inside the requests queue, nothing happens
     * NOTE: this method uses ONE-BASED indexing, which means that zero corresponds to an invalid request.
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if floorNum is less than 1 or greater than the total number of floors in the simulation
     */
 	@Override
 	public synchronized void addFloorToQueue(int floorNum) throws NegativeFloorException 
@@ -196,32 +199,19 @@ public class Elevator implements ElevatorInterface, Runnable
             	direction = Direction.UP;
             	Collections.sort(requestQueue);
             }
-            else// if(currentFloor > internalFloorNum)
+            else
             {
-            	//compare to see if the floorNumber is greater than the current floor
-            	//If true then assign the elevator to the request.
             	direction = Direction.DOWN;
             	Collections.reverse(requestQueue);
             }
-//            else
-//            {
-//            	if(currentFloor == this.minFloors)
-//            	{
-//            		direction = Direction.UP;
-//            	}
-//            	else if(currentFloor == this.maxFloors)
-//            	{
-//            		direction = Direction.DOWN;
-//            	}
-//            }
             this.printRequestQueue();
             break;
         }
 	}
 
 	/**
-    * Add a passenger to the elevator.  Adds person object.
-    * @param inPassenger The number of people being removed from the elevator.This number cannot be negative, and should be added to the passenger list.
+    * Add a passenger to the elevator and adds its destination floor to the elevator's request queue.
+    * @param inPassenger The Person object being added to this elevator object. Must not be null
 	* @return true if the Person object was added to the elevator successfully, false if the elevator is at capacity 
     * @throws NullPassengerException if inPassenger is set to null
     * @throws NegativeFloorException if inPassenger's destination floor is less than 1 or greater than the number of floors in the simulation.
@@ -246,8 +236,8 @@ public class Elevator implements ElevatorInterface, Runnable
 
 
    /**
- 	* Add multiple passengers to the elevator.
-    * @param inPassengers The number of people being added to the elevator.This number cannot be negative, and all passengers should be added to the list.
+ 	* Add multiple passengers to the elevator and adds all of their destination floors to the elevator's request queue.
+    * @param inPassengers The collection of Person objects to add to the elevator object. None of the Person objects in this collection should be null.
     * @return true if every passenger was added to the elevator successfully, otherwise false.
     * @throws NullPassengerException if any of the passengers contained within inPassengers is null
     * @throws NegativeFloorException if any of the Person objects have a destination floor that's less than 1 or greater than the number of floors in the simulation
@@ -272,8 +262,8 @@ public class Elevator implements ElevatorInterface, Runnable
     }
 	
 	/**
-	 * Allows for the doors of the elevator to be opened. A 500 ms wait time is added to allow for the removal and addition of passenger(s)
-	 * @throws InterruptedException if the elevator doors have any interence, then print a stackTrace.
+	 * Opens the elevator's doors and facilitates the movement of Person objects to and from this Elevator. The time it takes for this method to complete
+	 * is determined by the time specified (in milliseconds) in the xmlInputs file
 	 */
 	@Override
 	public synchronized void openDoors() 
@@ -295,6 +285,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			 }
 			 ElevatorControlModule.getInstance().elevatorDoorsOpened(this, this.currentFloor);
 			 ArrayList<Person> peopleToRemove = new ArrayList<Person>();
+			 
 			 //find any passengers who are supposed to get off on this floor and remove them
 			 for( int i = 0; i < this.passengerList.size(); ++i)
 			 {
@@ -324,7 +315,8 @@ public class Elevator implements ElevatorInterface, Runnable
 	}
 
 	/**
-	 * Allows for the doors of the elevator to be close. A 500 ms wait time is added to allow for the removal and addition of passenger(s)
+	 * Closes the elevator's doors so nobody else can enter/leave this Elevator. The time it takes for this method to complete
+	 * is determined by the time specified (in milliseconds) in the xmlInputs file
 	 */
 	@Override
 	public synchronized void closeDoors() 
@@ -577,7 +569,6 @@ public class Elevator implements ElevatorInterface, Runnable
 	
    /**
     * Sets the identifier number assigned to this elevator.
-    * private variable - only to be used to give an id to an elevator.
     * @param inId The unique identifier number. This number need not be in consecutive order compared to other elevators in the building, but it must be no larger than the 
     * maximum number of elevators in the simulation environment.
     */
@@ -614,7 +605,6 @@ public class Elevator implements ElevatorInterface, Runnable
 	
    /**
     * Sets the initial direction for the elevator to IDLE.
-    * private variable - only to be used to give a default direction to an elevator.
     */
 	private synchronized void setInitialDirection()
 	{
@@ -623,7 +613,6 @@ public class Elevator implements ElevatorInterface, Runnable
 	
    /**
     * Sets the initial capacity for the elevator.
-    * private variable - only to be used to give a default direction to an elevator.
     * @param inCap the total capacity limit the elevator can hold.
     * @throws NegativeCapacityException if inCap is negative
     */
@@ -636,6 +625,10 @@ public class Elevator implements ElevatorInterface, Runnable
 		this.capacity = inCap;
 	}
 
+	/**
+	 * Sets the speed of this elevator. Whenever an elevator moves between floors, this value will be used in the corresponding call to wait()
+	 * @param newSpeed the time (in milliseconds) that it should take this elevator object to move between floors
+	 */
     private synchronized void setSpeed(int newSpeed)
     {
         speed = newSpeed;

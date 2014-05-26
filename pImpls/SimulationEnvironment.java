@@ -1,12 +1,12 @@
 package pImpls;
 
+import java.util.Random;
+
 import pExceptions.NegativeCapacityException;
 import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pFactories.PersonFactory;
-
-import java.util.Random;
 
 /**
  * SimulationEnvironment class handles the creation of the elevator simulation given the number of floors and elevators.
@@ -21,9 +21,9 @@ public class SimulationEnvironment
 	/**
 	 * Default private constructor for the SimulationEnvironment. Passes off default values to the ElevatorControlModule's getInstance() method,
 	 * which will call the Module's constructor
-	 * @throws NegativeElevatorException 
-	 * @throws NegativeCapacityException 
-	 * @throws NegativeFloorException 
+	 * @throws NegativeElevatorException if the ECM constructor receives a total elevator number that is less than 1
+	 * @throws NegativeCapacityException if the ECM constructor receives an elevator capacity number that is less than 1
+	 * @throws NegativeFloorException if the ECM constructor receives a total floor number that is less than 1
 	 */
 	private SimulationEnvironment() throws NegativeFloorException, NegativeCapacityException, NegativeElevatorException
 	{                
@@ -63,16 +63,15 @@ public class SimulationEnvironment
 		try
 		{          
 			System.out.println("The simulation will run for " + ( XmlParser.getDuration() / 1000 ) + " seconds.");
-           getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());   // this kicks off a method to continuously generate people 
-              //... for the duration of the simulation, the people are handled by the floors/elevators
+            getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());
            
-           //let the thread wait enough time for every elevator to reach the default floor
-           //movement speed * ( door open speed + door close speed ) * number of floors
-           int totalSleepTime = XmlParser.getTotalFloorNumber() * ( ( XmlParser.getElevDoorTime() * 2 ) + XmlParser.getElevTravelTime() );
-           System.out.println("The simulation will sleep for " + totalSleepTime / 1000 + " seconds before shutting down completely.");
-           Thread.sleep(totalSleepTime);
-           System.out.println("The simulation is shutting down now");
-           getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
+            //let the thread wait enough time for every elevator to reach the default floor
+            //movement speed * ( door open speed + door close speed ) * number of floors
+            int totalSleepTime = XmlParser.getTotalFloorNumber() * ( ( XmlParser.getElevDoorTime() * 2 ) + XmlParser.getElevTravelTime() );
+            System.out.println("The simulation will sleep for " + totalSleepTime / 1000 + " seconds before shutting down completely.");
+            Thread.sleep(totalSleepTime);
+            System.out.println("The simulation is shutting down now");
+            getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
 		}
 		catch(InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
         {
@@ -115,7 +114,12 @@ public class SimulationEnvironment
 		}
 	}
         
-    private  void randPersonGenerator(long totalSimTime, int personRate)
+	/**
+	 * Helper method to generate a specified number of Person objects per minute while the simualation is running
+	 * @param totalSimTime the amount of time (in milliseconds) that the simulation should run for
+	 * @param personRate the number of Person objects that should be created every minute (60000 milliseconds)
+	 */
+    private void randPersonGenerator(long totalSimTime, int personRate)
     {
         long tStart = System.currentTimeMillis();
         int totalFloors = XmlParser.getTotalFloorNumber();
@@ -148,9 +152,5 @@ public class SimulationEnvironment
         {
         	e.printStackTrace();
         }
-        
-        
-    }
-       
-        
+    }   
 }

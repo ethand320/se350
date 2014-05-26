@@ -1,11 +1,11 @@
 package pInterfaces;
+import java.util.ArrayList;
+
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pExceptions.PassengerNotFoundException;
 import pImpls.Direction;
 import pImpls.Person;
-
-import java.util.ArrayList;
 
 public interface ElevatorInterface
 {
@@ -20,7 +20,7 @@ public interface ElevatorInterface
      * Adds a Person object to the elevator. Once inside, their destination floor is added to the elevator's request queue.
      * @param inPassenger the Person object that is entering the elevator.
      * @throws NullPassengerException if inPassenger is null.
-     * @throws NegativeFloorException 
+     * @throws NegativeFloorException if inPassenger's destination floor is less than 1 or greater than the number of floors in the simulation.
      */
     public boolean addPassenger(Person inPassenger) throws NullPassengerException, NegativeFloorException;
     
