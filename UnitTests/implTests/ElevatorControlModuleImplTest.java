@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package implTests;
+package UnitTests.implTests;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -27,7 +27,6 @@ import pInterfaces.ElevatorInterface;
 
 /**
  *
- * @author Stouny
  */
 public class ElevatorControlModuleImplTest
 {
