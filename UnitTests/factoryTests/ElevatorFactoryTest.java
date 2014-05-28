@@ -25,7 +25,6 @@ import pInterfaces.ElevatorInterface;
 
 /**
  *
- * @author Stouny
  */
 public class ElevatorFactoryTest {
     private int elevatorId;
@@ -69,7 +68,7 @@ public class ElevatorFactoryTest {
 		{
 			expResult = new Elevator(elevatorId, capacity, maxFloors, minFloors);
 			result = ElevatorFactory.createElevator(elevatorId, capacity, maxFloors, minFloors);
-	        failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
+	        	failResult = ElevatorFactory.createElevator(elevatorId+1, capacity+1, maxFloors+1, minFloors+1);
 		}
 		catch (NegativeCapacityException | NegativeFloorException e)
 		{
