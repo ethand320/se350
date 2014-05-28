@@ -57,6 +57,7 @@ public class XmlParser
         				inputHash.put("peoplePerMin", Integer.parseInt(eElement.getElementsByTagName("peoplePerMin").item(0).getTextContent()));
         				inputHash.put("duration", Integer.parseInt(eElement.getElementsByTagName("duration").item(0).getTextContent()));
         				inputHash.put("elevCapacity",  Integer.parseInt(eElement.getElementsByTagName("elevCapacity").item(0).getTextContent()));
+        				inputHash.put("doorSpeed",  Integer.parseInt(eElement.getElementsByTagName("doorSpeed").item(0).getTextContent()));
         			}
 				}
 				catch (ParserConfigurationException | SAXException | IOException e)
@@ -134,5 +135,14 @@ public class XmlParser
     		getInputs();
     	}
     	return inputHash.get("elevCapacity");
+    }
+    
+    public static int getDoorSpeed()
+    {
+      if (inputHash == null)
+           getInputs();
+      
+        int dspeed = inputHash.get("doorSpeed");
+        return dspeed;
     }
 }
