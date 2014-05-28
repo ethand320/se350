@@ -67,9 +67,9 @@ public class PersonFactoryTest
         Person failResult = null;
 		try
 		{
-            expResult = new Person(successID, startFloor, destinationFloor);
+            		expResult = new Person(successID, startFloor, destinationFloor);
 			result = PersonFactory.createPerson(successID, startFloor, destinationFloor);
-            failResult = PersonFactory.createPerson(failID, startFloor+1,destinationFloor+1);     
+            		failResult = PersonFactory.createPerson(failID, startFloor+1,destinationFloor+1);     
 		}
 		catch (NegativeFloorException e)
 		{
