@@ -31,7 +31,6 @@ import pInterfaces.ElevatorInterface;
 
 /**
  *
- * @author Stouny
  */
 public class FloorTest
 {
@@ -102,8 +101,8 @@ public class FloorTest
         Person inPerson = null;
         try
 		{
-        	ArrayList<Person> expResult = new ArrayList<Person>();
-        	ArrayList<Person> result = instance.getWaitingPeople();
+        		ArrayList<Person> expResult = new ArrayList<Person>();
+        		ArrayList<Person> result = instance.getWaitingPeople();
 			inPerson = new Person(personSuccessID, personSuccessStartFloor, personSuccessDestinationFloor);
 			instance.addPersonToFloor(inPerson);
 			expResult.add(inPerson);
@@ -153,7 +152,7 @@ public class FloorTest
 		{
 			//TODO: insert people into the floor object, making sure that their direction lines up properly with the elevator or else the person won't get added
 			//should probably also make tests for adding in each direction (up, down, idle) to fully test this out
-	        Direction directionToGo = Direction.UP;
+	        	Direction directionToGo = Direction.UP;
 			elevatorToEnter = new Elevator(defaultElevID, defaultElevCapacity, defaultElevMinFloors, defaultElevMaxFloors);
 			elevatorToEnter.shutDown();
 			
@@ -163,10 +162,10 @@ public class FloorTest
 			ArrayList<Person> expFloorResult = new ArrayList<Person>();
 			ArrayList<Person> expElevatorResult = new ArrayList<Person>();
 			
-	        instance.removeFromFloor(elevatorToEnter, directionToGo);
+	        	instance.removeFromFloor(elevatorToEnter, directionToGo);
 	        
-	        assertEquals(expFloorResult, floorPassengers);
-	        assertEquals(expElevatorResult, elevatorPassengers);
+	        	assertEquals(expFloorResult, floorPassengers);
+	        	assertEquals(expElevatorResult, elevatorPassengers);
 
 		}
 		catch (NegativeCapacityException | NegativeFloorException e)
@@ -187,23 +186,23 @@ public class FloorTest
 		try
 		{
 			personToAdd = new Person(personSuccessID, personSuccessStartFloor, personSuccessDestinationFloor);
-	    	personToNotAdd = new Person(personFailID, personFailStartFloor, personFailDestinationFloor);
+	    		personToNotAdd = new Person(personFailID, personFailStartFloor, personFailDestinationFloor);
 	    	
-	    	//by calling the copy constructor instead of directly assigning before to the ArrayList returned by getWaitingPeople, we ensure that
-	    	//the two variables are references to two objects with the same data instead of references to the exact same object
-	    	ArrayList<Person> before = new ArrayList<Person>(instance.getWaitingPeople());
-	    	assertFalse(before.contains(personToAdd));
-			assertFalse(before.contains(personToNotAdd));
-			assertEquals(before, beforeExpResult);
-	    	
-	    	instance.addPersonToFloor(personToAdd);
-	    	afterExpResult.add(personToAdd);
-	    	
-	    	ArrayList<Person> after = new ArrayList<Person>(instance.getWaitingPeople());
-	    	assertTrue(after.contains(personToAdd));
-	    	assertFalse(after.contains(personToNotAdd));
-	    	assertEquals(after, afterExpResult);
-	    	assertThat(after,not(equalTo(before)));
+		    	//by calling the copy constructor instead of directly assigning before to the ArrayList returned by getWaitingPeople, we ensure that
+		    	//the two variables are references to two objects with the same data instead of references to the exact same object
+		    	ArrayList<Person> before = new ArrayList<Person>(instance.getWaitingPeople());
+		    	assertFalse(before.contains(personToAdd));
+				assertFalse(before.contains(personToNotAdd));
+				assertEquals(before, beforeExpResult);
+		    	
+		    	instance.addPersonToFloor(personToAdd);
+		    	afterExpResult.add(personToAdd);
+		    	
+		    	ArrayList<Person> after = new ArrayList<Person>(instance.getWaitingPeople());
+		    	assertTrue(after.contains(personToAdd));
+		    	assertFalse(after.contains(personToNotAdd));
+		    	assertEquals(after, afterExpResult);
+		    	assertThat(after,not(equalTo(before)));
 		}
 		catch (NegativeFloorException | NullPassengerException e)
 		{
