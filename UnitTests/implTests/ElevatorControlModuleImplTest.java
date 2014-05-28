@@ -6,11 +6,11 @@
 
 package implTests;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,6 +20,7 @@ import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pImpls.Direction;
+import pImpls.Elevator;
 import pImpls.ElevatorControlModuleImpl;
 import pImpls.Person;
 import pInterfaces.ElevatorInterface;
@@ -57,7 +58,7 @@ public class ElevatorControlModuleImplTest
 
     /**
      * Test of elevatorCallReceiver method, of class ElevatorControlModuleImpl.
-     */
+     * This test will be added for the last iteration.
     @Test
     public void testElevatorCallReceiver()
     {
@@ -74,7 +75,8 @@ public class ElevatorControlModuleImplTest
 			fail(e.getMessage());
 		}
     }
-
+    */
+    
     /**
      * Test of getElevator method, of class ElevatorControlModuleImpl.
      */
@@ -82,11 +84,12 @@ public class ElevatorControlModuleImplTest
     public void testGetElevator()
     {
         System.out.println("getElevator");
-        int index = 0;
-        ElevatorControlModuleImpl instance = null;
+        int index = 1;
+        ElevatorControlModuleImpl instance = new ElevatorControlModuleImpl();
         ElevatorInterface expResult = null;
         ElevatorInterface result = instance.getElevator(index);
-        assertEquals(expResult, result);
+        assertThat(expResult,not(equalTo(result)));
+        assertNotNull(result);
     }
 
     /**
@@ -97,8 +100,10 @@ public class ElevatorControlModuleImplTest
     {
         System.out.println("shutDown");
         ElevatorControlModuleImpl instance = new ElevatorControlModuleImpl();
+        ElevatorControlModuleImpl instance2 = new ElevatorControlModuleImpl();
         instance.shutDown();
-        assertTrue(instance);
+        assertNotNull(instance);
+        assertThat(instance,not(equalTo(instance2)));
         
     }
 
@@ -109,17 +114,18 @@ public class ElevatorControlModuleImplTest
     public void testElevatorDoorsOpened()
     {
         System.out.println("elevatorDoorsOpened");
-        ElevatorInterface elevator = null;
-        int floorNumber = 0;
-        ElevatorControlModuleImpl instance = null;
         try
-		{
-			instance.elevatorDoorsOpened(elevator, floorNumber);
-		}
-		catch (NegativeFloorException e)
-		{
-			fail(e.getMessage());
-		}
+	{
+            ElevatorInterface elevator = new Elevator(1,10,10,15);
+            int floorNumber = 0;
+            ElevatorControlModuleImpl instance = new ElevatorControlModuleImpl();
+            instance.elevatorDoorsOpened(elevator, floorNumber);
+            assertNotNull(instance.getElevatorNum());
+        }
+        catch (NegativeFloorException | NegativeCapacityException e)
+        {
+                fail(e.getMessage());
+        }
     }
 
     /**
@@ -129,18 +135,19 @@ public class ElevatorControlModuleImplTest
     public void testAddPersonToFloor()
     {
         System.out.println("addPersonToFloor");
-        Person inPerson = null;
-        int floorNum = 0;
-        ElevatorControlModuleImpl instance;
-		try
-		{
-			instance = new ElevatorControlModuleImpl();
-			instance.addPersonToFloor(inPerson, floorNum);
-		}
-		catch (NegativeFloorException | NullPassengerException e)
-		{
-			fail(e.getMessage());
-		}
+        try
+        {
+            Person inPerson = new Person(1,1,2);
+            int floorNum = 1;
+            ElevatorControlModuleImpl instance;
+            instance = new ElevatorControlModuleImpl();
+            instance.addPersonToFloor(inPerson, floorNum);
+            assertNotNull(instance);
+        }
+        catch (NegativeFloorException | NullPassengerException e)
+        {
+                fail(e.getMessage());
+        }
     }
     
 }
