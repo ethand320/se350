@@ -6,8 +6,13 @@
 
 package UnitTests.implTests;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -38,7 +43,7 @@ public class FloorTest
 	private Floor instance;
 	private int defaultFloorID = 0;
 	private int failFloorID = 1;
-	
+
 	//person creation variables
 	private int personSuccessID = 0;
 	private int personSuccessStartFloor = 2;
@@ -46,17 +51,17 @@ public class FloorTest
 	private int personFailID = 1;
 	private int personFailStartFloor = 1;
 	private int personFailDestinationFloor = 6;
-	
+
 	//elevator creation variables
 	private int defaultElevID = 0;
 	private int defaultElevCapacity = 5;
 	private int defaultElevMinFloors = 1;
 	private int defaultElevMaxFloors = 8;
-    
-    @BeforeClass
-    public static void setUpClass()
-    {
-    	try
+
+	@BeforeClass
+	public static void setUpClass()
+	{
+		try
 		{
 			ControlModuleInterface ECM = ElevatorControlModule.getInstance();
 			ECM.shutDown();
@@ -66,17 +71,17 @@ public class FloorTest
 		{
 			fail(e.getMessage());
 		}
-    }
-    
-    @AfterClass
-    public static void tearDownClass()
-    {
-    }
-    
-    @Before
-    public void setUp()
-    {
-    	try
+	}
+
+	@AfterClass
+	public static void tearDownClass()
+	{
+	}
+
+	@Before
+	public void setUp()
+	{
+		try
 		{
 			instance = new Floor(defaultFloorID);
 		}
@@ -84,25 +89,25 @@ public class FloorTest
 		{
 			fail(e.getMessage());
 		}
-    }
-    
-    @After
-    public void tearDown()
-    {
-    }
+	}
 
-    /**
-     * Test of addPersonToFloor method, of class Floor.
-     */
-    @Test
-    public void testAddPersonToFloor()
-    {
-        System.out.println("addPersonToFloor");
-        Person inPerson = null;
-        try
+	@After
+	public void tearDown()
+	{
+	}
+
+	/**
+	 * Test of addPersonToFloor method, of class Floor.
+	 */
+	@Test
+	public void testAddPersonToFloor()
+	{
+		System.out.println("addPersonToFloor");
+		Person inPerson = null;
+		try
 		{
-        		ArrayList<Person> expResult = new ArrayList<Person>();
-        		ArrayList<Person> result = instance.getWaitingPeople();
+			ArrayList<Person> expResult = new ArrayList<Person>();
+			ArrayList<Person> result = instance.getWaitingPeople();
 			inPerson = new Person(personSuccessID, personSuccessStartFloor, personSuccessDestinationFloor);
 			instance.addPersonToFloor(inPerson);
 			expResult.add(inPerson);
@@ -112,60 +117,60 @@ public class FloorTest
 		{
 			fail(e.getMessage());
 		}
-    }
+	}
 
-    /**
-     * Test of summonElevator method, of class Floor.
-     */
-    @Test
-    public void testSummonElevator()
-    {
-        System.out.println("summonElevator");
-        Direction directionToGo = null;
-        instance.summonElevator(directionToGo);
-    }
+	/**
+	 * Test of summonElevator method, of class Floor.
+	 */
+	@Test
+	public void testSummonElevator()
+	{
+		System.out.println("summonElevator");
+		Direction directionToGo = null;
+		instance.summonElevator(directionToGo);
+	}
 
-    /**
-     * Test of getId method, of class Floor.
-     */
-    @Test
-    public void testGetId()
-    {
-        System.out.println("getId");
-        int expResult = defaultFloorID;
-        
-        //the ID is returned as a 1-based index externally, so we need to subtract 1 to get its zero-based representation
-        int result = instance.getId() - 1;
-        assertEquals(expResult, result);
-        assertThat(result,not(equalTo(failFloorID)));
-    }
+	/**
+	 * Test of getId method, of class Floor.
+	 */
+	@Test
+	public void testGetId()
+	{
+		System.out.println("getId");
+		int expResult = defaultFloorID;
 
-    /**
-     * Test of removeFromFloor method, of class Floor.
-     */
-    @Test
-    public void testRemoveFromFloor()
-    {
-        System.out.println("removeFromFloor");
-        ElevatorInterface elevatorToEnter;
+		//the ID is returned as a 1-based index externally, so we need to subtract 1 to get its zero-based representation
+		int result = instance.getId() - 1;
+		assertEquals(expResult, result);
+		assertThat(result,not(equalTo(failFloorID)));
+	}
+
+	/**
+	 * Test of removeFromFloor method, of class Floor.
+	 */
+	@Test
+	public void testRemoveFromFloor()
+	{
+		System.out.println("removeFromFloor");
+		ElevatorInterface elevatorToEnter;
 		try
 		{
 			//TODO: insert people into the floor object, making sure that their direction lines up properly with the elevator or else the person won't get added
 			//should probably also make tests for adding in each direction (up, down, idle) to fully test this out
-	        	Direction directionToGo = Direction.UP;
+			Direction directionToGo = Direction.UP;
 			elevatorToEnter = new Elevator(defaultElevID, defaultElevCapacity, defaultElevMinFloors, defaultElevMaxFloors);
 			elevatorToEnter.shutDown();
-			
+
 			ArrayList<Person> elevatorPassengers = elevatorToEnter.getPassengers();
 			ArrayList<Person> floorPassengers = instance.getWaitingPeople();
-			
+
 			ArrayList<Person> expFloorResult = new ArrayList<Person>();
 			ArrayList<Person> expElevatorResult = new ArrayList<Person>();
-			
-	        	instance.removeFromFloor(elevatorToEnter, directionToGo);
-	        
-	        	assertEquals(expFloorResult, floorPassengers);
-	        	assertEquals(expElevatorResult, elevatorPassengers);
+
+			instance.removeFromFloor(elevatorToEnter, directionToGo);
+
+			assertEquals(expFloorResult, floorPassengers);
+			assertEquals(expElevatorResult, elevatorPassengers);
 
 		}
 		catch (NegativeCapacityException | NegativeFloorException e)
@@ -173,40 +178,40 @@ public class FloorTest
 			fail(e.getMessage());
 		}
 
-    }
-    
-    @Test
-    public void testGetWaitingPeople()
-    {
-    	System.out.println("getWaitingPeople");
-    	Person personToAdd = null;
-    	Person personToNotAdd = null;
-    	ArrayList<Person> beforeExpResult = new ArrayList<Person>();
-    	ArrayList<Person> afterExpResult = new ArrayList<Person>();
+	}
+
+	@Test
+	public void testGetWaitingPeople()
+	{
+		System.out.println("getWaitingPeople");
+		Person personToAdd = null;
+		Person personToNotAdd = null;
+		ArrayList<Person> beforeExpResult = new ArrayList<Person>();
+		ArrayList<Person> afterExpResult = new ArrayList<Person>();
 		try
 		{
 			personToAdd = new Person(personSuccessID, personSuccessStartFloor, personSuccessDestinationFloor);
-	    		personToNotAdd = new Person(personFailID, personFailStartFloor, personFailDestinationFloor);
-	    	
-		    	//by calling the copy constructor instead of directly assigning before to the ArrayList returned by getWaitingPeople, we ensure that
-		    	//the two variables are references to two objects with the same data instead of references to the exact same object
-		    	ArrayList<Person> before = new ArrayList<Person>(instance.getWaitingPeople());
-		    	assertFalse(before.contains(personToAdd));
-				assertFalse(before.contains(personToNotAdd));
-				assertEquals(before, beforeExpResult);
-		    	
-		    	instance.addPersonToFloor(personToAdd);
-		    	afterExpResult.add(personToAdd);
-		    	
-		    	ArrayList<Person> after = new ArrayList<Person>(instance.getWaitingPeople());
-		    	assertTrue(after.contains(personToAdd));
-		    	assertFalse(after.contains(personToNotAdd));
-		    	assertEquals(after, afterExpResult);
-		    	assertThat(after,not(equalTo(before)));
+			personToNotAdd = new Person(personFailID, personFailStartFloor, personFailDestinationFloor);
+
+			//by calling the copy constructor instead of directly assigning before to the ArrayList returned by getWaitingPeople, we ensure that
+			//the two variables are references to two objects with the same data instead of references to the exact same object
+			ArrayList<Person> before = new ArrayList<Person>(instance.getWaitingPeople());
+			assertFalse(before.contains(personToAdd));
+			assertFalse(before.contains(personToNotAdd));
+			assertEquals(before, beforeExpResult);
+
+			instance.addPersonToFloor(personToAdd);
+			afterExpResult.add(personToAdd);
+
+			ArrayList<Person> after = new ArrayList<Person>(instance.getWaitingPeople());
+			assertTrue(after.contains(personToAdd));
+			assertFalse(after.contains(personToNotAdd));
+			assertEquals(after, afterExpResult);
+			assertThat(after,not(equalTo(before)));
 		}
 		catch (NegativeFloorException | NullPassengerException e)
 		{
 			fail(e.getMessage());
 		}
-    }
+	}
 }

@@ -6,7 +6,7 @@ public class NegativeFloorException extends Exception
 	{
 		super();
 	}
-	
+
 	public NegativeFloorException(String message)
 	{
 		super(message);

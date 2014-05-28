@@ -6,7 +6,7 @@ public class NegativeElevatorException extends Exception
 	{
 		super();
 	}
-	
+
 	public NegativeElevatorException(String message)
 	{
 		super(message);

@@ -6,7 +6,7 @@ public class PassengerNotFoundException extends Exception
 	{
 		super();
 	}
-	
+
 	public PassengerNotFoundException(String message)
 	{
 		super(message);

@@ -10,16 +10,16 @@ import pInterfaces.ElevatorInterface;
  */
 public class ElevatorFactory
 {    
-    /**
-     * This method creates and returns a new elevator object based upon the parameters.
-     * @param capacity A positive integer representing the number total number of people the elevator can hold.
-     * @param elevatorId A positive integer representing the identifier number of the elevator
-     * @param maxFloors the maximum number of the floors the elevator will be able to visit.
-     * @param minFloors the minimum number of the floors the elevator will be able to visit.
-     * @return A new elevator object with the given attributes
-     */
-    public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors) throws NegativeCapacityException, NegativeFloorException
-    {
-        return new Elevator(elevatorId, capacity, maxFloors, minFloors);
-    }
+	/**
+	 * This method creates and returns a new elevator object based upon the parameters.
+	 * @param capacity A positive integer representing the number total number of people the elevator can hold.
+	 * @param elevatorId A positive integer representing the identifier number of the elevator
+	 * @param maxFloors the maximum number of the floors the elevator will be able to visit.
+	 * @param minFloors the minimum number of the floors the elevator will be able to visit.
+	 * @return A new elevator object with the given attributes
+	 */
+	public static ElevatorInterface createElevator(int elevatorId, int capacity, int maxFloors, int minFloors) throws NegativeCapacityException, NegativeFloorException
+	{
+		return new Elevator(elevatorId, capacity, maxFloors, minFloors);
+	}
 }

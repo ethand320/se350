@@ -6,7 +6,7 @@ public class NullPassengerException extends Exception
 	{
 		super();
 	}
-	
+
 	public NullPassengerException(String message)
 	{
 		super(message);

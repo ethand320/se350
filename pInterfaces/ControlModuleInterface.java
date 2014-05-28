@@ -20,19 +20,19 @@ public interface ControlModuleInterface
 	 * @throws NegativeFloorException if floorNumber is outside the required bounds.
 	 */
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException;
-	
+
 	/**
 	 * Accessor for retrieving an elevator at the specified index.
 	 * @param index the elevator number to retrieve. Must be between 1 and the maximum number of elevators in the simulation, inclusive.
 	 * @return the ElevatorInterface object at the position specified by index.
 	 */
 	public ElevatorInterface getElevator(int index);
-	
+
 	/**
 	 * Issues the command to all of the elevators that an implementation of this interface owns to shut down immediately.
 	 */
 	public void shutDown();
-	
+
 	/**
 	 * 
 	 * @param elevator the ElevatorInterface object that has just opened its doors, which will trigger Person movement between the floor and
@@ -42,7 +42,7 @@ public interface ControlModuleInterface
 	 * @throws NegativeFloorException if floorNumber is outside the bounds of the simulation environment.
 	 */
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber) throws NegativeFloorException;
-	
+
 	/**
 	 * Helper function which places a Person object on a specified floor. Once inside the floor in question, the Person object will force the floor
 	 * to summon an elevator
@@ -52,13 +52,13 @@ public interface ControlModuleInterface
 	 * @throws NegativeFloorException if floorNum is outside the bounds of the simulation.
 	 */
 	public void addPersonToFloor(Person inPerson, int floorNum) throws NullPassengerException, NegativeFloorException;
-	
+
 	/**
 	 * Accessor which returns the number of floors that the implementing object is responsible for
 	 * @return the maximum number of floors in the simulation
 	 */
 	public int getMaxFloors();
-	
+
 	/**
 	 * Accessor which returns the number of elevators that the implementing object is responsible for
 	 * @return the number of elevators owned by this implementing object
