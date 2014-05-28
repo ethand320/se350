@@ -91,6 +91,7 @@ public class ElevatorControlModule implements ControlModuleInterface
 	* Retrieves the maximum number of floors.
 	* @return returns the total number of floors that the elevator controller knows about.
 	*/
+	@Override
 	public int getMaxFloors()
 	{
 		return delegate.getMaxFloors();
@@ -106,10 +107,11 @@ public class ElevatorControlModule implements ControlModuleInterface
 		return delegate.getElevatorNum();
 	}
 	
-   /**
-    * Handles the functionality of stopping all elevators.
-    * Delegates the shutDown method to allow for the Ending of all elevator instances.
-    */
+       /**
+    	* Handles the functionality of stopping all elevators.
+    	* Delegates the shutDown method to allow for the Ending of all elevator instances.
+    	*/
+    	@Override
 	public void shutDown()
 	{
 		delegate.shutDown();
