@@ -17,4 +17,6 @@
 
 <elevCapacity>10</elevCapacity>
 
+<doorSpeed>5</doorSpeed>
+
 </Input>
