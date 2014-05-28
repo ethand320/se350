@@ -23,7 +23,6 @@ import pInterfaces.FloorInterface;
 
 /**
  *
- * @author Stouny
  */
 public class FloorFactoryTest {
     
