@@ -1,7 +1,7 @@
 package pFactories;
 import pExceptions.NegativeFloorException;
-import pInterfaces.FloorInterface;
 import pImpls.Floor;
+import pInterfaces.FloorInterface;
 
 /**
  * The Factory class is aptly named, serving as a factory for floors. All of its methods

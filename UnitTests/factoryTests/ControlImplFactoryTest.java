@@ -1,10 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package UnitTests.factoryTests;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,17 +10,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import pExceptions.NegativeCapacityException;
 import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pFactories.ControlImplFactory;
+import pImpls.ElevatorControlModuleImpl;
 import pInterfaces.ControlModuleInterface;
-import pImpls.*;
 
 /**
  *
- * @author Stouny
  */
 public class ControlImplFactoryTest {
     private int elevatorNum;
@@ -54,24 +50,9 @@ public class ControlImplFactoryTest {
     @Test
     public void testCreateElevatorController() {
         System.out.println("createElevatorController");
-
         ControlModuleInterface expResult = null;
-        ControlModuleInterface result = null;
-        ControlModuleInterface failResult = null;
-        try
-        {
-        	failResult = ControlImplFactory.createElevatorController(elevatorNum+1, floorNum+1);
-            expResult = new ElevatorControlModuleImpl(elevatorNum, floorNum);
-            result = ControlImplFactory.createElevatorController(elevatorNum, floorNum);
-        }
-        catch (NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
-		{
-			fail(e.getMessage());
-		}
-        assertTrue(expResult.getMaxFloors() == result.getMaxFloors());
-        assertTrue(expResult.getElevatorNum() == result.getElevatorNum());
-        assertFalse(failResult.getMaxFloors() == expResult.getMaxFloors());
-        assertFalse(failResult.getElevatorNum() == expResult.getElevatorNum());
+        ControlModuleInterface result = ControlImplFactory.createElevatorController();
+        assertFalse(expResult==result);
     }
     
 }

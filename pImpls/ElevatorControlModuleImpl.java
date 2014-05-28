@@ -155,7 +155,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
     * @see removeFroomFloor removes passengers from the floor that will be placed into the elevator.
     * @param elevator the elevator the will receive the requests.
     * @param floorNumber the floor number the elevator is receiving the request at. Because this method is called by an Elevator object, it uses ZERO-BASED indexing
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if floorNumber is less than 0 or greater than or equal to the number of total floors in the simulation (remember: this is ZERO-BASED indexing)
     */
 	@Override
 	public void elevatorDoorsOpened(ElevatorInterface elevator, int floorNumber) throws NegativeFloorException
@@ -191,7 +191,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
     * @param maxFloors the maximum number of floors the elevator may visit.
     * @throws NegativeCapacityException if the capacity value of the elevator objects is less than 1
     * @throws NegativeElevatorException if elevatorNum is less than 1
-    * @throws NegativeFloorException 
+    * @throws NegativeFloorException if any elevators are created with invalid maximum or minimum floor values
     */
 	private void createElevators(int elevatorNum, int maxFloors) throws NegativeCapacityException, NegativeElevatorException, NegativeFloorException
 	{

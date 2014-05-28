@@ -32,9 +32,8 @@ public interface FloorInterface
      * Places a Person object in this floor. Once inside, they summon an elevator by calling summonElevator
      * @param inPerson the Person object being added to the floor. Must not be null.
      * @throws NullPassengerException if inPerson is null
-     * @throws NegativeFloorException
      */
-	public void addPersonToFloor(Person inPerson) throws NullPassengerException, NegativeFloorException;
+	public void addPersonToFloor(Person inPerson) throws NullPassengerException;
 	
 	/**
 	 * Accessor for all of the people waiting for an elevator on this floor

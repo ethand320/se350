@@ -1,12 +1,12 @@
 package pImpls;
+import java.util.ArrayList;
+
 import pExceptions.NegativeCapacityException;
 import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
 import pInterfaces.ElevatorInterface;
 import pInterfaces.FloorInterface;
-
-import java.util.ArrayList;
 
 
 /**
@@ -33,7 +33,7 @@ public class Floor implements FloorInterface
 	/** 
 	 * Constructor which allows for the initializations of the floor array as well as handling floor identification numbers.
 	 * @param inFloorId The identification number that will be assigned to each floor.
-	 * @throws NegativeFloorException 
+	 * @throws NegativeFloorException if inFloorId is outside the bounds of the simulation (less than 1 or greater than the number of floors in the simulation)
 	 */
 	public Floor(int inFloorId) throws NegativeFloorException
 	{
@@ -41,9 +41,9 @@ public class Floor implements FloorInterface
 		initializeFloorArrays();
 	}
 	
-    /** 
-     * Adds a person to the floor that called this method.
-     * @param inPerson the person that is being added to the floor
+    /**
+     * Places a Person object in this floor. Once inside, they summon an elevator by calling summonElevator
+     * @param inPerson the Person object being added to the floor. Must not be null.
      * @throws NullPassengerException if inPerson is null
      */
     @Override
@@ -81,7 +81,6 @@ public class Floor implements FloorInterface
 				//zero-based floorNumber index instead
 				ElevatorControlModule.getInstance().elevatorCallReceiver(this.floorNumber, directionToGo);
 			}
-			//NegativeFloorException isn't be declared here because it has already been caught in the constructor
 			catch (NegativeCapacityException | NegativeElevatorException | NegativeFloorException e)
 			{
 				e.printStackTrace();
@@ -100,6 +99,18 @@ public class Floor implements FloorInterface
 		return this.floorNumber + 1;
 	}
 
+	/**
+	 * Accessor for all of the Person objects who are waiting for elevators on this floor, regardless of direction
+	 * @return The collection of Person objects waiting for elevators on this floor.
+	 */
+	@Override
+	public synchronized ArrayList<Person> getWaitingPeople()
+	{
+		ArrayList<Person> listToReturn = this.goingUp;
+		listToReturn.addAll(this.goingDown);
+		return listToReturn;
+	}
+	
    /**
     * removes the people that desire to get off at the floor.
     * @param elevatorToEnter places the people from the floor onto the specified elevator.
@@ -160,7 +171,7 @@ public class Floor implements FloorInterface
    /**
     * Sets the floor number to the given parameter
     * @param inNum the floor number that will be set as the floorNumber.
-    * @throws NegativeFloorException 
+	* @throws NegativeFloorException if inFloorId is outside the bounds of the simulation (less than 1 or greater than the number of floors in the simulation)
     */
 	private synchronized void setFloorNumber(int inNum) throws NegativeFloorException
 	{
@@ -178,13 +189,5 @@ public class Floor implements FloorInterface
 	{
 		goingUp = new ArrayList<Person>();
 		goingDown = new ArrayList<Person>();
-	}
-
-	@Override
-	public synchronized ArrayList<Person> getWaitingPeople()
-	{
-		ArrayList<Person> listToReturn = this.goingUp;
-		listToReturn.addAll(this.goingDown);
-		return listToReturn;
 	}
 }
