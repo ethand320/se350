@@ -51,8 +51,15 @@ public class ControlImplFactoryTest {
     public void testCreateElevatorController() {
         System.out.println("createElevatorController");
         ControlModuleInterface expResult = null;
+        try
+        {
         ControlModuleInterface result = ControlImplFactory.createElevatorController();
         assertFalse(expResult==result);
+        }
+        catch (NegativeFloorException | NegativeCapacityException
+                        | NegativeElevatorException e)
+        {
+                fail(e.getMessage());
+        }
     }
-    
 }
