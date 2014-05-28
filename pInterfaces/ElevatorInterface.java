@@ -76,6 +76,16 @@ public interface ElevatorInterface
      */
     public int getElevatorId();
     
+    /**
+     * Accessor for the elevator's door speed.
+     * @return the elevator door speed.
+     */
+    public int getDoorSpeed();
+    
+    /**
+     * Accessor for the current floor.
+     * @return returns the current floor
+     */
     public int getCurrentFloor();
     
     /**
