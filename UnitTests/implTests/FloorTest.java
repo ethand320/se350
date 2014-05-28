@@ -6,11 +6,8 @@
 
 package UnitTests.implTests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 
@@ -143,7 +140,7 @@ public class FloorTest
         //the ID is returned as a 1-based index externally, so we need to subtract 1 to get its zero-based representation
         int result = instance.getId() - 1;
         assertEquals(expResult, result);
-        assertNotEquals(result, failFloorID);
+        assertThat(result,not(equalTo(failFloorID)));
     }
 
     /**
@@ -210,7 +207,7 @@ public class FloorTest
 	    	assertTrue(after.contains(personToAdd));
 	    	assertFalse(after.contains(personToNotAdd));
 	    	assertEquals(after, afterExpResult);
-	    	assertNotEquals(after, before);
+	    	assertThat(after,not(equalTo(before)));
 		}
 		catch (NegativeFloorException | NullPassengerException e)
 		{
