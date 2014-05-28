@@ -97,12 +97,13 @@ public class Elevator implements ElevatorInterface, Runnable
 		setCapacity(inCapacity);
 		setMaxFloors(inMaxFloors);
 		setMinFloors(inMinFloors);   
-        setSpeed(XmlParser.getElevDoorTime());    
-        initializeRequestQueue();
+        	setSpeed(XmlParser.getElevDoorTime());    
+        	setDoorSpeed(XmlParser.getDoorSpeed());
+        	initializeRequestQueue();
 		setInitialDirection();
-    	setDefaultFloor(0);
-    	createPassengerList();
-    	elevatorThread.start();
+    		setDefaultFloor(0);
+    		createPassengerList();
+    		elevatorThread.start();
 	}
 	
    /**
@@ -418,7 +419,17 @@ public class Elevator implements ElevatorInterface, Runnable
 	{
 		return this.currentFloor + 1;
 	}
-	
+
+        /**
+         * Retrieves the door speed time.
+         * @return returns the door speed time for the simulation
+         */
+        @Override
+        public synchronized int getDoorSpeed()
+        {
+            return this.doorSpeed;
+        }
+        
    /**
 	* Queries the state of the elevator's doors.
     * @return returns true if the doors are open or false if the doors are closed.
@@ -639,11 +650,20 @@ public class Elevator implements ElevatorInterface, Runnable
     * private variable - only to be used to give a default floor to an elevator.
     * @param floor The default floor level that will be assigned to an elevator.
     */	
-	private synchronized void setDefaultFloor(int floor)
+    private synchronized void setDefaultFloor(int floor)
     {
 		//TODO: this shouldn't be touching currentFloor. There should be a defaultFloor member that this method will modify instead
     	this.currentFloor = floor;
 	}
+    	
+     /**
+     * Sets the speed of the elevator doors.
+     * @param newDoorSpeed the speed of the elevator doors.
+     */
+    private synchronized void setDoorSpeed(int newDoorSpeed)
+    {
+        doorSpeed = newDoorSpeed;
+    }	
     	
    /**
     * Creates the passengerList to be used with the elevators.
