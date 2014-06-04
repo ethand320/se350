@@ -164,7 +164,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			}
 			else
 			{
-				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+				DataLogger.logRejectedElevatorRequest(floorNum, this.getElevatorId() + 1);
 			}
 			break;
 		case DOWN:
@@ -185,8 +185,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			}
 			else
 			{
-				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
-			}
+				DataLogger.logRejectedElevatorRequest(floorNum, this.getElevatorId() + 1);			}
 			break;
 		case IDLE:
 			synchronized(this)
@@ -230,7 +229,6 @@ public class Elevator implements ElevatorInterface, Runnable
 			return false;
 		}
 		DataLogger.logPersonAddToElevator(inPassenger.getID(), this.getElevatorId() + 1, this.currentFloor + 1);
-		//System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
 		return true;
@@ -363,7 +361,6 @@ public class Elevator implements ElevatorInterface, Runnable
 			throw new PassengerNotFoundException("The passenger object that was meant to be removed is not present in the elevator!");
 		}
 		DataLogger.logPersonLeaveElevator(inPassenger.getID(), this.getElevatorId() + 1, this.currentFloor + 1);
-		//System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
 		passengerList.remove(inPassenger);
 	}
 
@@ -528,8 +525,8 @@ public class Elevator implements ElevatorInterface, Runnable
 						wait(speed);
 						if(this.currentFloor < this.maxFloors)
 						{
+							DataLogger.logElevatorMoving(this.getElevatorId() + 1, this.currentFloor + 1, this.currentFloor + 2);
 							this.currentFloor++;
-							System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 							this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.maxFloors)
@@ -543,8 +540,9 @@ public class Elevator implements ElevatorInterface, Runnable
 						wait(speed);
 						if(this.currentFloor > this.minFloors)
 						{
+							DataLogger.logElevatorMoving(this.getElevatorId() + 1, this.currentFloor + 1 , this.currentFloor);
 							this.currentFloor--;
-							System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
+							//System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 							this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.minFloors)

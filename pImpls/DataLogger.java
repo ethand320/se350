@@ -6,10 +6,10 @@
 
 package pImpls;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import pInterfaces.ElevatorInterface;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
+
+import pInterfaces.ElevatorInterface;
 
 
 /**
@@ -17,27 +17,29 @@ import java.util.ArrayList;
  */
 public class DataLogger
 {
-    
-    
-    
-    
-    
     private static long startTime;   // time object?
-    private static long masterTime;   //needs to be a timestamp?
-    private static ArrayList<PersonDataEntry> dataEntries = new ArrayList<PersonDataEntry>();
+    private static long masterTime;   //needs to be a timestamp?    
     
-    
-    //needs to be called at beginning of simulation.
     /**
      * sets the Start time using the current time in Millis.
      */
-    public static void setStartTime()
+    public static void logSimulationStart()
     {
-        startTime = System.currentTimeMillis();
-        
-       // Calendar cal = Calendar.getInstance();
-       // SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-       // System.out.println("Master time is set to " + sdf.format(cal.getTime()) );
+    	if(startTime <= 0)
+    	{
+            startTime = System.currentTimeMillis();
+    		System.out.println("The simulation will run for " + ( XmlParser.getDuration() / 1000 ) + " seconds.");
+    	}
+    }
+    
+    public static void logIminentEnd(int timeToSleep)
+    {
+		System.out.println("The simulation will sleep for " + timeToSleep / 1000 + " seconds before shutting down completely.");
+    }
+    
+    public static void logActualEnd()
+    {
+		System.out.println("The simulation is shutting down now");
     }
     
     /**
@@ -66,15 +68,12 @@ public class DataLogger
      * prints out the person's id, currentfloor, and destinationfloor'
      * @param name takes in the id of a person that will be tracked.
      */
-    public static void logPersonCreation(Person name)
+    public static void logPersonCreation(int inPersonId, int inStartFloor, int inDestFloor)
     {
-    	PersonDataEntry newEntry = new PersonDataEntry();
-    	newEntry.personID = name.getID();
-    	newEntry.creationTimeStamp = System.currentTimeMillis();
-    	dataEntries.add(newEntry);        
+    	DataAnalytics.personCreationTimeStamp(inPersonId, inStartFloor, inDestFloor);
          //    masterTime = current system time - start time
-        System.out.println( masterTime + ":     Person " + name.getID() + "was created on floor " + name.getCurrentFloor() + " "
-                + " heading to floor " + name.getDestinationFloor());
+        System.out.println( masterTime + ":     Person " + inPersonId + "was created on floor " + inStartFloor + " "
+                + " heading to floor " + inDestFloor);
   
         // some logic to keep track of person that was created here
     }
@@ -131,13 +130,10 @@ public class DataLogger
      * @param to the destination floor the elevator is moving to.
      * @param from the starting floor the elevator started at.
      */
-    public static void logElevatorMoving(Elevator elev, Floor to, Floor from) 
+    public static void logElevatorMoving(int elev, int to, int from) 
     {
         
-        System.out.println("Elevator " + elev.getElevatorId() + "Moving from " + from + "to floor " + to);
-        
-        
-        
+        System.out.println("Elevator " + elev + " is moving from " + from + " to floor " + to);
     }
     
     //when elevator arrives at a floor with an UP/DOWN request
@@ -224,14 +220,18 @@ public class DataLogger
 	public static void logPersonAddToElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPersonId + " has entered Elevator " + inElevatorId + " at floor " + inCurrentFloor);
-		dataEntries.get(inPersonId).enterElevTimeStamp = System.currentTimeMillis();
+		DataAnalytics.elevAddTimeStamp(inPersonId, inElevatorId);
 	}
 	
 	public static void logPersonLeaveElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPersonId + " is being removed from Elevator " + inElevatorId + " at floor " + inCurrentFloor);
-		dataEntries.get(inPersonId).leaveElevTimeStamp = System.currentTimeMillis();
+		DataAnalytics.elevLeaveTimeStamp(inPersonId, inElevatorId);
+	}
+	
+	public static void logRejectedElevatorRequest(int inRequest, int inElevatorId)
+	{
+		System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + inRequest + " was rejected by the elevator: " + inElevatorId);
 
 	}
-     
 }

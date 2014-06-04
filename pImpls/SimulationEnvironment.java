@@ -62,17 +62,16 @@ public class SimulationEnvironment
 
 		try
 		{         
-                        DataLogger.setStartTime();
+            DataLogger.logSimulationStart();
                         
-			System.out.println("The simulation will run for " + ( XmlParser.getDuration() / 1000 ) + " seconds.");
 			getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());
 
 			//let the thread wait enough time for every elevator to reach the default floor
 			//movement speed * ( door open speed + door close speed ) * number of floors
 			int totalSleepTime = XmlParser.getTotalFloorNumber() * ( ( XmlParser.getElevDoorTime() * 2 ) + XmlParser.getElevTravelTime() );
-			System.out.println("The simulation will sleep for " + totalSleepTime / 1000 + " seconds before shutting down completely.");
+			DataLogger.logIminentEnd(totalSleepTime);
 			Thread.sleep(totalSleepTime);
-			System.out.println("The simulation is shutting down now");
+			DataLogger.logActualEnd();
 			getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
 		}
 		catch(InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
@@ -143,7 +142,6 @@ public class SimulationEnvironment
 					}
 					while(randStartFloor == randEndFloor);
 					Person newPerson = PersonFactory.createPerson(totalPeopleCreated++, randStartFloor, randEndFloor);
-					//  Dont need this anymore with datalogger System.out.println("Person " + newPerson.getID() + " going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
 
 					addPersonToFloor(newPerson, randStartFloor);
 				}
