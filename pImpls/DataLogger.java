@@ -16,10 +16,23 @@ import java.util.ArrayList;
  *
  * @author User
  */
-public class DataLogger {
-    
+public class DataLogger
+{
+    private static class PersonDataEntry
+    {
+    	public int personID;
+    	public long creationTimeStamp;
+    	public long enterElevTimeStamp;
+    	public long leaveElevTimeStamp;
+    	
+    	public PersonDataEntry()
+    	{
+    		
+    	}
+    }
     private static long startTime;   // time object?
     private static long masterTime;   //needs to be a timestamp?
+    private static ArrayList<PersonDataEntry> dataEntries = new ArrayList<PersonDataEntry>();
     
     
     //needs to be called at beginning of simulation.
@@ -57,7 +70,12 @@ public class DataLogger {
     }
     
     
-    public static void logPersonCreation(Person name){
+    public static void logPersonCreation(Person name)
+    {
+    	PersonDataEntry newEntry = new PersonDataEntry();
+    	newEntry.personID = name.getID();
+    	newEntry.creationTimeStamp = System.currentTimeMillis();
+    	dataEntries.add(newEntry);
         
     //    masterTime = current system time - start time
         System.out.println( masterTime + ":     Person " + name.getID() + "was created on floor " + name.getCurrentFloor() + " "
