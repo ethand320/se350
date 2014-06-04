@@ -1,5 +1,7 @@
 package pImpls;
 
+import java.util.ArrayList;
+
 import pExceptions.NegativeCapacityException;
 import pExceptions.NegativeElevatorException;
 import pExceptions.NegativeFloorException;
@@ -121,7 +123,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 			//      yes:  add the floor to that elevator's request queue
 			else if (curElev.isRunning() && (curDirection == directionRequest ||  curDirection == Direction.IDLE) )
 			{
-                                DataLogger.logElevatorDirectionRequest(curElev, externalFloorNum, directionRequest);
+                DataLogger.logElevatorDirectionRequest(curElev.getElevatorId() + 1, externalFloorNum, directionRequest, new ArrayList<Integer>(curElev.getRequestQueue()));
 				curElev.addFloorToQueue(externalFloorNum);
 				handledRequest = true; 
 			}

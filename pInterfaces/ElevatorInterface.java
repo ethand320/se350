@@ -1,5 +1,6 @@
 package pInterfaces;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import pExceptions.NegativeFloorException;
 import pExceptions.NullPassengerException;
@@ -116,4 +117,6 @@ public interface ElevatorInterface
 	 * Constant indicating the default amount of Person objects that may fit inside this object.
 	 */
 	public static final int DEFAULT_ELEVATOR_CAPACITY = 10;
+
+	public Collection<? extends Integer> getRequestQueue();
 }
