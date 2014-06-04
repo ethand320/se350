@@ -150,9 +150,14 @@ public class DataAnalytics
                 
             }
             
-           
+           //Implementation to print the table we consturcted (floorMinMaxAvgArray)  below:
                 
-            
+            for (int i = 0; i < totalFloors; i++)
+                for (int j =0; j < 3; j++)
+                {
+                    System.out.printf("%5d ", floorMinMaxAvgArray[i][j]);
+                    
+                }
             
         }
 }
