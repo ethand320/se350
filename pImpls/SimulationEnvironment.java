@@ -73,6 +73,7 @@ public class SimulationEnvironment
 			Thread.sleep(totalSleepTime);
 			DataLogger.logActualEnd();
 			getInstance().stopSimluation();  // kill simulation after time is up (determined by randPersGen method
+			DataAnalytics.printFloorWaitTimeTable();
 		}
 		catch(InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
 		{
