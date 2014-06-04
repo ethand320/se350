@@ -229,7 +229,8 @@ public class Elevator implements ElevatorInterface, Runnable
 			System.out.println(DataLogger.printTimeStamp() + ":     Adding person " + inPassenger.getID() + " to Elevator " + ( this.getElevatorId() + 1 ) + " failed because the elevator is already full!");
 			return false;
 		}
-		System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
+		DataLogger.logPersonAddToElevator(inPassenger.getID(), this.getElevatorId() + 1, this.currentFloor + 1);
+		//System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
 		return true;
@@ -329,7 +330,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		//time to close doors, add a wait
 		try
 		{
-                        DataLogger.logElevatorCloseDoors(this);
+            DataLogger.logElevatorCloseDoors(this);
                         
 			wait(doorSpeed);
 		}
@@ -361,7 +362,8 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			throw new PassengerNotFoundException("The passenger object that was meant to be removed is not present in the elevator!");
 		}
-		System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
+		DataLogger.logPersonLeaveElevator(inPassenger.getID(), this.getElevatorId() + 1, this.currentFloor + 1);
+		//System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
 		passengerList.remove(inPassenger);
 	}
 
