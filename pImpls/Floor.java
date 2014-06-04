@@ -49,6 +49,9 @@ public class Floor implements FloorInterface
 	@Override
 	public synchronized void addPersonToFloor(Person inPerson) throws NullPassengerException
 	{
+                DataLogger.logPersonAddToFloor(inPerson, this, this.getWaitingPeople());
+                
+                
 		if(inPerson == null)
 		{
 			throw new NullPassengerException("The passenger meant to be placed on this floor is null!");
@@ -75,6 +78,7 @@ public class Floor implements FloorInterface
 	{
 		if(directionToGo != Direction.IDLE)
 		{
+                    
 			try
 			{
 				//elevatorCallReceiver's floor index is zero-based, so instead of using this.getId(), we want to pass the

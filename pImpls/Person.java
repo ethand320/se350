@@ -35,6 +35,10 @@ public class Person
 		setPersonID(inID);
 		setDestinationFloor(floorToStop);
 		setCurrentFloor(floorToStart);
+                
+                DataLogger.logPersonCreation(this);
+                
+                
 	}
 
 	/**

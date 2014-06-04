@@ -8,6 +8,7 @@ package pImpls;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ArrayList;
 
 
 /**
@@ -58,7 +59,9 @@ public class DataLogger {
     public static void logPersonCreation(Person name){
         
     //    masterTime = current system time - start time
-        System.out.println( masterTime + ":     Person " + name.getID() + "was created ");
+        System.out.println( masterTime + ":     Person " + name.getID() + "was created on floor " + name.getCurrentFloor() + " "
+                + " heading to floor " + name.getDestinationFloor());
+        
         
         // some logic to keep track of person that was created here
     }
@@ -104,9 +107,9 @@ public class DataLogger {
     
     //when elevator arrives at a floor with an UP/DOWN request
     
-    public static void logElevatorArriveAtRequestedFloor(Elevator elev, Floor floor){
+    public static void logElevatorArriveAtRequestedFloor(Elevator elev, int floor){
         
-        System.out.println("Elevator " + elev.getElevatorId() + " arriving at floor " + floor);
+        System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + " has arrived at floor " + floor);
         
     }
     
@@ -114,7 +117,7 @@ public class DataLogger {
     //when elevator doors open
     public static void logElevatorOpenDoors(Elevator elev){
         
-        System.out.println("Elevator " + elev.getElevatorId() + "opening doors");
+        System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + "opening doors");
                 
     }
     
@@ -122,7 +125,7 @@ public class DataLogger {
     // when elevator doors close
      public static void logElevatorCloseDoors(Elevator elev){
         
-        System.out.println("Elevator " + elev.getElevatorId() + "closing doors");
+        System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + "closing doors");
                 
     }
      
@@ -133,11 +136,28 @@ public class DataLogger {
      // time person ID left elevator elevID   [array of all riders]
      
      //when person enters a floor
+   //  logPersonAddToFloor(inperson, this, this.getWaitingPeople());
+     
+     public static void logPersonAddToFloor(Person p, Floor floor, ArrayList<Person> peopleList)
+     {
+         System.out.println(printTimeStamp() + ":     Person " + p.getID() + " added to floor " + floor.getId() + displayArrayList(peopleList) );
+     }
      //time person persID has entered floor floorNum
      
      //when person leaves a floor
      // itme person pers]ID has left floor floorNum
      
-     
+     public static String displayArrayList(ArrayList<Person> list)
+     {
+         String myString = "[ ";
+         for (Person person: list )
+                 
+         {
+             myString += (Integer.toString(person.getID()) + " :");
+         }
+         myString += "]";
+         
+         return myString;
+     }
      
 }

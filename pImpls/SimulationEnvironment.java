@@ -61,7 +61,9 @@ public class SimulationEnvironment
 	{
 
 		try
-		{          
+		{         
+                        DataLogger.setStartTime();
+                        
 			System.out.println("The simulation will run for " + ( XmlParser.getDuration() / 1000 ) + " seconds.");
 			getInstance().randPersonGenerator(XmlParser.getDuration(), XmlParser.getPeoplePerMin());
 

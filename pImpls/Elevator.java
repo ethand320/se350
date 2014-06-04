@@ -307,6 +307,8 @@ public class Elevator implements ElevatorInterface, Runnable
 					e.printStackTrace();
 				}
 			}
+                        DataLogger.logElevatorOpenDoors(this);
+                        
 			wait(doorSpeed);
 		}
 		catch (InterruptedException | NegativeFloorException | NegativeCapacityException | NegativeElevatorException e)
@@ -327,6 +329,8 @@ public class Elevator implements ElevatorInterface, Runnable
 		//time to close doors, add a wait
 		try
 		{
+                        DataLogger.logElevatorCloseDoors(this);
+                        
 			wait(doorSpeed);
 		}
 		catch (InterruptedException e)
@@ -477,6 +481,8 @@ public class Elevator implements ElevatorInterface, Runnable
 				if (requestQueue.contains(this.currentFloor))
 				{
 					requestQueue.remove((Integer)this.currentFloor);
+                                        // log elev stop on floor
+                                        DataLogger.logElevatorArriveAtRequestedFloor(this, this.currentFloor);
 					this.openDoors();
 					this.closeDoors();
 				}
@@ -521,7 +527,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						if(this.currentFloor < this.maxFloors)
 						{
 							this.currentFloor++;
-							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
+							System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 							this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.maxFloors)
@@ -536,7 +542,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						if(this.currentFloor > this.minFloors)
 						{
 							this.currentFloor--;
-							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
+							System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " passing floor " + ( currentFloor + 1 ) );
 							this.printRequestQueue();
 						}
 						else if(this.currentFloor == this.minFloors)

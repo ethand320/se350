@@ -182,6 +182,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 		{
 			throw new NegativeFloorException("Attempting to add a person to an invalid floor. Remember that this method uses ONE-BASED indexing instead of ZERO-BASED indexing (Floor number: " + (floorNum + 1) + ").");
 		}
+               // DataLogger.logFloorRequest(inPerson, Direction dir, Floor floor);
 		this.floors[floorNum-1].addPersonToFloor(inPerson);
 	}
 
