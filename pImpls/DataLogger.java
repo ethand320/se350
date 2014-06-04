@@ -17,43 +17,11 @@ import java.util.ArrayList;
  */
 public class DataLogger
 {
-    private static class PersonDataEntry
-    {
-    	/**
-    	 * The person's ID number
-    	 */
-    	public int personID;
-    	
-    	/**
-    	 * The person's start floor. Used for analytics related to inter-floor travel and total wait time
-    	 */
-    	public int personStartFloor;
-    	
-    	/**
-    	 * The person's destination floor. Used for analytics related to inter-floor travel and total wait time
-    	 */
-    	public int personEndFloor;
-    	
-    	/**
-    	 * The system time at which this object was created, measured in milliseconds
-    	 */
-    	public long creationTimeStamp;
-    	
-    	/**
-    	 * The system time at which this object enters an elevator, measured in milliseconds
-    	 */
-    	public long enterElevTimeStamp;
-    	
-    	/**
-    	 * The system time at which this object leaves the elevator and arrives at their destination floor, measured in milliseconds
-    	 */
-    	public long leaveElevTimeStamp;
-    	
-    	public PersonDataEntry()
-    	{
-    		
-    	}
-    }
+    
+    
+    
+    
+    
     private static long startTime;   // time object?
     private static long masterTime;   //needs to be a timestamp?
     private static ArrayList<PersonDataEntry> dataEntries = new ArrayList<PersonDataEntry>();
