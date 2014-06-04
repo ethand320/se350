@@ -154,7 +154,7 @@ public class Elevator implements ElevatorInterface, Runnable
 					Collections.sort(requestQueue);
 					notifyAll();
 				}
-				System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
 				printRequestQueue();
 			}
 			else if(internalFloorNum == this.currentFloor)
@@ -164,7 +164,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			}
 			else
 			{
-				System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
 			}
 			break;
 		case DOWN:
@@ -176,7 +176,7 @@ public class Elevator implements ElevatorInterface, Runnable
 					Collections.reverse(requestQueue);
 					notifyAll();
 				}
-				System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
 				this.printRequestQueue();
 			}
 			else if(internalFloorNum == this.currentFloor)
@@ -185,7 +185,7 @@ public class Elevator implements ElevatorInterface, Runnable
 			}
 			else
 			{
-				System.out.println("Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
+				System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was rejected by the elevator: " + ( this.getElevatorId() + 1 ));
 			}
 			break;
 		case IDLE:
@@ -194,7 +194,7 @@ public class Elevator implements ElevatorInterface, Runnable
 				requestQueue.add(internalFloorNum);
 				notifyAll();
 			}
-			System.out.println("Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
+			System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + floorNum + " was added to elevator: " + ( this.getElevatorId() + 1 ));
 			if (currentFloor < internalFloorNum)
 			{
 				direction = Direction.UP;
@@ -226,10 +226,10 @@ public class Elevator implements ElevatorInterface, Runnable
 		}
 		if(this.passengerList.size() >= this.capacity)
 		{
-			System.out.println("Adding person " + inPassenger.getID() + " to Elevator " + ( this.getElevatorId() + 1 ) + " failed because the elevator is already full!");
+			System.out.println(DataLogger.printTimeStamp() + ":     Adding person " + inPassenger.getID() + " to Elevator " + ( this.getElevatorId() + 1 ) + " failed because the elevator is already full!");
 			return false;
 		}
-		System.out.println("Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
+		System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPassenger.getID() + " has entered Elevator " + ( this.getElevatorId() + 1 ) );
 		this.passengerList.add(inPassenger);
 		this.addFloorToQueue(inPassenger.getDestinationFloor());
 		return true;
@@ -361,7 +361,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			throw new PassengerNotFoundException("The passenger object that was meant to be removed is not present in the elevator!");
 		}
-		System.out.println("Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
+		System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPassenger.getID() + " is being removed from Elevator " + ( this.getElevatorId() + 1 ) + " at floor " + ( this.currentFloor + 1 ) );
 		passengerList.remove(inPassenger);
 	}
 
@@ -473,7 +473,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			long tStart = System.currentTimeMillis();
 
-			System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has started");
+			System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " has started");
 			running = true;
 			while (running)
 			{
@@ -490,7 +490,7 @@ public class Elevator implements ElevatorInterface, Runnable
 				// if queue is empty  switch to idle.
 				if (requestQueue.isEmpty())
 				{
-					System.out.println("Request queue for Elevator " + ( getElevatorId() + 1 ) + " is empty");
+					System.out.println(DataLogger.printTimeStamp() + ":     Request queue for Elevator " + ( getElevatorId() + 1 ) + " is empty");
 
 					this.direction = Direction.IDLE;
 					tStart = System.currentTimeMillis();
@@ -507,7 +507,7 @@ public class Elevator implements ElevatorInterface, Runnable
 						//only add a new request (and add an entry to the log) if the elevator is idle and isn't already at its default floor
 						if (tStart >= 10001 && this.currentFloor != 0)
 						{
-							System.out.println("Elevator " + ( getElevatorId() + 1 ) + " has been idle for 10 seconds. Returning to floor 1");
+							System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( getElevatorId() + 1 ) + " has been idle for 10 seconds. Returning to floor 1");
 
 							//since this is a hard coded value, there's no point in adding this exception to the outer catch block. just take care of it here
 							try
@@ -581,7 +581,7 @@ public class Elevator implements ElevatorInterface, Runnable
 		{
 			queueToPrint.set(i, queueToPrint.get(i) + 1);
 		}
-		System.out.println("Elevator " + ( this.getElevatorId() + 1 ) + "'s request queue: " + queueToPrint.toString());
+		System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + ( this.getElevatorId() + 1 ) + "'s request queue: " + queueToPrint.toString());
 	}
 
 	/**

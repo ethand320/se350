@@ -143,7 +143,7 @@ public class SimulationEnvironment
 					}
 					while(randStartFloor == randEndFloor);
 					Person newPerson = PersonFactory.createPerson(totalPeopleCreated++, randStartFloor, randEndFloor);
-					System.out.println("Person " + newPerson.getID() + " going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
+					//  Dont need this anymore with datalogger System.out.println("Person " + newPerson.getID() + " going to floor " + randEndFloor + " is being created and added to a floor #: " + randStartFloor);
 
 					addPersonToFloor(newPerson, randStartFloor);
 				}

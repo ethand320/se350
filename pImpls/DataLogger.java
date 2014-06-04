@@ -7,6 +7,7 @@
 package pImpls;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import pInterfaces.ElevatorInterface;
 import java.util.Date;
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class DataLogger {
         //masterTime = current system time - start time
         
         masterTime = System.currentTimeMillis() - startTime;
-        System.out.println("differnce of times in millis is " + masterTime);
+      //  System.out.println("differnce of times in millis is " + masterTime);
         
         SimpleDateFormat sdf = new SimpleDateFormat("00:mm:ss");
         Date date = new Date(masterTime);
@@ -77,12 +78,12 @@ public class DataLogger {
     }
     
     // when an elevator is assigned an up/down request from a floor
-    public static void logElevatorDirectionRequest(Elevator elev, Floor floor, Direction dir){
+    public static void logElevatorDirectionRequest(ElevatorInterface elev, int floor, Direction dir){
         
         
       //  masterTime = systemtime - start time
         
-        System.out.println(masterTime + "     Elevator " + elev.getElevatorId() + " going to floor" + floor.getId() + " for " + dir + " request");
+        System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + " going to floor" + floor + " for " + dir + " request");
         // also need to print out how many floor requests and how many rider requests??
         
         

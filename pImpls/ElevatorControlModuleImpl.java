@@ -56,6 +56,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 	@Override
 	public void elevatorCallReceiver(int floorNumber, Direction directionRequest) throws NegativeFloorException
 	{
+          
 		if(floorNumber < 0 || floorNumber >= floors.length)
 		{
 			throw new NegativeFloorException("The floor object that called this method has an invalid ID number! (floorNumber: " + floorNumber + ")");
@@ -109,7 +110,8 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 				if (curDirection == directionRequest || curDirection == Direction.IDLE)
 				{    
 					//open the doors of that elevator so people can get in. no need to actually add a request since it's already there
-					curElev.openDoors();
+					
+                                        curElev.openDoors();
 					curElev.closeDoors();
 					handledRequest = true;
 				}   
@@ -119,6 +121,7 @@ public class ElevatorControlModuleImpl implements ControlModuleInterface
 			//      yes:  add the floor to that elevator's request queue
 			else if (curElev.isRunning() && (curDirection == directionRequest ||  curDirection == Direction.IDLE) )
 			{
+                                DataLogger.logElevatorDirectionRequest(curElev, externalFloorNum, directionRequest);
 				curElev.addFloorToQueue(externalFloorNum);
 				handledRequest = true; 
 			}
