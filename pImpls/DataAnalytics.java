@@ -76,5 +76,39 @@ public class DataAnalytics
 	{
 		dataEntries.get(inPersonId).leaveElevTimeStamp = System.currentTimeMillis();
 	}
-
+        
+        public static void printFloorWaitTimeTable(){
+            
+            //Build array of floors
+            int totalFloors = XmlParser.getTotalFloorNumber();
+            int[] floorArray = new int[totalFloors];
+            
+            
+            
+            for (int i = 0; i <= totalFloors; i++)
+                floorArray[i] = i;
+            
+            //table array for wait times
+            long[][] floorWaitTimeList = new long[totalFloors][dataEntries.size()];
+            
+          
+            //This is the loop to get all data  into the two dimensional array
+            //First dimension is array by floor number
+            // second dimension is each floor's array of total wait times (so averages can be calculated)
+            
+            int increm = 0;
+            for (PersonDataEntry person : dataEntries)
+            {
+               floorWaitTimeList[person.personStartFloor][increm] = (person.creationTimeStamp - person.enterElevTimeStamp )/1000;
+               increm++;
+        
+            }
+            
+            
+            
+           
+                
+            
+            
+        }
 }
