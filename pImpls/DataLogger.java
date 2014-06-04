@@ -172,8 +172,8 @@ public class DataLogger
      * logs the traffic of a specific elevator when doors close.
      * @param elev the elevator id associated with the elevator that is currently being closed.
      */
-     public static void logElevatorCloseDoors(Elevator elev)
-     {
+    public static void logElevatorCloseDoors(Elevator elev)
+    {
         
         System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + "closing doors");
                 
@@ -221,17 +221,29 @@ public class DataLogger
          return myString;
      }
 
-	public static void logPersonAddToElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
+	/**
+	 * Logs the traffic of passengers that enter the elevator
+	 * @param inPersonId the id of the passenger that is unique to that passenger
+	 * @param inElevatorId the id of the elevator that is unique to that elevator
+	 * @param inCurrentFloor the floor number the passenger is getting on at 
+	 */
+    	public static void logPersonAddToElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":    Person " + inPersonId + " has entered Elevator " + inElevatorId + " at floor " + inCurrentFloor);
 		dataEntries.get(inPersonId).enterElevTimeStamp = System.currentTimeMillis();
 	}
-	
+
+	/**
+	 * Logs the traffic of passengers that leave the elevator
+	 * @param inPersonId the id of the passenger that is unique to that passenger
+	 * @param inElevatorId the id of the elevator that is unique to that elevator
+	 * @param inCurrentFloor the floor number the passenger is getting off at 
+	 */
 	public static void logPersonLeaveElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Person " + inPersonId + " is being removed from Elevator " + inElevatorId + " at floor " + inCurrentFloor);
 		dataEntries.get(inPersonId).leaveElevTimeStamp = System.currentTimeMillis();
-
+	
 	}
-     
+
 }
