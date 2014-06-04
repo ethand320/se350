@@ -6,6 +6,8 @@
 
 package pImpls;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author User
@@ -14,7 +16,11 @@ package pImpls;
 
 
 public class DataAnalytics 
-    {
+{
+    
+     private static ArrayList<PersonDataEntry> dataEntries = new ArrayList<PersonDataEntry>();
+
+
     	/**
     	 * The person's ID number
     	 */
@@ -50,12 +56,8 @@ public class DataAnalytics
     	/**
     	 * The system time at which this object leaves the elevator and arrives at their destination floor, measured in milliseconds
     	 */
-    	public long leaveElevTimeStamp;
     	
-    	public PersonDataEntry()
-    	{
-    		
-    	}
+    	
         
         
         public static void logPersonAddToElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
