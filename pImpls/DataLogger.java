@@ -29,11 +29,18 @@ public class DataLogger
 		}
 	}
 
+	/**
+	 * logs the simulation sleep time to the console.
+	 * @param timeToSleep the time the simulation will be running for prior to sleeping.
+	 */
 	public static void logIminentEnd(int timeToSleep)
 	{
 		System.out.println("The simulation will sleep for " + timeToSleep / 1000 + " seconds before shutting down completely.");
 	}
 
+	/**
+	 * Logs the shutting down message to the console
+	 */
 	public static void logActualEnd()
 	{
 		System.out.println("The simulation is shutting down now");
@@ -45,7 +52,6 @@ public class DataLogger
 	 */
 	public static String printTimeStamp()
 	{
-
 		//masterTime = current system time - start time
 
 		masterTime = System.currentTimeMillis() - startTime;
@@ -53,11 +59,9 @@ public class DataLogger
 
 		SimpleDateFormat sdf = new SimpleDateFormat("mm:ss:SSS");
 		Date date = new Date(masterTime);
-
-
+		
 		return sdf.format(date);
 		//return timestamp to be used in all below methods
-
 	}
 
 	/**
@@ -97,12 +101,10 @@ public class DataLogger
 	 */
 	public static void logElevatorDirectionRequest(int elevId, int floor, Direction dir, ArrayList<Integer> inRequestQueue)
 	{
-
 		//  masterTime = systemtime - start time
-
+		
 		System.out.println(printTimeStamp() + ":     Elevator " + elevId + " going to floor " + floor + " for " + dir + " request");
 		// also need to print out how many floor requests and how many rider requests??
-
 	}
 
 	//when a person inside an elevator presses a floor number button
@@ -114,7 +116,6 @@ public class DataLogger
 	public static void logPersonElevatorFloorRequest(Elevator elev, Floor floor)
 	{
 		System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + " Rider Request made for Floor " + floor.getId() );
-
 	}
 
 	// When an elevator moves from one floor to another,
@@ -145,9 +146,7 @@ public class DataLogger
 	 */
 	public static void logElevatorOpenDoors(Elevator elev)
 	{
-
 		System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + " opening doors");
-
 	}
 
 	/**
@@ -156,9 +155,7 @@ public class DataLogger
 	 */
 	public static void logElevatorCloseDoors(Elevator elev)
 	{
-
 		System.out.println(printTimeStamp() + ":     Elevator " + elev.getElevatorId() + " closing doors");
-
 	}
 
 	//when a person enters an elevator
@@ -170,9 +167,10 @@ public class DataLogger
 	//when person enters a floor
 	//  logPersonAddToFloor(inperson, this, this.getWaitingPeople());
 
+
 	/**
 	 * Logs the traffic for when a person is removed from an elevator and placed onto the floor.
-	 * @param p the id that is associated with each person
+	 * @param p the id that is associated with each person.
 	 * @param floor the floor number that some passengers will get off at.
 	 * @param peopleList array list of people being added to the floor.
 	 */
@@ -204,10 +202,10 @@ public class DataLogger
 	}
 
 	/**
-	 * Logs the traffic of passengers that enter the elevator
-	 * @param inPersonId the id of the passenger that is unique to that passenger
-	 * @param inElevatorId the id of the elevator that is unique to that elevator
-	 * @param inCurrentFloor the floor number the passenger is getting on at 
+	 * Logs the traffic of passengers that enter the elevator.
+	 * @param inPersonId the id of the passenger that is unique to that passenger.
+	 * @param inElevatorId the id of the elevator that is unique to that elevator.
+	 * @param inCurrentFloor the floor number the passenger is getting on at .
 	 */
 	public static void logPersonAddToElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
@@ -216,10 +214,10 @@ public class DataLogger
 	}
 
 	/**
-	 * Logs the traffic of passengers that leave the elevator
-	 * @param inPersonId the id of the passenger that is unique to that passenger
-	 * @param inElevatorId the id of the elevator that is unique to that elevator
-	 * @param inCurrentFloor the floor number the passenger is getting off at 
+	 * Logs the traffic of passengers that leave the elevator.
+	 * @param inPersonId the id of the passenger that is unique to that passenger.
+	 * @param inElevatorId the id of the elevator that is unique to that elevator.
+	 * @param inCurrentFloor the floor number the passenger is getting off at .
 	 */
 	public static void logPersonLeaveElevator(int inPersonId, int inElevatorId, int inCurrentFloor)
 	{
@@ -227,26 +225,48 @@ public class DataLogger
 		DataAnalytics.elevLeaveTimeStamp(inPersonId, inElevatorId);
 	}
 
+	/**
+	 * Logs the rejected elevator requests to the console.
+	 * @param inRequest The requested floor that is being rejected.
+	 * @param inElevatorId the elevator id that is rejected the request.
+	 */
 	public static void logRejectedElevatorRequest(int inRequest, int inElevatorId)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Request for floor " + inRequest + " was rejected by the elevator: " + inElevatorId);
 	}
 
+	/**
+	 * logs to the console when the elevator is full and rejects a request.
+	 * @param inRequest The requested floor that is being rejected.
+	 * @param inElevatorId the elevator id that is rejected the request.
+	 */
 	public static void logFullElevator(int inElevatorId, int inPassengerId)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Adding person " + inPassengerId + " to Elevator " + inElevatorId + " failed because the elevator is already full!");
 	}
 
+	/**
+	 * logs the start of the specified elevator to the console.
+	 * @param inElevatorId the id of the elevator that has started.
+	 */
 	public static void logElevatorStart(int inElevatorId)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + inElevatorId + " has started");		
 	}
 
+	/**
+	 * logs the stop of the specified elevator to the console.
+	 * @param inElevatorId the id of the elevator that has stopped.
+	 */
 	public static void logElevatorStop(int inElevatorId)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + inElevatorId + " has stopped");
 	}
 
+	/**
+	 * logs the timing out of the specified elevator to the console.
+	 * @param inElevatorId the id of the elevator that has timed out.
+	 */
 	public static void logElevatorTimeout(int inElevatorId)
 	{
 		System.out.println(DataLogger.printTimeStamp() + ":     Elevator " + inElevatorId + " has been idle for 10 seconds. Returning to floor 1");
