@@ -172,6 +172,18 @@ public class DataAnalytics
                 }
             }
             
+            
+            //print table out
+            for (int i = 0; i < totalFloors; i++)
+            {
+                for (int j = 0; j < totalFloors; j++)
+                {
+                   System.out.printf("%5d", table[i][j] );
+                   
+                }
+                System.out.println("\n");
+            }
+            
         }
         
 //        public static void printFloorWaitTimeTable(){
