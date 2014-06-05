@@ -12,6 +12,7 @@ public class PersonFactory
 	 * @param startFloor The floor that this person should start on. Used with destinationFloor to compute which direction this Person needs to
 	 * go.
 	 * @param destinationFloor The floor that this person should end on. Used with startFloor to compute which direction this Person needs to go.
+	 * @param inId the id associated with the person being created.
 	 * @return A new Person object whose start and destination floors are initialized to the values of startFloor and destinationFloor
 	 * @throws NegativeFloorException if either startFloor or destinationFloor are negative or otherwise outside the bounds of the simulation.
 	 */
