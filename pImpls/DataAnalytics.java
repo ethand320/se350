@@ -136,7 +136,12 @@ public class DataAnalytics
                 counter++;
                 
             }
-                
+                for (int i = 0; i < dataEntries.size(); i++)
+                {
+                    for (int j =0; j < 6; j++)   
+                      System.out.printf("%5d ", table[i][j]);
+                    
+                }
                 
                 
             
