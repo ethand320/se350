@@ -150,38 +150,57 @@ public class DataAnalytics
             
         }
         
-        public static void printFloorMinTimeTable(){
+        public static void printFloorMinMaxTimeTable(){
             int totalFloors = XmlParser.getTotalFloorNumber();
-            long[][] table = new long[totalFloors][totalFloors];
-            
+            long[][] minTable = new long[totalFloors][totalFloors];
+            long[][] maxTable = new long[totalFloors][totalFloors];
             for (int i = 0; i < totalFloors; i++)
             {
                 for (int j = 0; j < totalFloors- 1; j++)
-                    table[i][j] = 0;
+                    minTable[i][j] = 0;
             }
             
             for(PersonDataEntry data : dataEntries)
             {
-                if (table[data.personStartFloor][data.personEndFloor] == 0)
+                if (minTable[data.personStartFloor][data.personEndFloor] == 0)
                 {
-                    table[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                    minTable[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
                 }
-                else if ( table[data.personStartFloor][data.personEndFloor] > (data.leaveElevTimeStamp - data.enterElevTimeStamp ))
+                else if ( minTable[data.personStartFloor][data.personEndFloor] > (data.leaveElevTimeStamp - data.enterElevTimeStamp ))
                 {
-                    table[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                    minTable[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                }
+                
+                if (maxTable[data.personStartFloor][data.personEndFloor] == 0)
+                {
+                    maxTable[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                }
+                else if ( maxTable[data.personStartFloor][data.personEndFloor] < (data.leaveElevTimeStamp - data.enterElevTimeStamp ))
+                {
+                    maxTable[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
                 }
             }
             
-            
+            System.out.println("Minimum wait per floor");
             //print table out
             for (int i = 0; i < totalFloors- 1; i++)
             {
                 for (int j = 0; j < totalFloors -1 ; j++)
                 {
-                   System.out.printf("%5d", table[i][j] );
+                   System.out.printf("%5d", minTable[i][j] );
                    
                 }
                 System.out.println("\n");
+            }
+            
+            System.out.println("Maximum wait per floor");
+            for (int i = 0; i < totalFloors; ++i)
+            {
+            	for (int j = 0; j < totalFloors; ++j)
+            	{
+            		System.out.printf("%5d", maxTable[i][j]);
+            	}
+            	System.out.println("\n");
             }
             
         }
