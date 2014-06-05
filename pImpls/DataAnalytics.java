@@ -97,7 +97,7 @@ public class DataAnalytics
 		for(PersonDataEntry data : dataEntries)
 		{
 			int totalWaitMillis = (int)(data.enterElevTimeStamp - data.creationTimeStamp);
-			int startFloor = data.personStartFloor - 1;
+			int startFloor = data.personStartFloor ;
 			if(totalWaitMillis < floorMinWaits[startFloor])
 			{
 				floorMinWaits[startFloor] = totalWaitMillis;
