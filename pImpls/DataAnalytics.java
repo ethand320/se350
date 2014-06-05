@@ -150,6 +150,29 @@ public class DataAnalytics
             
         }
         
+        public static void printFloorMinTimeTable(){
+            int totalFloors = XmlParser.getTotalFloorNumber();
+            long[][] table = new long[totalFloors][totalFloors];
+            
+            for (int i = 0; i < totalFloors; i++)
+            {
+                for (int j = 0; j < totalFloors; j++)
+                    table[i][j] = 0;
+            }
+            
+            for(PersonDataEntry data : dataEntries)
+            {
+                if (table[data.personStartFloor][data.personEndFloor] == 0)
+                {
+                    table[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                }
+                else if ( table[data.personStartFloor][data.personEndFloor] > (data.leaveElevTimeStamp - data.enterElevTimeStamp ))
+                {
+                    table[data.personStartFloor][data.personEndFloor] = data.leaveElevTimeStamp - data.enterElevTimeStamp ;
+                }
+            }
+            
+        }
         
 //        public static void printFloorWaitTimeTable(){
 //            
