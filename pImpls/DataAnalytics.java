@@ -119,6 +119,30 @@ public class DataAnalytics
 		}
 	}
 	
+        public static void printFloorToFloorTable(){
+            int totalFloors = XmlParser.getTotalFloorNumber();
+            long[][] table = new long[dataEntries.size()][6];
+            
+            int counter = 0;
+            for(PersonDataEntry data : dataEntries)
+            {
+                table[counter][0] = data.personID;
+                table[counter][1] = data.personStartFloor;
+                table[counter][2] = data.personEndFloor;
+                table[counter][3] = (data.enterElevTimeStamp = data.creationTimeStamp)/1000;
+                table[counter][4] = (data.leaveElevTimeStamp - data.enterElevTimeStamp)/1000;
+                table[counter][5] = (data.leaveElevTimeStamp - data.creationTimeStamp)/1000;
+                  
+                counter++;
+                
+            }
+                
+                
+                
+            
+        }
+        
+        
 //        public static void printFloorWaitTimeTable(){
 //            
 //            //Build array of floors
