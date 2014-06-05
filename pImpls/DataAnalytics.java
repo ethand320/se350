@@ -154,9 +154,9 @@ public class DataAnalytics
             int totalFloors = XmlParser.getTotalFloorNumber();
             long[][] table = new long[totalFloors][totalFloors];
             
-            for (int i = 0; i < totalFloors; i++)
+            for (int i = 0; i < totalFloors - 1; i++)
             {
-                for (int j = 0; j < totalFloors; j++)
+                for (int j = 0; j < totalFloors- 1; j++)
                     table[i][j] = 0;
             }
             
@@ -174,9 +174,9 @@ public class DataAnalytics
             
             
             //print table out
-            for (int i = 0; i < totalFloors; i++)
+            for (int i = 0; i < totalFloors- 1; i++)
             {
-                for (int j = 0; j < totalFloors; j++)
+                for (int j = 0; j < totalFloors -1 ; j++)
                 {
                    System.out.printf("%5d", table[i][j] );
                    
