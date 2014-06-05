@@ -36,7 +36,7 @@ public class Person
 		setDestinationFloor(floorToStop);
 		setCurrentFloor(floorToStart);
                 
-        DataLogger.logPersonCreation(this.getID(), this.getCurrentFloor(), this.getDestinationFloor());
+        DataLogger.logPersonCreation(this.getID(), this.getCurrentFloor() - 1, this.getDestinationFloor() - 1);
                 
                 
 	}

@@ -97,7 +97,7 @@ public class DataAnalytics
 		for(PersonDataEntry data : dataEntries)
 		{
 			int totalWaitMillis = (int)(data.enterElevTimeStamp - data.creationTimeStamp);
-			int startFloor = data.personStartFloor - 1;
+			int startFloor = data.personStartFloor;
 			if(totalWaitMillis < floorMinWaits[startFloor])
 			{
 				floorMinWaits[startFloor] = totalWaitMillis;
@@ -154,7 +154,7 @@ public class DataAnalytics
             int totalFloors = XmlParser.getTotalFloorNumber();
             long[][] table = new long[totalFloors][totalFloors];
             
-            for (int i = 0; i < totalFloors - 1; i++)
+            for (int i = 0; i < totalFloors; i++)
             {
                 for (int j = 0; j < totalFloors- 1; j++)
                     table[i][j] = 0;
