@@ -129,7 +129,7 @@ public class DataAnalytics
                 table[counter][0] = data.personID;   //Person id column
                 table[counter][1] = data.personStartFloor;  // Person Start floor
                 table[counter][2] = data.personEndFloor;    // person Destination floor
-                table[counter][3] = (data.enterElevTimeStamp = data.creationTimeStamp)/1000;  // Wait time
+                table[counter][3] = (data.enterElevTimeStamp - data.creationTimeStamp)/1000;  // Wait time
                 table[counter][4] = (data.leaveElevTimeStamp - data.enterElevTimeStamp)/1000; //Ride Time
                 table[counter][5] = (data.leaveElevTimeStamp - data.creationTimeStamp)/1000;  // Total Time
                   
